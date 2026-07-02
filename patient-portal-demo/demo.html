@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#e7e5df">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Crawfurd Portal — Live Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body { margin: 0; background: #e7e5df; font-family: 'Gaegu', sans-serif; color: #222;
+         display: flex; align-items: center; justify-content: center; gap: 34px; padding: 20px; }
+
+  /* ---------- phone frame ---------- */
+  #frame { position: relative; width: 390px; height: min(800px, calc(100vh - 40px)); background: #fff;
+           border: 1.5px solid #2b2b2b; border-radius: 34px; overflow: hidden; flex: none;
+           box-shadow: 0 18px 44px rgba(31,42,68,.18); display: flex; flex-direction: column; }
+  #statusbar { flex: none; display: flex; justify-content: space-between; align-items: center;
+               padding: 10px 18px 4px; font-size: 12px; color: #aaa; }
+  #demoChip { font-size: 11px; font-weight: 700; color: #7d7361; border: 1px dashed #cdbf9f;
+              border-radius: 10px; padding: 1px 8px; cursor: pointer; background: #fdfbf6; }
+  #stage { position: relative; flex: 1; min-height: 0; overflow: hidden; }
+
+  /* ---------- screens & transitions ---------- */
+  .screen { position: absolute; inset: 0; background: #fff; display: flex; flex-direction: column;
+            transition: transform .3s cubic-bezier(.33,.9,.3,1), opacity .3s; }
+  .screen .content { flex: 1; min-height: 0; overflow-y: auto; padding: 6px 18px 18px; }
+  .enter-right { transform: translateX(100%); }
+  .enter-left { transform: translateX(-28%); opacity: .4; }
+  .exit-left { transform: translateX(-28%); opacity: .4; }
+  .exit-right { transform: translateX(100%); }
+  .enter-fade { opacity: 0; transform: translateY(8px); }
+  .exit-fade { opacity: 0; }
+  .shown { transform: translateX(0) translateY(0); opacity: 1; }
+
+  /* ---------- header ---------- */
+  .hdr { flex: none; display: flex; align-items: center; gap: 8px; padding: 8px 18px 4px; min-height: 38px; }
+  .hdr .back { display: inline-flex; align-items: center; gap: 3px; font-size: 14px; font-weight: 700;
+               color: #1f2a44; cursor: pointer; }
+  .hdr .back .chev { font-size: 20px; line-height: 1; }
+  .hdr .title { flex: 1; font-weight: 700; font-size: 17px; color: #222; white-space: nowrap;
+                overflow: hidden; text-overflow: ellipsis; }
+  .hdr .action { background: #1f2a44; color: #fff; border-radius: 13px; padding: 4px 12px;
+                 font-size: 12px; font-weight: 700; cursor: pointer; }
+
+  /* ---------- tab bar ---------- */
+  #tabs { flex: none; display: flex; justify-content: space-around; border-top: 1.5px solid #eee;
+          padding: 9px 0 max(9px, env(safe-area-inset-bottom)); background: #fff; }
+  #tabs span { font-size: 12px; color: #999; cursor: pointer; padding: 2px 10px; }
+  #tabs span.on { color: #1f2a44; font-weight: 700; }
+  #tabs.hidden { display: none; }
+
+  /* ---------- shared bits ---------- */
+  .h1 { font-weight: 700; font-size: 22px; color: #222; line-height: 1.2; }
+  .h2 { font-weight: 700; font-size: 17px; color: #222; }
+  .sub { font-size: 13px; color: #9a9a9a; line-height: 1.45; }
+  .btn { display: block; width: 100%; background: #1f2a44; color: #fff; border: 1.5px solid #1f2a44;
+         border-radius: 11px; padding: 13px; text-align: center; font-family: 'Gaegu'; font-weight: 700;
+         font-size: 15px; cursor: pointer; transition: transform .12s; user-select: none; }
+  .btn.sec { background: #fff; color: #1f2a44; }
+  .btn.green { background: #25d366; border-color: #25d366; }
+  .btn:active { transform: scale(.97); }
+  .btn[disabled] { opacity: .45; pointer-events: none; }
+  .card { border: 1.5px solid #ddd; border-radius: 12px; padding: 12px; background: #fff; }
+  .hatch { background: repeating-linear-gradient(45deg, #eee, #eee 8px, #f6f6f6 8px, #f6f6f6 16px); }
+  .chip { display: inline-block; border: 1px dashed #cdbf9f; color: #7d7361; border-radius: 10px;
+          padding: 1px 8px; font-size: 11px; }
+  input[type=text], input[type=tel] { font-family: 'Gaegu'; font-size: 15px; border: 1.5px solid #1f2a44;
+          border-radius: 9px; padding: 11px 12px; width: 100%; outline: none; background: #fff; color: #222; }
+  input::placeholder { color: #bbb; }
+
+  /* press feedback for any tappable card */
+  [data-act] { cursor: pointer; }
+  .press { transition: transform .12s; }
+  .press:active { transform: scale(.975); }
+
+  /* ---------- sheet ---------- */
+  #backdrop { position: absolute; inset: 0; background: rgba(20,24,38,.42); opacity: 0;
+              transition: opacity .25s; z-index: 30; }
+  #sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 31; background: #fff;
+           border-top: 1.5px solid #2b2b2b; border-radius: 18px 18px 0 0; padding: 12px 16px 22px;
+           transform: translateY(102%); transition: transform .3s cubic-bezier(.33,.9,.3,1);
+           max-height: 86%; overflow-y: auto; box-shadow: 0 -8px 22px rgba(0,0,0,.16); }
+  #sheet.open { transform: translateY(0); }
+  #backdrop.open { opacity: 1; }
+  .grab { width: 38px; height: 4px; border-radius: 2px; background: #ddd; margin: 0 auto 10px; }
+
+  /* ---------- toast & banner ---------- */
+  #toast { position: absolute; left: 50%; bottom: 84px; transform: translate(-50%, 18px); z-index: 40;
+           background: #1f2a44; color: #fff; font-size: 13px; font-weight: 700; border-radius: 11px;
+           padding: 9px 16px; opacity: 0; transition: all .3s; pointer-events: none; white-space: nowrap; }
+  #toast.show { opacity: 1; transform: translate(-50%, 0); }
+  #banner { position: absolute; top: 8px; left: 10px; right: 10px; z-index: 41; background: #1f2a44;
+            color: #fff; border-radius: 14px; padding: 11px 14px; display: flex; gap: 10px; align-items: center;
+            transform: translateY(-140%); opacity: 0; pointer-events: none;
+            transition: transform .38s cubic-bezier(.33,.9,.3,1), opacity .3s; cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,.25); }
+  #banner.show { transform: translateY(0); opacity: 1; pointer-events: auto; }
+
+  /* ---------- assessment ---------- */
+  .progress { height: 5px; background: #eee; border-radius: 3px; overflow: hidden; }
+  .progress i { display: block; height: 100%; background: #1f2a44; border-radius: 3px; transition: width .35s; }
+  .opt { border: 1.5px solid #ddd; border-radius: 11px; padding: 13px 12px; font-size: 14.5px; color: #444;
+         margin-bottom: 9px; display: flex; justify-content: space-between; align-items: center; }
+  .opt.sel { border-color: #1f2a44; background: #eef2f8; color: #1f2a44; font-weight: 700; }
+  .spinner { width: 34px; height: 34px; border: 3px solid #e5e5e5; border-top-color: #1f2a44;
+             border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ---------- body map ---------- */
+  .bm-stage { position: relative; border: 1.5px dashed #cfcfcf; border-radius: 14px; background: #f7f7f7;
+              overflow: hidden; }
+  .bm-node { position: absolute; transform: translate(-50%,-50%); display: flex; flex-direction: column;
+             align-items: center; gap: 3px; cursor: pointer; z-index: 2; }
+  .bm-dot { position: relative; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; font-size: 9px; font-weight: 700; letter-spacing: .3px;
+            transition: transform .15s, background .25s, border .25s; }
+  .bm-node:active .bm-dot { transform: scale(.9); }
+  .bm-lbl { font-size: 9.5px; white-space: nowrap; background: rgba(247,247,247,.85); padding: 0 3px; border-radius: 4px; }
+  .pkg-dd { position: absolute; right: 0; top: 38px; z-index: 9; background: #fff; border: 1.5px solid #2b2b2b;
+            border-radius: 10px; padding: 5px; width: 178px; box-shadow: 0 6px 16px rgba(0,0,0,.15); }
+  .pkg-row { display: flex; justify-content: space-between; align-items: center; gap: 6px; padding: 8px;
+             border-radius: 7px; cursor: pointer; font-size: 12.5px; }
+
+  /* ---------- checkmark anim ---------- */
+  .bigcheck { width: 78px; height: 78px; margin: 0 auto; }
+  .bigcheck circle { stroke: #4a9d6e; stroke-width: 2.5; fill: #eefaf4; }
+  .bigcheck path { stroke: #2f6b4d; stroke-width: 4; fill: none; stroke-linecap: round; stroke-linejoin: round;
+                   stroke-dasharray: 60; stroke-dashoffset: 60; animation: draw .6s .25s ease forwards; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  .pop { animation: pop .45s cubic-bezier(.3,1.6,.5,1) both; }
+  @keyframes pop { from { transform: scale(.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .fadeup { animation: fadeup .4s ease both; }
+  @keyframes fadeup { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  .stagger > * { animation: fadeup .4s ease both; }
+  .stagger > *:nth-child(2) { animation-delay: .06s; } .stagger > *:nth-child(3) { animation-delay: .12s; }
+  .stagger > *:nth-child(4) { animation-delay: .18s; } .stagger > *:nth-child(5) { animation-delay: .24s; }
+  .stagger > *:nth-child(6) { animation-delay: .3s; }
+
+  /* ---------- trends chart ---------- */
+  .chart path.line { fill: none; stroke: #1f2a44; stroke-width: 2.5; stroke-linecap: round;
+                     stroke-dasharray: 400; stroke-dashoffset: 400; animation: draw2 1s .2s ease forwards; }
+  @keyframes draw2 { to { stroke-dashoffset: 0; } }
+  .seg { display: flex; border: 1.5px solid #1f2a44; border-radius: 9px; overflow: hidden; }
+  .seg span { flex: 1; text-align: center; padding: 6px 0; font-size: 12.5px; font-weight: 700;
+              color: #1f2a44; cursor: pointer; }
+  .seg span.on { background: #1f2a44; color: #fff; }
+
+  /* ---------- desktop side note ---------- */
+  #sidenote { width: 250px; flex: none; display: flex; flex-direction: column; gap: 12px; }
+  #sidenote .box { background: #fdfcf9; border: 1.5px solid #d8d3c8; border-radius: 14px; padding: 14px;
+                   font-size: 13px; color: #6a6a6a; line-height: 1.45; }
+  #sidenote .cap { font-family: 'Caveat'; font-weight: 700; font-size: 24px; color: #1f2a44; line-height: 1.1; }
+  #sidenote a { color: #2f6fd0; font-weight: 700; text-decoration: none; }
+
+  /* responsive — must stay last to win the cascade */
+  @media (max-width: 520px) {
+    body { padding: 0; }
+    #frame { width: 100%; height: 100%; border: none; border-radius: 0; box-shadow: none; }
+    #sidenote { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="frame">
+  <div id="statusbar"><span>9:41</span><span id="demoChip" data-act="demoMenu">🎬 demo</span><span>● ● ●</span></div>
+  <div id="stage"></div>
+  <div id="tabs" class="hidden">
+    <span data-act="tab" data-tab="home">Home</span>
+    <span data-act="tab" data-tab="bodymap">Tests</span>
+    <span data-act="tab" data-tab="reports">Reports</span>
+    <span data-act="tab" data-tab="profile">Profile</span>
+  </div>
+  <div id="backdrop" style="display:none" data-act="closeSheet"></div>
+  <div id="sheet"></div>
+  <div id="toast"></div>
+  <div id="banner" data-act="bannerTap"></div>
+</div>
+
+<div id="sidenote">
+  <div class="box"><div class="cap">Live demo</div>
+    Every button works and the app state evolves from what you do — sign up, take the assessment, build a selection, book.
+    Then use <b>🎬 demo → fast-forward</b> to make the report arrive and unlock the follow-up path.</div>
+  <div class="box">All data is hardcoded demo data. Wireframe style is intentional — this shows flows, not final design.</div>
+  <div class="box"><a href="./index.html">‹ Back to mode chooser</a><br><a href="./slides.html">Open slide mode ↗</a></div>
+</div>
+
+<script>
+/* ================================================================
+   Crawfurd Patient Portal — LIVE DEMO
+   Single-user evolving state; all data hardcoded.
+================================================================ */
+
+/* ---------------- state ---------------- */
+const DEFAULTS = {
+  authed: false, name: '', phone: '9123 4567',
+  aDone: false, aAnswers: {},           // assessment
+  pkg: null,                            // current package key on body map
+  added: {},                            // à-la-carte picks "organ:idx" -> true
+  booking: null,                        // {kind:'initial'|'followup', pkgKey, pkgName, tests, areas, addons, ref}
+  reportReady: false,
+  followupBooked: false,
+};
+let S = load();
+function load() {
+  try { const raw = localStorage.getItem('crawfurd-demo'); if (raw) return Object.assign({}, DEFAULTS, JSON.parse(raw)); } catch (e) {}
+  return Object.assign({}, DEFAULTS);
+}
+function save() { try { localStorage.setItem('crawfurd-demo', JSON.stringify(S)); } catch (e) {} }
+function resetDemo() { S = Object.assign({}, DEFAULTS); save(); stack = []; go(S.authed ? 'home' : 'landing', 'fade'); toast('Demo reset'); }
+
+/* ---------------- demo data ---------------- */
+const PKGS = {
+  none: { name: 'No package', meta: 'à la carte' },
+  commence: { name: 'Commence', meta: 'essentials' },
+  wayfind: { name: 'Wayfind', meta: 'recommended' },
+  discovery: { name: 'Discovery', meta: 'most complete' },
+};
+const ORGANS = [
+  { id:'brain', label:'Brain', abbr:'BRN', x:50, y:7, tiers:['discovery'],
+    tests:[ ['Cognitive screen','Questionnaire','Memory, attention & processing speed','Establishes a baseline to track cognition over time'],
+            ['Vitamin B12 / Folate','Blood draw','B-vitamins essential to nerve & brain function','Low levels can cause fatigue, brain fog & nerve issues'] ] },
+  { id:'thyroid', label:'Thyroid', abbr:'THY', x:50, y:15, tiers:['wayfind','discovery'],
+    tests:[ ['TSH','Blood draw','The pituitary signal that drives the thyroid','First-line check for an over- or under-active thyroid'],
+            ['Free T4','Blood draw','Circulating thyroid hormone','Confirms how hard the thyroid is actually working'] ] },
+  { id:'lungs', label:'Lungs', abbr:'LNG', x:30, y:24, tiers:['wayfind','discovery'],
+    tests:[ ['Spirometry','Breath test','How much & how fast you can exhale','Screens for asthma, COPD & restricted airflow'] ] },
+  { id:'heart', label:'Heart', abbr:'HRT', x:70, y:28, tiers:['commence','wayfind','discovery'], flagged:true,
+    tests:[ ['Lipid panel','Blood draw','Total, LDL & HDL cholesterol and triglycerides','The core read on cardiovascular risk','LDL 185 ▲'],
+            ['Blood pressure','Arm cuff','Systolic / diastolic pressure','Sustained highs strain the heart & arteries','146/92 ▲'],
+            ['ApoB','Blood draw','Number of atherogenic particles','Refines risk beyond standard cholesterol'],
+            ['Lipoprotein (a)','Blood draw','An inherited lipid particle','Flags genetic cardiac risk that diet won’t change','>90 ▲'] ] },
+  { id:'blood', label:'Blood', abbr:'BLD', x:16, y:36, tiers:['commence','wayfind','discovery'],
+    tests:[ ['Full blood count','Blood draw','Red & white cells, platelets, haemoglobin','Screens for anaemia, infection & clotting issues'],
+            ['Ferritin / iron studies','Blood draw','Stored & circulating iron','Detects iron deficiency or overload'] ] },
+  { id:'liver', label:'Liver', abbr:'LVR', x:84, y:40, tiers:['commence','wayfind','discovery'],
+    tests:[ ['Liver panel (ALT/AST/GGT)','Blood draw','Enzymes released when liver cells are stressed','Early signal of fatty liver or inflammation'],
+            ['Bilirubin','Blood draw','A breakdown product cleared by the liver','Raised levels point to bile-flow or liver issues'] ] },
+  { id:'kidneys', label:'Kidneys', abbr:'KDN', x:32, y:48, tiers:['commence','wayfind','discovery'],
+    tests:[ ['Creatinine & eGFR','Blood draw','How well the kidneys filter waste','The standard measure of kidney function'],
+            ['Urine ACR','Urine sample','Protein leaking into urine','Catches early kidney damage before symptoms'] ] },
+  { id:'metabolic', label:'Metabolic', abbr:'MET', x:68, y:50, tiers:['commence','wayfind','discovery'], flagged:true,
+    tests:[ ['HbA1c','Blood draw','Average blood sugar over ~3 months','The key screen for diabetes & prediabetes','5.9% ▲'],
+            ['Fasting glucose','Blood draw','Blood sugar after an overnight fast','Confirms how the body handles glucose'],
+            ['Fasting insulin','Blood draw','Insulin output at rest','Reveals insulin resistance early'] ] },
+  { id:'hormones', label:'Hormones', abbr:'HOR', x:50, y:57, tiers:['wayfind','discovery'],
+    tests:[ ['Sex hormones','Blood draw','Testosterone / estradiol','Drives energy, mood, libido & bone health'],
+            ['Cortisol','Blood draw','The body’s main stress hormone','Imbalance affects sleep, weight & energy'],
+            ['Vitamin D','Blood draw','Vitamin D stored in the body','Underpins bone, immune & hormone health'] ] },
+  { id:'joints', label:'Bones & joints', abbr:'JNT', x:50, y:80, tiers:['discovery'],
+    tests:[ ['Vitamin D','Blood draw','Vitamin D stored in the body','Essential for calcium uptake & bone strength'],
+            ['Calcium','Blood draw','Calcium circulating in the blood','Reflects bone turnover & parathyroid balance'],
+            ['Uric acid','Blood draw','A waste product that can crystallise','Raised levels drive gout & joint pain'] ] },
+];
+const DOCTOR_PICKS = ['heart:0','heart:3','blood:1','hormones:2'];  // lipids, Lp(a), ferritin, vitamin D
+
+const QUESTIONS = [
+  { q:'How old are you?', cat:'About you', opts:['Under 30','30–39','40–49','50 and above'] },
+  { q:'When was your last full health screening?', cat:'About you',
+    opts:['Never — this is my first','Within the last year','1–2 years ago','More than 2 years ago'] },
+  { q:'How often do you exercise?', cat:'Lifestyle', opts:['3+ times a week','1–2 times a week','A few times a month','Rarely'] },
+  { q:'Do you smoke?', cat:'Lifestyle', opts:['Never','Occasionally / socially','Regularly','I quit'] },
+  { q:'How much sleep do you usually get?', cat:'Lifestyle', opts:['7–8 hours most nights','5–6 hours','Less than 5','It varies wildly'] },
+  { q:'How would you rate your energy lately?', cat:'Lifestyle',
+    opts:['Consistently high','Some afternoon dips','Often tired','Exhausted most days'] },
+  { q:'Any family history of these conditions?', cat:'Family history',
+    opts:['None that I know of','Diabetes or heart disease','Cancer','More than one of these'] },
+  { q:'What brings you here today?', cat:'Your goal',
+    opts:['A general baseline','A specific concern','My doctor recommended it','Tracking a known condition'] },
+];
+
+/* ---------------- selection helpers ---------------- */
+function coveredByPkg(o) { return S.pkg && S.pkg !== 'none' && o.tiers.includes(S.pkg); }
+function addedCount(o) { return o.tests.reduce((n, _, i) => n + (S.added[o.id + ':' + i] ? 1 : 0), 0); }
+function organActive(o) { return coveredByPkg(o) || addedCount(o) > 0; }
+function selCounts() {
+  let areas = 0, tests = 0;
+  ORGANS.forEach(o => { const c = coveredByPkg(o) ? o.tests.length : addedCount(o); if (c) { areas++; tests += c; } });
+  return { areas, tests };
+}
+function selAddons() {
+  const out = [];
+  ORGANS.forEach(o => { if (!coveredByPkg(o)) o.tests.forEach((t, i) => { if (S.added[o.id + ':' + i]) out.push({ key: o.id + ':' + i, n: t[0], organ: o.label }); }); });
+  return out;
+}
+function selSummary() {
+  const c = selCounts(); const addons = selAddons();
+  const pkgKey = S.pkg || 'none';
+  const alc = pkgKey === 'none';
+  return {
+    pkgKey, alc, addons,
+    pkgName: PKGS[pkgKey].name,
+    line: alc ? 'À la carte selection' : PKGS[pkgKey].name + ' package',
+    meta: c.areas + ' areas · ' + c.tests + ' tests',
+    msg: alc ? ('an à-la-carte selection of ' + c.tests + ' tests')
+             : ('the ' + PKGS[pkgKey].name + ' package' + (addons.length ? ' + ' + addons.length + ' add-on' + (addons.length > 1 ? 's' : '') : '')),
+  };
+}
+
+/* ---------------- tiny dom helpers ---------------- */
+const stage = document.getElementById('stage');
+const tabsEl = document.getElementById('tabs');
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+function toast(msg) {
+  const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 2200);
+}
+function banner(html, onTap) {
+  const b = document.getElementById('banner'); b.innerHTML = html; b.classList.add('show');
+  banner._fn = onTap;
+  clearTimeout(banner._t); banner._t = setTimeout(() => b.classList.remove('show'), 5200);
+}
+function sheet(html) {
+  const bd = document.getElementById('backdrop'), sh = document.getElementById('sheet');
+  bd.style.display = 'block'; sh.innerHTML = '<div class="grab"></div>' + html;
+  requestAnimationFrame(() => { bd.classList.add('open'); sh.classList.add('open'); });
+}
+function closeSheet() {
+  const bd = document.getElementById('backdrop'), sh = document.getElementById('sheet');
+  bd.classList.remove('open'); sh.classList.remove('open');
+  setTimeout(() => { bd.style.display = 'none'; sh.innerHTML = ''; }, 300);
+}
+function hdr(opts) {
+  const back = opts.back ? '<span class="back" data-act="back"><span class="chev">‹</span>Back</span>' : '';
+  const title = '<span class="title">' + (opts.title || '') + '</span>';
+  const action = opts.action ? '<span class="action" data-act="' + opts.action[1] + '">' + opts.action[0] + '</span>' : '';
+  return '<div class="hdr">' + back + title + action + '</div>';
+}
+
+/* ---------------- router ---------------- */
+const TABS = { home: 'home', bodymap: 'bodymap', reports: 'reports', profile: 'profile' };
+let current = null, stack = [];
+function go(id, mode, arg) {
+  // mode: 'push' (slide left), 'pop' (slide right), 'fade' (tab/root switch)
+  mode = mode || 'push';
+  if (mode === 'push' && current) stack.push(current.id);
+  if (mode === 'fade') stack = [];
+  const scr = SCREENS[id];
+  const el = document.createElement('div');
+  el.className = 'screen ' + (mode === 'push' ? 'enter-right' : mode === 'pop' ? 'enter-left' : 'enter-fade');
+  el.innerHTML = scr.render(arg);
+  stage.appendChild(el);
+  const old = current;
+  current = { id, el, arg };
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    el.classList.add('shown');
+    if (old) old.el.classList.add(mode === 'push' ? 'exit-left' : mode === 'pop' ? 'exit-right' : 'exit-fade');
+  }));
+  setTimeout(() => { if (old) old.el.remove(); }, 340);
+  // tabs
+  const tab = scr.tab;
+  if (tab) {
+    tabsEl.classList.remove('hidden');
+    tabsEl.querySelectorAll('span').forEach(s => s.classList.toggle('on', s.dataset.tab === tab));
+  } else tabsEl.classList.add('hidden');
+  if (scr.after) setTimeout(() => scr.after(arg), 60);
+  save();
+}
+function goBack() {
+  const prev = stack.pop();
+  if (prev) go(prev, 'pop');
+  else go(S.authed ? 'home' : 'landing', 'pop');
+}
+
+/* ================================================================
+   SCREENS
+================================================================ */
+const SCREENS = {};
+
+/* ---------- landing ---------- */
+SCREENS.landing = { render() { return `
+  <div class="content" style="display:flex;flex-direction:column;">
+    <div style="display:flex;align-items:center;gap:8px;padding-top:6px;">
+      <span style="width:30px;height:30px;border-radius:50%;background:#1f2a44;color:#fff;font-family:'Caveat';font-size:18px;display:flex;align-items:center;justify-content:center;">+</span>
+      <span style="font-weight:700;font-size:15px;color:#1f2a44;">Crawfurd</span>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:0 8px;" class="stagger">
+      <div class="hatch" style="width:150px;height:150px;border-radius:18px;display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:monospace;font-size:10px;color:#9a9a9a;">hero image</span>
+      </div>
+      <div style="font-weight:700;font-size:24px;color:#222;line-height:1.2;">Your health,<br>system by system</div>
+      <div class="sub">Screenings, reports and trends from<br>Crawfurd Medical — in one place.</div>
+    </div>
+    <button class="btn" data-act="go" data-to="phone">Get started</button>
+    <div style="text-align:center;font-size:12px;color:#a4a4a4;margin-top:10px;">Already a member? <b style="color:#1f2a44;cursor:pointer;" data-act="go" data-to="phone">Log in</b></div>
+  </div>`; } };
+
+/* ---------- phone / singpass ---------- */
+SCREENS.phone = { render() { return hdr({ back: true }) + `
+  <div class="content" style="display:flex;flex-direction:column;gap:14px;padding-top:12px;">
+    <div class="h1">Log in or sign up</div>
+    <div class="sub">Fastest with Singpass, or use your phone number.</div>
+    <button class="btn press" style="background:#d0342c;border-color:#d0342c;display:flex;align-items:center;justify-content:center;gap:8px;" data-act="singpass">
+      <span style="width:16px;height:16px;border-radius:3px;background:#fff;display:inline-block;"></span>Continue with Singpass</button>
+    <div style="display:flex;align-items:center;gap:10px;color:#bbb;font-size:12px;"><span style="flex:1;height:1px;background:#e6e6e6;"></span>or<span style="flex:1;height:1px;background:#e6e6e6;"></span></div>
+    <div style="display:flex;gap:8px;">
+      <div style="border:1.5px solid #cfcfcf;border-radius:9px;padding:11px 10px;font-size:14px;color:#888;flex:none;">+65 ▾</div>
+      <input type="tel" id="phoneInput" placeholder="9123 4567" value="" autocomplete="off">
+    </div>
+    <button class="btn sec" data-act="sendCode">Send code</button>
+    <div style="font-size:12px;color:#a4a4a4;text-align:center;">By continuing you agree to Terms &amp; Privacy</div>
+    <div class="chip" style="align-self:center;">demo: any number works — or just tap Send code</div>
+  </div>`; } };
+
+/* ---------- verify code ---------- */
+SCREENS.verify = { render() { return hdr({ back: true }) + `
+  <div class="content" style="display:flex;flex-direction:column;gap:16px;padding-top:12px;">
+    <div class="h1">Enter the 6-digit code</div>
+    <div class="sub">Sent to +65 ${esc(S.phone)}</div>
+    <div id="codeBoxes" style="display:flex;gap:8px;justify-content:center;padding:6px 0;">
+      ${[0,1,2,3,4,5].map(i => `<div data-i="${i}" style="width:44px;height:54px;border:1.5px solid #cfcfcf;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:#1f2a44;transition:border .2s;"></div>`).join('')}
+    </div>
+    <button class="btn" data-act="autofill">✨ Auto-fill code (demo)</button>
+    <div style="font-size:12px;color:#a4a4a4;text-align:center;">Resend code in 0:24</div>
+  </div>`; },
+  after() {
+    // also allow real typing via hidden capture
+    document.addEventListener('keydown', SCREENS.verify._key = function (e) {
+      if (current.id !== 'verify') return;
+      if (/^[0-9]$/.test(e.key)) fillDigit(e.key);
+    });
+  } };
+let codePos = 0;
+function fillDigit(d) {
+  const boxes = current.el.querySelectorAll('#codeBoxes div');
+  if (codePos >= 6) return;
+  boxes[codePos].textContent = d; boxes[codePos].style.borderColor = '#1f2a44';
+  codePos++;
+  if (codePos === 6) setTimeout(verifyOk, 350);
+}
+function verifyOk() {
+  codePos = 0;
+  showLoading('Verifying…', () => { S.authed = true; save(); go(S.name ? 'home' : 'nameSetup', 'push'); });
+}
+function autofillCode() {
+  codePos = 0;
+  const digits = '482913'.split('');
+  digits.forEach((d, i) => setTimeout(() => fillDigit(d), 140 * i));
+}
+
+/* ---------- loading interstitial ---------- */
+SCREENS.loading = { render(arg) { return `
+  <div class="content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;">
+    <div class="spinner"></div>
+    <div class="sub" id="loadMsg">${esc(arg && arg.msg || 'One moment…')}</div>
+  </div>`; } };
+function showLoading(msg, done, ms) {
+  go('loading', 'push', { msg });
+  setTimeout(() => { stack.pop(); done(); }, ms || 900);
+}
+
+/* ---------- name setup ---------- */
+SCREENS.nameSetup = { render() { return `
+  <div class="content" style="display:flex;flex-direction:column;gap:14px;justify-content:center;">
+    <div class="h1" style="text-align:center;">Nice to meet you!</div>
+    <div class="sub" style="text-align:center;">What should we call you?</div>
+    <input type="text" id="nameInput" placeholder="Your name" value="${esc(S.name || 'Aisha')}" style="text-align:center;font-size:18px;">
+    <button class="btn" data-act="saveName">Continue</button>
+  </div>`; } };
+
+/* ---------- home ---------- */
+SCREENS.home = { tab: 'home', render() {
+  const hello = 'Good ' + (new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 18 ? 'afternoon' : 'evening');
+  let heroCard = '';
+  if (S.reportReady && !S.followupBooked) {
+    heroCard = `
+    <div class="card press" style="background:#1f2a44;color:#fff;border-color:#1f2a44;" data-act="go" data-to="report">
+      <span class="chip" style="border-color:#5a6a8c;color:#c7cdd9;">NEW REPORT</span>
+      <div style="font-weight:700;font-size:17px;margin-top:6px;">Your Wayfind screening report is ready</div>
+      <div style="font-size:12.5px;color:#c7cdd9;margin-top:3px;">Tap to see your results, body systems and recommendations.</div>
+      <div style="background:#fff;color:#1f2a44;border-radius:9px;padding:9px;text-align:center;font-weight:700;font-size:13.5px;margin-top:10px;">View health report</div>
+    </div>`;
+  } else if (S.reportReady && S.followupBooked) {
+    heroCard = `
+    <div class="card" style="border-color:#cdd6c9;background:#f4f8f2;">
+      <div style="font-weight:700;font-size:14.5px;color:#2a5238;">✓ Follow-up requested</div>
+      <div style="font-size:12.5px;color:#6f8f7a;margin-top:2px;">Ref ${esc(S.booking ? S.booking.ref : '#F-2207')} — our team will confirm by SMS within 2 working hours.</div>
+    </div>
+    <div class="card press" data-act="go" data-to="report" style="margin-top:10px;">
+      <div style="font-weight:700;font-size:14.5px;">Health Report · May 2026</div>
+      <div style="font-size:12px;color:#999;">Wayfind screening · tap to review</div>
+    </div>`;
+  } else if (S.booking) {
+    heroCard = `
+    <div class="card" style="border-color:#cdd6c9;background:#f4f8f2;">
+      <div style="font-weight:700;font-size:14.5px;color:#2a5238;">✓ Booking requested</div>
+      <div style="font-size:12.5px;color:#6f8f7a;margin-top:2px;">${esc(S.booking.pkgName)} · ref ${esc(S.booking.ref)} — our team will confirm by SMS within 2 working hours.</div>
+    </div>
+    <div class="card press" style="border:1.5px dashed #cdbf9f;background:#fdfbf6;margin-top:10px;" data-act="fastforward">
+      <div style="font-weight:700;font-size:14px;color:#7d7361;">⏩ Demo: fast-forward two weeks</div>
+      <div style="font-size:12px;color:#a89c87;">Screening done → your report arrives.</div>
+    </div>`;
+  } else if (S.aDone) {
+    heroCard = `
+    <div class="card press" style="background:#1f2a44;color:#fff;border-color:#1f2a44;" data-act="go" data-to="recommendation">
+      <span class="chip" style="border-color:#5a6a8c;color:#c7cdd9;">Based on your assessment</span>
+      <div style="font-weight:700;font-size:17px;margin-top:6px;">Your recommended tests are ready</div>
+      <div style="font-size:12.5px;color:#c7cdd9;margin-top:3px;">Wayfind package · matched to your answers</div>
+      <div style="background:#fff;color:#1f2a44;border-radius:9px;padding:9px;text-align:center;font-weight:700;font-size:13.5px;margin-top:10px;">See recommendations</div>
+    </div>`;
+  } else {
+    heroCard = `
+    <div class="card" style="background:#1f2a44;color:#fff;border-color:#1f2a44;">
+      <div style="font-weight:700;font-size:17px;">Let’s find the right tests for you</div>
+      <div style="font-size:12.5px;color:#c7cdd9;margin-top:3px;">Not sure where to start? Take the 5-minute health assessment and we’ll match you to a package.</div>
+      <div class="press" style="background:#fff;color:#1f2a44;border-radius:9px;padding:9px;text-align:center;font-weight:700;font-size:13.5px;margin-top:10px;" data-act="startAssessment">Take assessment · 5 min</div>
+    </div>
+    <div class="card press" style="margin-top:10px;" data-act="go" data-to="bodymap">
+      <div style="font-weight:700;font-size:14px;">Know what you want?</div>
+      <div style="font-size:12px;color:#999;">Skip straight to the body map and pick packages or tests. ›</div>
+    </div>`;
+  }
+  const reportRow = S.reportReady
+    ? `<div class="card press" data-act="go" data-to="report" style="display:flex;justify-content:space-between;align-items:center;">
+         <div><div style="font-weight:700;font-size:14px;">Health Report · May 2026</div>
+         <div style="font-size:11.5px;color:#4a9d6e;font-weight:700;">New · tap to view</div></div><span style="color:#c8c8c8;">›</span></div>`
+    : `<div class="card" style="border-style:dashed;color:#b3b3b3;font-size:12.5px;text-align:center;">No reports yet — they’ll appear here after your first screening.</div>`;
+  return hdr({ title: '' }) + `
+  <div class="content stagger">
+    <div style="font-size:13px;color:#9a9a9a;">${hello},</div>
+    <div class="h1" style="font-size:26px;margin-bottom:12px;">${esc(S.name || 'there')}</div>
+    ${heroCard}
+    <div style="display:flex;gap:9px;margin-top:12px;">
+      <div class="card press" style="flex:1;text-align:center;padding:10px 6px;" data-act="go" data-to="bodymap">
+        <div style="width:24px;height:24px;border-radius:6px;background:#eee;margin:0 auto 6px;"></div>
+        <div style="font-size:12px;color:#555;white-space:nowrap;">Browse tests</div></div>
+      <div class="card press" style="flex:1;text-align:center;padding:10px 6px;" data-act="go" data-to="reports">
+        <div style="width:24px;height:24px;border-radius:6px;background:#eee;margin:0 auto 6px;"></div>
+        <div style="font-size:12px;color:#555;white-space:nowrap;">My reports</div></div>
+      <div class="card press" style="flex:1;text-align:center;padding:10px 6px;${S.reportReady ? '' : 'opacity:.55;'}" data-act="trendsTile">
+        <div style="width:24px;height:24px;border-radius:6px;background:#eee;margin:0 auto 6px;"></div>
+        <div style="font-size:12px;color:#555;white-space:nowrap;">Trends</div></div>
+    </div>
+    <div style="font-size:12px;color:#9a9a9a;margin:14px 0 6px;">Latest report</div>
+    ${reportRow}
+  </div>`; } };
+
+/* ---------- assessment ---------- */
+let qIdx = 0;
+SCREENS.assessment = { render() {
+  const q = QUESTIONS[qIdx];
+  const chosen = S.aAnswers[qIdx];
+  return hdr({ back: true, title: '' }) + `
+  <div class="content" style="padding-top:4px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#9a9a9a;margin-bottom:6px;">
+      <span>${qIdx + 1}/${QUESTIONS.length}</span><span>${esc(q.cat)}</span></div>
+    <div class="progress"><i style="width:${((qIdx) / QUESTIONS.length * 100)}%"></i></div>
+    <div class="h1" style="margin:20px 0 16px;">${esc(q.q)}</div>
+    <div class="stagger">
+    ${q.opts.map((o, i) => `<div class="opt press ${chosen === i ? 'sel' : ''}" data-act="answer" data-i="${i}">${esc(o)}<span>${chosen === i ? '✓' : ''}</span></div>`).join('')}
+    </div>
+  </div>`; },
+  after() { const bar = current.el.querySelector('.progress i'); if (bar) requestAnimationFrame(() => bar.style.width = ((qIdx + 1) / QUESTIONS.length * 100) + '%'); } };
+
+function answerTap(i) {
+  S.aAnswers[qIdx] = i; save();
+  const opts = current.el.querySelectorAll('.opt');
+  opts.forEach((el, j) => { el.classList.toggle('sel', j === i); el.querySelector('span').textContent = j === i ? '✓' : ''; });
+  setTimeout(() => {
+    if (qIdx < QUESTIONS.length - 1) { qIdx++; go('assessment', 'push'); }
+    else {
+      S.aDone = true; S.pkg = 'wayfind'; save();
+      go('analysing', 'push');
+    }
+  }, 280);
+}
+SCREENS.analysing = { render() { return `
+  <div class="content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;">
+    <div class="spinner"></div>
+    <div class="sub" id="anaMsg">Analysing your answers…</div>
+  </div>`; },
+  after() {
+    const msgs = ['Analysing your answers…', 'Matching body systems…', 'Choosing your package…'];
+    let i = 0;
+    const t = setInterval(() => { i++; const el = document.getElementById('anaMsg'); if (el && msgs[i]) el.textContent = msgs[i]; }, 650);
+    setTimeout(() => { clearInterval(t); stack = []; go('recommendation', 'push'); }, 2100);
+  } };
+
+function reasonsFromAnswers() {
+  const a = S.aAnswers, out = [];
+  if (a[1] === 0 || a[1] === 3) out.push('It’s been a while since a full screening — Wayfind gives a complete baseline across 8 body areas.');
+  if (a[5] === 1 || a[5] === 2 || a[5] === 3) out.push('Your energy answers point to thyroid, iron and metabolic markers — all included.');
+  if (a[6] === 1 || a[6] === 3) out.push('With family history in the picture, the full lipid &amp; cardiac panel matters.');
+  if (a[6] === 2) out.push('Family history noted — baseline markers help catch changes early.');
+  if (a[3] === 2) out.push('As a smoker, lung function screening (spirometry) is part of your package.');
+  if (a[2] === 3) out.push('Low activity raises metabolic risk — HbA1c and fasting glucose are included.');
+  if (out.length < 2) out.push('19 tests across 8 body areas — the sweet spot between essentials and everything.');
+  return out.slice(0, 3);
+}
+SCREENS.recommendation = { render() { return hdr({ back: true }) + `
+  <div class="content stagger" style="padding-top:4px;">
+    <span class="chip">Based on your answers, ${esc(S.name || 'friend')}</span>
+    <div class="h1" style="margin:10px 0 4px;">We recommend<br>the Wayfind package</div>
+    <div class="sub" style="margin-bottom:12px;">8 body areas · 19 tests · our most popular screening</div>
+    <div class="card" style="border-color:#45a7d9;background:#f3f9fd;">
+      ${reasonsFromAnswers().map(r => `<div style="display:flex;gap:8px;font-size:13.5px;color:#27506f;line-height:1.4;margin-bottom:8px;"><span style="flex:none;">✓</span><span>${r}</span></div>`).join('')}
+      <div style="font-size:11.5px;color:#8aa9be;">You can add or remove anything on the body map.</div>
+    </div>
+    <div style="height:14px;"></div>
+    <button class="btn" data-act="seeOnMap">See it on the body map</button>
+    <button class="btn sec" style="margin-top:8px;" data-act="seeOnMapFree">I’ll pick tests myself</button>
+  </div>`; } };
+
+/* ---------- body map ---------- */
+let bmOrgan = null, bmTest = null, pkgOpen = false;
+SCREENS.bodymap = { tab: 'bodymap', render() {
+  const c = selCounts();
+  const pkgKey = S.pkg || 'none';
+  return `
+  <div class="content" style="display:flex;flex-direction:column;padding-bottom:10px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin:4px 0 2px;">
+      <div style="font-weight:700;font-size:17px;">Choose what to test</div>
+      <div style="position:relative;flex:none;">
+        <div class="press" data-act="togglePkg" style="display:flex;align-items:center;gap:5px;border:1.5px solid #1f2a44;border-radius:9px;padding:5px 9px;background:#fff;">
+          <span style="font-size:12.5px;font-weight:700;color:#1f2a44;">${esc(PKGS[pkgKey].name)}</span><span style="font-size:10px;color:#1f2a44;">▾</span></div>
+        ${pkgOpen ? `<div class="pkg-dd">${Object.keys(PKGS).map(k => {
+          const n = ORGANS.filter(o => k !== 'none' && o.tiers.includes(k));
+          const meta = k === 'none' ? 'à la carte' : n.length + ' areas · ' + n.reduce((s, o) => s + o.tests.length, 0) + ' tests';
+          const rec = k === 'wayfind' ? ' <span style="color:#45a7d9;font-size:10px;">★ recommended</span>' : '';
+          return `<div class="pkg-row" data-act="pickPkg" data-k="${k}" style="background:${k === pkgKey ? '#eef2f8' : '#fff'};">
+            <span style="font-weight:700;color:#333;">${PKGS[k].name}${rec}</span><span style="font-size:10px;color:#999;">${meta}</span></div>`;
+        }).join('')}</div>` : ''}
+      </div>
+    </div>
+    <div class="sub" style="margin-bottom:8px;">${pkgKey === 'none' ? (c.tests ? 'À la carte · ' + c.areas + ' areas · ' + c.tests + ' tests' : 'À la carte · tap any area to add tests') : PKGS[pkgKey].name + ' · ' + c.areas + ' areas · ' + c.tests + ' tests'}</div>
+    <div class="bm-stage" style="flex:1;min-height:0;">
+      <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);height:100%;aspect-ratio:188/451;">
+        <svg viewBox="6 7 188 451" style="width:100%;height:100%;display:block;opacity:.9;" preserveAspectRatio="xMidYMid meet">
+          <g fill="#e4e4e4"><ellipse cx="100" cy="40" rx="26" ry="29"/><rect x="87.6" y="62" width="24.8" height="14" rx="6"/><rect x="32.2" y="74" width="135.6" height="40" rx="20"/><rect x="54.8" y="100" width="90.4" height="124" rx="26"/><rect x="9.6" y="86" width="26" height="156" rx="11"/><rect x="164.4" y="86" width="26" height="156" rx="11"/><rect x="55.9" y="208" width="88.2" height="58" rx="24"/><rect x="62.7" y="256" width="32.8" height="198" rx="14"/><rect x="104.5" y="256" width="32.8" height="198" rx="14"/></g>
+        </svg>
+        ${ORGANS.map(o => {
+          const active = organActive(o);
+          const sx = (100 + (o.x * 2 - 100) * 1.13 - 6) / 188 * 100;
+          const sy = (o.y * 4.6 - 7) / 451 * 100;
+          return `<div class="bm-node" data-act="organ" data-id="${o.id}" style="left:${sx}%;top:${sy}%;">
+            <div class="bm-dot" style="background:${active ? '#1f2a44' : '#d4d4d4'};color:${active ? '#fff' : '#8c8c8c'};border:${active ? '2px solid #fff' : '2px dashed #c2c2c2'};box-shadow:${active ? '0 1px 5px rgba(20,24,38,.28)' : 'none'};">${o.abbr}</div>
+            <span class="bm-lbl" style="color:${active ? '#555' : '#a8a8a8'};">${o.label}</span></div>`;
+        }).join('')}
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:12.5px;font-weight:700;color:#1f2a44;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(PKGS[pkgKey].name)} · ${c.tests} tests</div>
+        <div style="font-size:10.5px;color:#9a9a9a;">${c.areas} areas in your selection</div></div>
+      <div class="press" data-act="checkout" style="background:#1f2a44;color:#fff;border-radius:10px;padding:10px 16px;font-weight:700;font-size:13.5px;white-space:nowrap;">Checkout →</div>
+    </div>
+    <div style="display:flex;gap:12px;align-items:center;font-size:10.5px;color:#888;margin-top:6px;">
+      <span style="display:flex;gap:5px;align-items:center;"><span style="width:11px;height:11px;border-radius:50%;background:#1f2a44;"></span>In selection (${c.areas})</span>
+      <span style="display:flex;gap:5px;align-items:center;"><span style="width:11px;height:11px;border-radius:50%;background:#d2d2d2;"></span>Tap grey to add</span>
+    </div>
+  </div>`; } };
+
+function openOrganSheet(id) {
+  bmOrgan = id; bmTest = null;
+  renderOrganSheet();
+}
+function renderOrganSheet() {
+  const o = ORGANS.find(x => x.id === bmOrgan);
+  const covered = coveredByPkg(o);
+  if (bmTest == null) {
+    const sub = covered ? 'All ' + o.tests.length + ' tests included in ' + PKGS[S.pkg || 'none'].name
+      : addedCount(o) > 0 ? addedCount(o) + ' of ' + o.tests.length + ' added to your selection'
+      : 'Not in your package — add the tests you want';
+    sheet(`
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px;">
+        <span style="width:34px;height:34px;border-radius:50%;background:${organActive(o) ? '#1f2a44' : '#d4d4d4'};color:${organActive(o) ? '#fff' : '#8c8c8c'};font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;">${o.abbr}</span>
+        <div style="flex:1;"><div style="font-weight:700;font-size:17px;">${o.label}</div>
+        <div style="font-size:11.5px;color:#9a9a9a;">${sub}</div></div>
+        <span data-act="closeSheet" style="font-size:15px;color:#bbb;cursor:pointer;">✕</span></div>
+      ${o.tests.map((t, i) => {
+        const added = !!S.added[o.id + ':' + i];
+        const on = covered || added;
+        return `<div class="card" style="display:flex;gap:8px;align-items:center;margin-bottom:8px;padding:10px;">
+          <div style="flex:1;min-width:0;cursor:pointer;" data-act="testDetail" data-i="${i}">
+            <div style="font-size:13.5px;font-weight:700;color:#333;">${t[0]}</div>
+            <div style="font-size:10.5px;color:#999;">${t[1]}</div></div>
+          <span class="press" data-act="toggleTest" data-i="${i}" style="flex:none;font-size:11.5px;font-weight:700;border-radius:8px;padding:6px 11px;cursor:pointer;white-space:nowrap;color:${on ? '#fff' : '#1f2a44'};background:${covered ? '#9aa6bb' : added ? '#4a9d6e' : '#fff'};border:1.5px solid ${covered ? '#9aa6bb' : added ? '#4a9d6e' : '#1f2a44'};">${covered ? 'Included' : added ? 'Added ✓' : '+ Add'}</span>
+        </div>`;
+      }).join('')}
+      <button class="btn" data-act="closeSheet" style="margin-top:4px;">Done</button>`);
+  } else {
+    const t = o.tests[bmTest];
+    const added = !!S.added[o.id + ':' + bmTest];
+    const cta = covered ? ['Included in ' + PKGS[S.pkg].name, '#9aa6bb', '#fff', ''] :
+      added ? ['Remove from selection', '#fff', '#1f2a44', 'toggleTestDetail'] : ['Add to selection', '#1f2a44', '#fff', 'toggleTestDetail'];
+    sheet(`
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span data-act="backToList" style="font-size:20px;color:#aaa;cursor:pointer;line-height:1;">‹</span>
+        <span style="font-size:11.5px;color:#999;flex:1;">${o.label}</span>
+        <span data-act="closeSheet" style="font-size:15px;color:#bbb;cursor:pointer;">✕</span></div>
+      <div style="font-weight:700;font-size:19px;margin-bottom:8px;">${t[0]}</div>
+      <span style="border:1.5px solid #ddd;border-radius:11px;padding:3px 9px;font-size:11px;color:#777;">${t[1]}</span>
+      <div style="margin:12px 0;"><div style="font-size:11.5px;color:#9a8f7d;font-weight:700;">What it measures</div>
+      <div style="font-size:13px;color:#555;line-height:1.4;">${t[2]}</div></div>
+      <div style="margin-bottom:14px;"><div style="font-size:11.5px;color:#9a8f7d;font-weight:700;">Why it matters</div>
+      <div style="font-size:13px;color:#555;line-height:1.4;">${t[3]}</div></div>
+      <button class="btn" ${cta[3] ? `data-act="${cta[3]}" data-i="${bmTest}"` : 'disabled'} style="background:${cta[1]};color:${cta[2]};border-color:${cta[1] === '#fff' ? '#1f2a44' : cta[1]};">${cta[0]}</button>`);
+  }
+}
+
+/* ---------- follow-up body map (doctor's picks) ---------- */
+SCREENS.followupMap = { render() {
+  // reuse bodymap rendering but with heading + no package
+  const c = selCounts();
+  return hdr({ back: true, title: 'Recommended tests' }) + `
+  <div class="content" style="display:flex;flex-direction:column;padding-bottom:10px;">
+    <div class="sub" style="margin-bottom:8px;">From your May 2026 report · adjust anything</div>
+    <div class="bm-stage" style="flex:1;min-height:0;">
+      <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);height:100%;aspect-ratio:188/451;">
+        <svg viewBox="6 7 188 451" style="width:100%;height:100%;display:block;opacity:.9;" preserveAspectRatio="xMidYMid meet">
+          <g fill="#e4e4e4"><ellipse cx="100" cy="40" rx="26" ry="29"/><rect x="87.6" y="62" width="24.8" height="14" rx="6"/><rect x="32.2" y="74" width="135.6" height="40" rx="20"/><rect x="54.8" y="100" width="90.4" height="124" rx="26"/><rect x="9.6" y="86" width="26" height="156" rx="11"/><rect x="164.4" y="86" width="26" height="156" rx="11"/><rect x="55.9" y="208" width="88.2" height="58" rx="24"/><rect x="62.7" y="256" width="32.8" height="198" rx="14"/><rect x="104.5" y="256" width="32.8" height="198" rx="14"/></g>
+        </svg>
+        ${ORGANS.map(o => {
+          const active = organActive(o);
+          const sx = (100 + (o.x * 2 - 100) * 1.13 - 6) / 188 * 100;
+          const sy = (o.y * 4.6 - 7) / 451 * 100;
+          return `<div class="bm-node" data-act="organ" data-id="${o.id}" style="left:${sx}%;top:${sy}%;">
+            <div class="bm-dot" style="background:${active ? '#1f2a44' : '#d4d4d4'};color:${active ? '#fff' : '#8c8c8c'};border:${active ? '2px solid #fff' : '2px dashed #c2c2c2'};">${o.abbr}</div>
+            <span class="bm-lbl" style="color:${active ? '#555' : '#a8a8a8'};">${o.label}</span></div>`;
+        }).join('')}
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:12.5px;font-weight:700;color:#1f2a44;">Doctor’s picks · ${c.tests} tests</div>
+        <div style="font-size:10.5px;color:#9a9a9a;">${c.areas} areas in your selection</div></div>
+      <div class="press" data-act="checkout" style="background:#1f2a44;color:#fff;border-radius:10px;padding:10px 16px;font-weight:700;font-size:13.5px;white-space:nowrap;">Checkout →</div>
+    </div>
+  </div>`; } };
+
+/* ---------- selection ---------- */
+SCREENS.selection = { render() {
+  const s = selSummary();
+  const followup = S.reportReady;
+  return hdr({ back: true }) + `
+  <div class="content stagger" style="padding-top:4px;">
+    <div class="h1">Ready to book</div>
+    <div class="sub" style="margin-bottom:12px;">Here’s what you’ve put together</div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:13.5px;">
+        <span style="display:flex;gap:7px;align-items:center;">
+          <span style="width:22px;height:22px;border-radius:50%;background:${s.alc ? '#1f2a44' : s.pkgKey === 'commence' ? '#4a9d6e' : s.pkgKey === 'discovery' ? '#c79a52' : '#45a7d9'};color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">${s.alc ? 'À' : s.pkgName[0]}</span>
+          <span style="font-weight:700;color:#333;">${s.line}</span></span>
+        <span style="font-size:11px;color:#999;">${s.meta}</span></div>
+      ${s.addons.map(a => `<div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#555;margin-top:7px;">
+        <span>+ ${a.n} <span style="font-size:11px;color:#aaa;">· ${a.organ}</span></span>
+        <span data-act="removeAddon" data-key="${a.key}" style="color:#c8c8c8;cursor:pointer;padding:0 4px;">✕</span></div>`).join('')}
+      ${s.addons.length === 0 ? '<div style="font-size:12px;color:#b3b3b3;margin-top:7px;">No à-la-carte add-ons</div>' : ''}
+      <div style="border-top:1px dashed #e5e5e5;margin:9px 0;"></div>
+      <div style="font-size:12px;color:#888;">${followup ? 'From report · May 2026' : S.aDone ? 'Assessment ref #A-2481' : 'No assessment — browsed directly'}</div>
+    </div>
+    <div style="background:#f6f4ee;border-radius:10px;padding:9px 11px;font-size:12.5px;color:#7a7361;margin-top:10px;">
+      No in-app booking — send this to our team and they’ll arrange the appointment for you.</div>
+    <div style="height:14px;"></div>
+    <button class="btn" data-act="go" data-to="reach">Book with our team</button>
+  </div>`; } };
+
+/* ---------- reach ---------- */
+SCREENS.reach = { render() {
+  const s = selSummary();
+  const ref = S.reportReady ? 'my report ref #R-8842' : S.aDone ? 'my assessment ref #A-2481' : 'my selection';
+  return hdr({ back: true }) + `
+  <div class="content stagger" style="padding-top:4px;">
+    <div class="h1">Send us your selection</div>
+    <div class="sub" style="margin-bottom:12px;">Our team sets up the appointment for you.</div>
+    <div class="card press" data-act="contact" data-via="WhatsApp" style="border-color:#cdd6c9;background:#f4f8f2;display:flex;gap:9px;align-items:center;">
+      <span style="width:30px;height:30px;border-radius:8px;background:#25d366;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;">W</span>
+      <div style="flex:1;"><div style="font-size:13.5px;color:#2a5238;font-weight:700;">WhatsApp us</div>
+      <div style="font-size:11px;color:#6f8f7a;">Pre-filled message ready</div></div><span style="color:#9cc4ad;">›</span></div>
+    <div class="card press" data-act="contact" data-via="email" style="display:flex;gap:9px;align-items:center;margin-top:8px;">
+      <span style="width:30px;height:30px;border-radius:8px;background:#1f2a44;color:#fff;display:flex;align-items:center;justify-content:center;">✉</span>
+      <div style="flex:1;"><div style="font-size:13.5px;font-weight:700;">Email us</div>
+      <div style="font-size:11px;color:#999;">care@crawfurd.sg · pre-filled</div></div><span style="color:#bbb;">›</span></div>
+    <div class="card press" data-act="contact" data-via="phone" style="display:flex;gap:9px;align-items:center;margin-top:8px;">
+      <span style="width:30px;height:30px;border-radius:8px;background:#1f2a44;color:#fff;display:flex;align-items:center;justify-content:center;">☏</span>
+      <div style="flex:1;"><div style="font-size:13.5px;font-weight:700;">Call the clinic</div>
+      <div style="font-size:11px;color:#999;">+65 6730 0000 · Mon–Sat</div></div><span style="color:#bbb;">›</span></div>
+    <div style="font-size:12px;color:#888;margin:12px 0 4px;">Message preview</div>
+    <div style="background:#f6f4ee;border-radius:10px;padding:10px;font-size:12.5px;color:#6f6650;line-height:1.5;">
+      “Hi Crawfurd, I’d like to book <b>${s.msg}</b> at Suntec City. Sending ${ref}. When are your next available slots?”</div>
+    <div style="height:14px;"></div>
+    <button class="btn green" data-act="contact" data-via="WhatsApp">Open WhatsApp</button>
+  </div>`; } };
+
+function doContact(via) {
+  const s = selSummary();
+  sheet(`
+    <div class="h2" style="margin-bottom:6px;">${via === 'WhatsApp' ? 'Opening WhatsApp…' : via === 'email' ? 'Opening your email app…' : 'Calling the clinic…'}</div>
+    <div class="sub" style="margin-bottom:14px;">In the real app this hands off to ${via === 'phone' ? 'the dialler' : via} with your message pre-filled. For the demo, we’ll simulate the send.</div>
+    <button class="btn ${via === 'WhatsApp' ? 'green' : ''}" data-act="confirmSend">Send it</button>
+    <button class="btn sec" style="margin-top:8px;" data-act="closeSheet">Cancel</button>`);
+}
+function confirmSend() {
+  closeSheet();
+  const s = selSummary(), c = selCounts();
+  const followup = S.reportReady;
+  S.booking = { kind: followup ? 'followup' : 'initial', pkgKey: s.pkgKey, pkgName: s.line, tests: c.tests, areas: c.areas, ref: followup ? '#F-2207' : '#B-1042' };
+  if (followup) S.followupBooked = true;
+  save();
+  showLoading('Sending your selection…', () => { stack = []; go('requestsent', 'push'); }, 1100);
+}
+
+/* ---------- request sent ---------- */
+SCREENS.requestsent = { render() { return `
+  <div class="content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;">
+    <svg class="bigcheck pop" viewBox="0 0 80 80"><circle cx="40" cy="40" r="37"/><path d="M25 41 l10 10 l20 -22"/></svg>
+    <div class="h1">Request sent!</div>
+    <div class="sub">We’ll reply within 2 working hours.<br>You’ll get a confirmation by SMS.</div>
+    <div class="chip">Ref ${esc(S.booking ? S.booking.ref : '#B-1042')} · keep browsing meanwhile</div>
+    <div style="height:6px;"></div>
+    <button class="btn" style="width:220px;" data-act="goHome">Back to home</button>
+  </div>`; } };
+
+/* ---------- report ---------- */
+let repTab = 'recs';
+SCREENS.report = { render() {
+  const seg = (id, label) => `<span class="${repTab === id ? 'on' : ''}" data-act="repTab" data-t="${id}">${label}</span>`;
+  let body = '';
+  if (repTab === 'recs') body = `
+    <div class="card" style="border-color:#e8b3a6;background:#fdf4f1;margin-bottom:9px;">
+      <div style="display:flex;justify-content:space-between;"><span class="chip" style="border-color:#e2664f;color:#c1492f;">FLAGGED RESULT</span><span style="font-size:11px;color:#c1492f;font-weight:700;">LDL 185 mg/dL ▲</span></div>
+      <div style="font-weight:700;font-size:14.5px;margin-top:6px;">LDL Cholesterol <span style="font-size:11px;color:#999;font-weight:400;">target &lt;130</span></div>
+      <div style="font-size:12.5px;color:#7a5a50;line-height:1.4;">Reduce LDL. Lifestyle + diet changes. Retest in 3 months.</div></div>
+    <div class="card" style="border-color:#e8b3a6;background:#fdf4f1;margin-bottom:9px;">
+      <div style="display:flex;justify-content:space-between;"><span class="chip" style="border-color:#e2664f;color:#c1492f;">FLAGGED RESULT</span><span style="font-size:11px;color:#c1492f;font-weight:700;">&gt;90 mg/dL ▲</span></div>
+      <div style="font-weight:700;font-size:14.5px;margin-top:6px;">Lipoprotein (a) <span style="font-size:11px;color:#999;font-weight:400;">target ≤30</span></div>
+      <div style="font-size:12.5px;color:#7a5a50;line-height:1.4;">Genetic cardiac risk factor. Discuss with your doctor.</div></div>
+    <div class="card" style="margin-bottom:9px;">
+      <div style="display:flex;justify-content:space-between;"><span class="chip">WATCH</span><span style="font-size:11px;color:#c79a52;font-weight:700;">5.9% ▲</span></div>
+      <div style="font-weight:700;font-size:14.5px;margin-top:6px;">HbA1c <span style="font-size:11px;color:#999;font-weight:400;">target &lt;5.7</span></div>
+      <div style="font-size:12.5px;color:#7a7361;line-height:1.4;">Borderline — recheck fasting glucose &amp; insulin.</div></div>`;
+  else if (repTab === 'results') body = `
+    ${[['Full blood count','Normal','#4a9d6e'],['Ferritin / iron','Normal','#4a9d6e'],['Liver panel','Normal','#4a9d6e'],['Kidneys · eGFR','Normal','#4a9d6e'],['TSH / Free T4','Normal','#4a9d6e'],['Lipid panel','LDL 185 ▲','#e2664f'],['HbA1c','5.9% ▲','#c79a52'],['Vitamin D','15.6 ng/mL ↓','#c79a52'],['Blood pressure','146/92 ▲','#e2664f']].map(r =>
+      `<div class="card" style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;margin-bottom:7px;">
+        <span style="font-size:13.5px;font-weight:700;color:#333;">${r[0]}</span>
+        <span style="font-size:12px;font-weight:700;color:${r[2]};">${r[1]}</span></div>`).join('')}`;
+  else body = `
+    ${[['Cardiovascular risk','Elevated', 62, '#e2664f'],['Metabolic / diabetes','Borderline', 38, '#c79a52'],['Cancer markers','Low', 12, '#4a9d6e'],['Bone & joint','Low', 15, '#4a9d6e']].map(r => `
+      <div class="card" style="margin-bottom:8px;">
+        <div style="display:flex;justify-content:space-between;font-size:13.5px;"><b>${r[0]}</b><span style="color:${r[3]};font-weight:700;">${r[1]}</span></div>
+        <div class="progress" style="margin-top:7px;"><i style="width:${r[2]}%;background:${r[3]};"></i></div></div>`).join('')}`;
+  return hdr({ back: true, title: 'Health Report · May 2026', action: ['⤓ Export', 'exportSheet'] }) + `
+  <div class="content" style="padding-top:2px;">
+    <div class="seg" style="margin-bottom:12px;">${seg('recs','Recommendations')}${seg('results','Results')}${seg('risk','Risk scores')}</div>
+    ${body}
+    <div style="height:6px;"></div>
+    <button class="btn" data-act="seeRecTests">See recommended tests →</button>
+  </div>`; } };
+
+function exportSheet(state) {
+  const st = state || 'idle';
+  sheet(`
+    <div class="h2" style="margin-bottom:4px;">Export / share</div>
+    <div class="card hatch" style="height:70px;display:flex;align-items:center;justify-content:center;color:#9a9a9a;font-family:monospace;font-size:10px;margin:8px 0;">report preview</div>
+    ${st === 'preparing' ? '<div style="display:flex;align-items:center;gap:10px;padding:10px 0;"><div class="spinner" style="width:22px;height:22px;border-width:2.5px;margin:0;"></div><span class="sub">Preparing your PDF…</span></div>'
+      : st === 'done' ? '<div style="display:flex;align-items:center;gap:8px;color:#2f6b4d;font-weight:700;padding:10px 0;">✓ Saved to your downloads</div>'
+      : `<button class="btn" data-act="dlPdf">Download PDF</button>
+         <button class="btn sec" style="margin-top:8px;" data-act="emailMe">Email to me</button>`}
+    <div style="display:flex;gap:8px;align-items:center;margin-top:10px;">
+      <div style="flex:1;border:1.5px solid #ddd;border-radius:9px;padding:9px 10px;font-size:12px;color:#888;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">crawfurd.health/r/8f3kd9</div>
+      <div class="press" data-act="copyLink" style="border:1.5px solid #1f2a44;color:#1f2a44;border-radius:9px;padding:9px 12px;font-size:12px;font-weight:700;">Copy link</div></div>
+    <div style="font-size:11px;color:#a4a4a4;text-align:center;margin-top:8px;">🔒 Secure link · expires in 7 days</div>`);
+}
+
+/* ---------- reports list ---------- */
+SCREENS.reports = { tab: 'reports', render() {
+  if (!S.reportReady) return hdr({ title: 'My reports' }) + `
+    <div class="content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;">
+      <div class="hatch" style="width:90px;height:90px;border-radius:16px;"></div>
+      <div class="h2">No reports yet</div>
+      <div class="sub" style="max-width:230px;">Your reports appear here after your first screening.${S.booking ? '' : ' Start by finding the right tests.'}</div>
+      ${S.booking ? '<span class="chip">Booking requested · ' + esc(S.booking.ref) + '</span>' : '<button class="btn" style="width:220px;" data-act="go" data-to="bodymap">Browse tests</button>'}
+    </div>`;
+  return hdr({ title: 'My reports' }) + `
+  <div class="content stagger">
+    <div style="display:flex;gap:7px;margin-bottom:10px;">
+      <span class="chip" style="background:#1f2a44;color:#fff;border-color:#1f2a44;">All</span><span class="chip">Health</span><span class="chip">Simple</span></div>
+    <div class="card press" data-act="go" data-to="report" style="display:flex;gap:9px;align-items:center;margin-bottom:8px;">
+      <div class="hatch" style="width:34px;height:34px;border-radius:8px;flex:none;"></div>
+      <div style="flex:1;"><div style="font-weight:700;font-size:14px;">Health Report</div>
+      <div style="font-size:11.5px;color:#4a9d6e;font-weight:700;">May 2026 · ready</div></div><span style="color:#c8c8c8;">›</span></div>
+    <div class="card press" data-act="go" data-to="lipidtrend" style="display:flex;gap:9px;align-items:center;margin-bottom:8px;">
+      <div class="hatch" style="width:34px;height:34px;border-radius:8px;flex:none;"></div>
+      <div style="flex:1;"><div style="font-weight:700;font-size:14px;">Lipid panel</div>
+      <div style="font-size:11.5px;color:#999;">Simple · trend available</div></div><span style="color:#c8c8c8;">›</span></div>
+    <div class="card" style="display:flex;gap:9px;align-items:center;opacity:.6;">
+      <div class="hatch" style="width:34px;height:34px;border-radius:8px;flex:none;"></div>
+      <div style="flex:1;"><div style="font-weight:700;font-size:14px;">Thyroid panel</div>
+      <div style="font-size:11.5px;color:#c79a52;">Processing…</div></div></div>
+  </div>`; } };
+
+/* ---------- trends ---------- */
+SCREENS.trends = { render() {
+  if (!S.reportReady) return hdr({ back: true, title: 'Trends' }) + `
+    <div class="content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;">
+      <div class="hatch" style="width:90px;height:90px;border-radius:16px;"></div>
+      <div class="h2">Trends unlock after your first screening</div>
+      <div class="sub" style="max-width:240px;">Once you have two or more results we chart every marker year on year.</div></div>`;
+  return hdr({ back: true, title: 'Trends' }) + `
+  <div class="content stagger">
+    <div class="sub" style="margin-bottom:10px;">From 3 screenings · Aug 2024 – May 2026</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <div class="card" style="flex:1;text-align:center;padding:10px 4px;"><div style="font-size:21px;font-weight:700;color:#4a9d6e;">9</div><div style="font-size:11px;color:#999;">improving</div></div>
+      <div class="card" style="flex:1;text-align:center;padding:10px 4px;"><div style="font-size:21px;font-weight:700;color:#e2664f;">3</div><div style="font-size:11px;color:#999;">need attention</div></div>
+      <div class="card" style="flex:1;text-align:center;padding:10px 4px;"><div style="font-size:21px;font-weight:700;color:#1f2a44;">28</div><div style="font-size:11px;color:#999;">tracked</div></div>
+    </div>
+    <div style="font-size:12px;color:#9a9a9a;margin-bottom:6px;">Tracked markers</div>
+    ${[['LDL cholesterol','3.8 mmol/L','↓ 18%','#4a9d6e','lipidtrend'],['Total cholesterol','5.9 mmol/L','↓ 13%','#4a9d6e','lipidtrend'],['HbA1c','5.9%','▲ watch','#c79a52','lipidtrend'],['Ferritin','88 µg/L','stable','#999','lipidtrend']].map(m =>
+      `<div class="card press" data-act="go" data-to="${m[4]}" style="display:flex;justify-content:space-between;align-items:center;padding:11px 12px;margin-bottom:7px;">
+        <div><div style="font-weight:700;font-size:13.5px;">${m[0]}</div><div style="font-size:11px;color:#999;">${m[1]}</div></div>
+        <span style="font-size:12px;font-weight:700;color:${m[3]};">${m[2]}</span></div>`).join('')}
+  </div>`; } };
+
+let trendRange = '1Y';
+const LDL_DATA = { '1Y': [[ 'Jan ’26', 4.1 ], [ 'May ’26', 3.8 ]], '2Y': [[ 'Jan ’25', 4.2 ], [ 'Aug ’25', 4.0 ], [ 'May ’26', 3.8 ]], 'All': [[ 'Aug ’24', 4.6 ], [ 'Jan ’25', 4.2 ], [ 'Aug ’25', 4.0 ], [ 'May ’26', 3.8 ]] };
+SCREENS.lipidtrend = { render() {
+  const pts = LDL_DATA[trendRange];
+  const W = 300, H = 130, min = 3.2, max = 4.8;
+  const xy = pts.map((p, i) => [20 + i * ((W - 40) / Math.max(1, pts.length - 1)), H - 18 - (p[1] - min) / (max - min) * (H - 40)]);
+  const path = xy.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+  const targetY = H - 18 - (3.4 - min) / (max - min) * (H - 40);
+  return hdr({ back: true, title: 'Lipid panel' }) + `
+  <div class="content">
+    <div class="sub" style="margin-bottom:8px;">4 markers · ${LDL_DATA['All'].length} screenings tracked</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
+      <span style="font-size:30px;font-weight:700;color:#4a9d6e;">↓ 18%</span>
+      <span class="sub">LDL vs Aug ’24</span></div>
+    <div class="seg" style="margin-bottom:12px;">${['1Y','2Y','All'].map(r => `<span class="${trendRange === r ? 'on' : ''}" data-act="trendRange" data-r="${r}">${r}</span>`).join('')}</div>
+    <div class="card">
+      <div style="font-size:12px;font-weight:700;color:#333;margin-bottom:4px;">LDL cholesterol <span style="color:#999;font-weight:400;">· target &lt;3.4 mmol/L</span></div>
+      <svg class="chart" viewBox="0 0 ${W} ${H}" style="width:100%;display:block;">
+        <line x1="16" y1="${targetY}" x2="${W - 12}" y2="${targetY}" stroke="#e2664f" stroke-width="1" stroke-dasharray="4 4"/>
+        <text x="${W - 12}" y="${targetY - 4}" text-anchor="end" font-size="8" fill="#e2664f" font-family="Gaegu">target</text>
+        <path class="line" d="${path}"/>
+        ${xy.map((p, i) => `<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="#1f2a44" stroke="#fff" stroke-width="1.5"/>
+          <text x="${p[0]}" y="${H - 4}" text-anchor="middle" font-size="8.5" fill="#999" font-family="Gaegu">${pts[i][0]}</text>
+          <text x="${p[0]}" y="${p[1] - 8}" text-anchor="middle" font-size="9" font-weight="bold" fill="#1f2a44" font-family="Gaegu">${pts[i][1]}</text>`).join('')}
+      </svg></div>
+    <div class="card" style="margin-top:10px;border-style:dashed;">
+      <div style="font-size:12.5px;color:#7a7361;line-height:1.45;">📅 Keep the trend going — most members re-screen every 12 months. Your next window opens <b>May 2027</b>.</div></div>
+  </div>`; } };
+
+/* ---------- profile ---------- */
+SCREENS.profile = { tab: 'profile', render() { return hdr({ title: 'Profile' }) + `
+  <div class="content stagger">
+    <div style="display:flex;gap:12px;align-items:center;margin-bottom:14px;">
+      <div style="width:54px;height:54px;border-radius:50%;background:#eef2f8;border:1.5px solid #1f2a44;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;color:#1f2a44;">${esc((S.name || 'A')[0].toUpperCase())}</div>
+      <div><div style="font-weight:700;font-size:17px;">${esc(S.name || '—')}</div>
+      <div style="font-size:12px;color:#999;">+65 ${esc(S.phone)}</div></div></div>
+    ${[['Personal details','›'],['Notifications','On'],['Language','English'],['Terms & privacy','›']].map(r =>
+      `<div class="card" style="display:flex;justify-content:space-between;align-items:center;padding:12px;margin-bottom:8px;">
+        <span style="font-size:14px;font-weight:700;color:#333;">${r[0]}</span><span style="font-size:12px;color:#999;">${r[1]}</span></div>`).join('')}
+    <div style="height:8px;"></div>
+    <button class="btn sec" data-act="resetDemo">↺ Reset demo</button>
+    <div style="text-align:center;font-size:11px;color:#b3b3b3;margin-top:10px;">Crawfurd Patient Portal · wireframe demo build</div>
+  </div>`; } };
+
+/* ================================================================
+   actions
+================================================================ */
+const ACTIONS = {
+  go(el) { go(el.dataset.to, 'push'); },
+  back() { goBack(); },
+  tab(el) {
+    const t = el.dataset.tab;
+    if (!S.authed) { toast('Sign in first'); return; }
+    const map = { home: 'home', bodymap: 'bodymap', reports: 'reports', profile: 'profile' };
+    if (current.id !== map[t]) go(map[t], 'fade');
+  },
+  goHome() { stack = []; go('home', 'fade'); },
+  singpass() { showLoading('Connecting to Singpass…', () => { S.authed = true; save(); go(S.name ? 'home' : 'nameSetup', 'push'); }, 1200); },
+  sendCode() {
+    const v = (document.getElementById('phoneInput') || {}).value;
+    if (v && v.trim()) S.phone = v.trim();
+    save(); codePos = 0; go('verify', 'push');
+  },
+  autofill() { autofillCode(); },
+  saveName() {
+    const v = (document.getElementById('nameInput') || {}).value;
+    S.name = (v && v.trim()) || 'Aisha'; save();
+    stack = []; go('home', 'fade'); toast('Welcome, ' + S.name + '!');
+  },
+  startAssessment() { qIdx = 0; S.aAnswers = {}; save(); go('assessment', 'push'); },
+  answer(el) { answerTap(parseInt(el.dataset.i, 10)); },
+  seeOnMap() { S.pkg = 'wayfind'; save(); go('bodymap', 'fade'); toast('Wayfind preselected for you'); },
+  seeOnMapFree() { S.pkg = 'none'; save(); go('bodymap', 'fade'); },
+  togglePkg() { pkgOpen = !pkgOpen; rerender(); },
+  pickPkg(el) { S.pkg = el.dataset.k; pkgOpen = false; save(); rerender(); },
+  organ(el) { pkgOpen = false; openOrganSheet(el.dataset.id); },
+  toggleTest(el) {
+    const i = el.dataset.i, key = bmOrgan + ':' + i;
+    if (S.added[key]) delete S.added[key]; else S.added[key] = true;
+    save(); renderOrganSheet(); rerenderBehindSheet();
+  },
+  toggleTestDetail(el) {
+    const key = bmOrgan + ':' + el.dataset.i;
+    if (S.added[key]) delete S.added[key]; else S.added[key] = true;
+    save(); renderOrganSheet(); rerenderBehindSheet();
+  },
+  testDetail(el) { bmTest = parseInt(el.dataset.i, 10); renderOrganSheet(); },
+  backToList() { bmTest = null; renderOrganSheet(); },
+  checkout() { const c = selCounts(); if (!c.tests) { toast('Pick at least one test first'); return; } go('selection', 'push'); },
+  removeAddon(el) { delete S.added[el.dataset.key]; save(); rerender(); toast('Removed'); },
+  contact(el) { doContact(el.dataset.via); },
+  confirmSend() { confirmSend(); },
+  fastforward() { fastForward(); },
+  trendsTile() { if (!S.reportReady) { toast('Trends unlock after your first screening'); go('trends', 'push'); } else go('trends', 'push'); },
+  repTab(el) { repTab = el.dataset.t; rerender(); },
+  exportSheet() { exportSheet('idle'); },
+  dlPdf() { exportSheet('preparing'); setTimeout(() => exportSheet('done'), 1400); },
+  emailMe() { closeSheet(); toast('Sent to your inbox ✓'); },
+  copyLink() { toast('Link copied ✓'); },
+  seeRecTests() {
+    S.pkg = 'none'; S.added = {}; DOCTOR_PICKS.forEach(k => S.added[k] = true); save();
+    go('followupMap', 'push');
+  },
+  trendRange(el) { trendRange = el.dataset.r; rerender(); },
+  resetDemo() { resetDemo(); },
+  closeSheet() { closeSheet(); },
+  demoMenu() { demoMenu(); },
+  bannerTap() { document.getElementById('banner').classList.remove('show'); if (banner._fn) banner._fn(); },
+  exitDemoLink() { location.href = './index.html'; },
+};
+function rerender() { const id = current.id, arg = current.arg; current.el.innerHTML = SCREENS[id].render(arg); if (SCREENS[id].after) SCREENS[id].after(arg); }
+function rerenderBehindSheet() { rerender(); }
+
+document.addEventListener('click', function (e) {
+  const el = e.target.closest('[data-act]');
+  if (!el) return;
+  const fn = ACTIONS[el.dataset.act];
+  if (fn) fn(el);
+});
+
+/* ---------------- demo controls ---------------- */
+function demoMenu() {
+  const canFF = S.booking && !S.reportReady;
+  sheet(`
+    <div class="h2" style="margin-bottom:2px;">🎬 Demo controls</div>
+    <div class="sub" style="margin-bottom:12px;">Presentation helpers — not part of the app.</div>
+    <button class="btn" ${canFF ? 'data-act="fastforward"' : 'disabled'}>⏩ Fast-forward: report arrives</button>
+    <div class="sub" style="font-size:11.5px;margin:4px 0 10px;">${S.reportReady ? 'Report already arrived.' : S.booking ? 'Simulates: screening done, report uploaded.' : 'Available after you request a booking.'}</div>
+    <button class="btn sec" data-act="resetDemo">↺ Reset demo from the start</button>
+    <div style="height:8px;"></div>
+    <button class="btn sec" data-act="exitDemoLink">‹ Exit to mode chooser</button>`);
+}
+function fastForward() {
+  closeSheet();
+  S.reportReady = true; S.pkg = 'wayfind'; S.added = {}; save();
+  if (current.id !== 'home') go('home', 'fade'); else rerender();
+  setTimeout(() => {
+    banner(`<span style="font-size:20px;">🔔</span><div style="flex:1;"><div style="font-weight:700;font-size:13.5px;">Your report is ready</div>
+      <div style="font-size:11.5px;color:#c7cdd9;">Wayfind screening · May 2026 — tap to open</div></div>`,
+      () => go('report', 'push'));
+  }, 700);
+}
+
+/* ---------------- boot ---------------- */
+go(S.authed ? 'home' : 'landing', 'fade');
+</script>
+</body>
+</html>

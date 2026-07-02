@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&amp;family=Gaegu:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  @keyframes dcspin { to { transform: rotate(360deg); } }
+</style>
+</helmet>
+<template id="__bundler_thumbnail">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#1f2a44"/><rect x="38" y="20" width="24" height="60" rx="6" fill="#fff"/></svg>
+</template>
+
+<sc-if value="{{ isLanding }}" hint-placeholder-val="{{ true }}">
+<dc-import name="AuthScreen" gap="0px" hint-size="290px,600px">
+  <div style="flex:1;display:flex;flex-direction:column;">
+    <div style="display:flex;align-items:center;gap:8px;padding:4px 2px 0;">
+      <span style="width:30px;height:30px;border-radius:50%;background:#1f2a44;color:#fff;font-family:'Caveat';font-size:18px;display:flex;align-items:center;justify-content:center;">+</span>
+      <span style="font-family:'Gaegu';font-weight:700;font-size:15px;color:#1f2a44;">Crawfurd</span>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:0 8px;">
+      <div style="width:150px;height:150px;border-radius:18px;background:repeating-linear-gradient(45deg,#eee,#eee 8px,#f6f6f6 8px,#f6f6f6 16px);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:monospace;font-size:10px;color:#9a9a9a;">hero image</span>
+      </div>
+      <div style="font-family:'Gaegu';font-weight:700;font-size:24px;color:#222;line-height:1.2;">Your health,<br>system by system</div>
+      <div style="font-size:13px;color:#8a8a8a;line-height:1.5;">Screenings, reports and trends from<br>Crawfurd Medical — in one place.</div>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;padding:0 4px 6px;">
+    <div style="background:#1f2a44;color:#fff;border-radius:10px;padding:12px;text-align:center;font-weight:700;font-size:15px;">Get started</div>
+  </div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ isSplash }}" hint-placeholder-val="{{ true }}">
+<dc-import name="AuthScreen" gap="0px" hint-size="290px,600px">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:0 6px;">
+    <div style="width:74px;height:74px;border-radius:50%;background:#1f2a44;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Caveat';font-size:30px;">+</div>
+    <div style="font-family:'Gaegu';font-weight:700;font-size:22px;color:#222;">Know your body,<br>system by system</div>
+    <div style="display:flex;flex-direction:column;gap:9px;width:100%;align-items:flex-start;padding:0 4px;">
+      <div style="display:flex;gap:8px;align-items:center;"><span style="width:16px;height:16px;border-radius:50%;background:#e6e6e6;"></span><span style="height:8px;width:150px;background:#e6e6e6;border-radius:4px;"></span></div>
+      <div style="display:flex;gap:8px;align-items:center;"><span style="width:16px;height:16px;border-radius:50%;background:#e6e6e6;"></span><span style="height:8px;width:120px;background:#e6e6e6;border-radius:4px;"></span></div>
+      <div style="display:flex;gap:8px;align-items:center;"><span style="width:16px;height:16px;border-radius:50%;background:#e6e6e6;"></span><span style="height:8px;width:140px;background:#e6e6e6;border-radius:4px;"></span></div>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;padding:0 4px 6px;">
+    <div style="background:#1f2a44;color:#fff;border-radius:10px;padding:12px;text-align:center;font-weight:700;font-size:15px;">Get started</div>
+    <div style="border:1.5px solid #1f2a44;color:#1f2a44;border-radius:10px;padding:11px;text-align:center;font-size:15px;">I have an account</div>
+  </div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ isOtp }}" hint-placeholder-val="{{ true }}">
+<dc-import name="AuthScreen" gap="0px" show-back="{{ true }}" hint-size="290px,600px">
+  <div style="padding:0 6px;display:flex;flex-direction:column;gap:14px;">
+    <div style="font-family:'Gaegu';font-weight:700;font-size:22px;color:#222;">Log in or sign up</div>
+    <div style="font-size:13px;color:#9a9a9a;line-height:1.45;">Fastest with Singpass, or use your phone number.</div>
+    <div style="background:#d0342c;color:#fff;border-radius:10px;padding:13px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;font-weight:700;"><span style="width:16px;height:16px;border-radius:3px;background:#fff;"></span>Continue with Singpass</div>
+    <div style="display:flex;align-items:center;gap:10px;color:#bbb;font-size:12px;"><span style="flex:1;height:1px;background:#e6e6e6;"></span>or<span style="flex:1;height:1px;background:#e6e6e6;"></span></div>
+    <div style="display:flex;gap:8px;">
+      <div style="border:1.5px solid #cfcfcf;border-radius:8px;padding:12px 10px;font-size:13px;color:#888;width:64px;">+65 ▾</div>
+      <div style="border:1.5px solid #1f2a44;border-radius:8px;padding:12px 10px;font-size:13px;color:#777;flex:1;">9•• ••• •••</div>
+    </div>
+    <div style="border:1.5px solid #1f2a44;color:#1f2a44;border-radius:10px;padding:11px;text-align:center;font-weight:700;font-size:15px;">Send code</div>
+    <div style="font-size:12px;color:#a4a4a4;text-align:center;">By continuing you agree to Terms &amp; Privacy</div>
+  </div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<dc-import name="MenuScreen" active-tab="Home" hint-size="290px,600px">
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+    <div><div style="font-size:13px;color:#999;">Good morning</div><div style="font-family:'Gaegu';font-weight:700;font-size:19px;color:#222;">Aisha</div></div>
+    <div style="width:36px;height:36px;border-radius:50%;background:#eee;"></div>
+  </div>
+  <div style="background:#1f2a44;border-radius:14px;padding:14px;color:#fff;display:flex;flex-direction:column;gap:8px;">
+    <div style="font-size:13px;opacity:.85;">Recommended next step</div>
+    <div style="font-family:'Gaegu';font-weight:700;font-size:17px;">Complete your health assessment</div>
+    <div style="background:#fff;color:#1f2a44;border-radius:8px;padding:8px;text-align:center;font-size:13px;font-weight:700;width:120px;">Start · 5 min</div>
+  </div>
+  <dc-import name="HomeActions" hint-size="100%,72px"></dc-import>
+  <div style="font-size:13px;color:#888;margin-top:2px;">Latest report</div>
+  <div style="border:1.5px solid #ddd;border-radius:12px;padding:11px;display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:13px;color:#333;font-weight:700;">Health Report · Aug 2025</div><div style="height:7px;width:90px;background:#ececec;border-radius:4px;margin-top:6px;"></div></div><span style="font-size:18px;color:#bbb;">›</span></div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_home_reactivate }}" hint-placeholder-val="{{ true }}">
+<dc-import name="MenuScreen" active-tab="Home" hint-size="290px,600px">
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+    <div><div style="font-size:13px;color:#999;">Welcome back</div><div style="font-family:'Gaegu';font-weight:700;font-size:19px;color:#222;">Aisha</div></div>
+    <div style="width:36px;height:36px;border-radius:50%;background:#eee;"></div>
+  </div>
+  <div style="background:#1f2a44;border-radius:14px;padding:14px;color:#fff;display:flex;flex-direction:column;gap:8px;">
+    <div><span style="font-size:11px;background:#33405d;border-radius:20px;padding:2px 9px;">Last screening · Aug 2025 · over a year ago</span></div>
+    <div style="font-family:'Gaegu';font-weight:700;font-size:17px;">Time to refresh your health picture</div>
+    <div style="font-size:12px;opacity:.8;line-height:1.35;">Retake the 5-minute assessment so we can match you to the right tests.</div>
+    <div style="background:#fff;color:#1f2a44;border-radius:8px;padding:8px;text-align:center;font-size:13px;font-weight:700;width:150px;">Start assessment · 5 min</div>
+  </div>
+  <dc-import name="HomeActions" hint-size="100%,72px"></dc-import>
+  <div style="font-size:13px;color:#888;margin-top:2px;">Latest report</div>
+  <div style="border:1.5px solid #ddd;border-radius:12px;padding:11px;display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:13px;color:#333;font-weight:700;">Health Report · Aug 2025</div><div style="height:7px;width:90px;background:#ececec;border-radius:4px;margin-top:6px;"></div></div><span style="font-size:18px;color:#bbb;">›</span></div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_home_choose }}" hint-placeholder-val="{{ true }}">
+<dc-import name="MenuScreen" active-tab="Home" hint-size="290px,600px">
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+    <div><div style="font-size:13px;color:#999;">Welcome</div><div style="font-family:'Gaegu';font-weight:700;font-size:19px;color:#222;">Aisha</div></div>
+    <div style="width:36px;height:36px;border-radius:50%;background:#eee;"></div>
+  </div>
+  <div style="background:#1f2a44;border-radius:14px;padding:14px;color:#fff;display:flex;flex-direction:column;gap:8px;">
+    <div style="font-family:'Gaegu';font-weight:700;font-size:17px;">Let’s find the right tests for you</div>
+    <div style="font-size:12px;opacity:.8;line-height:1.35;">Not sure where to start? Take the 5-minute health assessment and we’ll match you to a package.</div>
+    <div style="background:#fff;color:#1f2a44;border-radius:8px;padding:8px;text-align:center;font-size:13px;font-weight:700;width:160px;">Take assessment · 5 min</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;color:#bbb;font-size:12px;"><span style="flex:1;height:1px;background:#e6e6e6;"></span>or<span style="flex:1;height:1px;background:#e6e6e6;"></span></div>
+  <div style="border:1.5px solid #ddd;border-radius:12px;padding:12px;display:flex;gap:9px;align-items:center;"><span style="width:28px;height:28px;border-radius:8px;background:#eef2f8;flex:none;"></span><div style="flex:1;"><div style="font-size:13px;color:#333;font-weight:700;">Know what you want?</div><div style="font-size:11px;color:#999;line-height:1.3;">Skip straight to the body map and pick packages or tests.</div></div><span style="color:#bbb;">›</span></div>
+  <dc-import name="HomeActions" hint-size="100%,72px"></dc-import>
+  <div style="border:1.5px dashed #ddd;border-radius:12px;padding:11px;text-align:center;font-size:12px;color:#aaa;">No reports yet — they’ll appear here after your first screening.</div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_home_nextstep }}" hint-placeholder-val="{{ true }}">
+<dc-import name="MenuScreen" active-tab="Home" hint-size="290px,600px">
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+    <div><div style="font-size:13px;color:#999;">Good morning</div><div style="font-family:'Gaegu';font-weight:700;font-size:19px;color:#222;">Aisha</div></div>
+    <div style="width:36px;height:36px;border-radius:50%;background:#eee;"></div>
+  </div>
+  <div style="background:#1f2a44;border-radius:14px;padding:14px;color:#fff;display:flex;flex-direction:column;gap:8px;">
+    <div style="font-size:13px;opacity:.85;">Based on your assessment</div>
+    <div style="font-family:'Gaegu';font-weight:700;font-size:17px;">Your recommended tests are ready</div>
+    <div style="font-size:12px;opacity:.8;">Wayfind package · 6 tests matched to you</div>
+    <div style="background:#fff;color:#1f2a44;border-radius:8px;padding:8px;text-align:center;font-size:13px;font-weight:700;width:150px;">See recommendations</div>
+  </div>
+  <div style="border:1.5px solid #cdd6c9;background:#f4f8f2;border-radius:12px;padding:11px;display:flex;gap:9px;align-items:center;"><span style="width:28px;height:28px;border-radius:8px;background:#25d366;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none;">W</span><div style="flex:1;"><div style="font-size:13px;color:#2a5238;font-weight:700;">Ready to book?</div><div style="font-size:11px;color:#6f8f7a;line-height:1.3;">Send your selection to our team — we'll book it.</div></div><span style="color:#9cc4ad;">›</span></div>
+  <dc-import name="HomeActions" hint-size="100%,72px"></dc-import>
+  <div style="font-size:13px;color:#888;margin-top:2px;">Latest report</div>
+  <div style="border:1.5px solid #ddd;border-radius:12px;padding:11px;display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:13px;color:#333;font-weight:700;">Health Report · Aug 2025</div><div style="height:7px;width:90px;background:#ececec;border-radius:4px;margin-top:6px;"></div></div><span style="font-size:18px;color:#bbb;">›</span></div>
+</dc-import>
+</sc-if>
+
+
+
+
+
+<sc-if value="{{ is_home_newreport }}" hint-placeholder-val="{{ true }}">
+<dc-import name="MenuScreen" active-tab="Home" hint-size="290px,600px">
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+    <div><div style="font-size:13px;color:#999;">Good morning</div><div style="font-family:'Gaegu';font-weight:700;font-size:19px;color:#222;">Aisha</div></div>
+    <div style="width:36px;height:36px;border-radius:50%;background:#eee;"></div>
+  </div>
+  <div style="background:#1f2a44;border-radius:14px;padding:14px;color:#fff;display:flex;flex-direction:column;gap:8px;">
+    <div><span style="font-size:11px;background:#4a9d6e;border-radius:20px;padding:2px 9px;font-weight:700;">NEW REPORT</span></div>
+    <div style="font-family:'Gaegu';font-weight:700;font-size:17px;">Your Wayfind screening report is ready</div>
+    <div style="font-size:12px;opacity:.8;line-height:1.35;">Tap to see your results, body systems and recommendations.</div>
+    <div style="background:#fff;color:#1f2a44;border-radius:8px;padding:8px;text-align:center;font-size:13px;font-weight:700;width:150px;">View health report</div>
+  </div>
+  <dc-import name="HomeActions" hint-size="100%,72px"></dc-import>
+  <div style="font-size:13px;color:#888;margin-top:2px;">Latest report</div>
+  <div style="border:1.5px solid #4a9d6e;background:#f4f8f2;border-radius:12px;padding:11px;display:flex;justify-content:space-between;align-items:center;"><div><div style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#4a9d6e;"></span><div style="font-size:13px;color:#222;font-weight:700;">Health Report · May 2026</div></div><div style="font-size:11px;color:#4a9d6e;font-weight:700;margin-top:4px;">New · tap to view</div></div><span style="font-size:18px;color:#4a9d6e;">›</span></div>
+  <div style="border:1.5px solid #ddd;border-radius:12px;padding:11px;display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:13px;color:#333;font-weight:700;">Health Report · Aug 2025</div><div style="height:7px;width:90px;background:#ececec;border-radius:4px;margin-top:6px;"></div></div><span style="font-size:18px;color:#bbb;">›</span></div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ isCatalog }}" hint-placeholder-val="{{ true }}">
+<dc-import name="MenuScreen" active-tab="Tests" gap="10px" hint-size="290px,600px">
+  <div style="font-family:'Gaegu';font-weight:700;font-size:18px;color:#222;">Explore tests</div>
+  <div style="border:1.5px solid #cfcfcf;border-radius:20px;padding:9px 12px;font-size:13px;color:#999;">🔍 Search tests or systems</div>
+  <div style="background:#1f2a44;border-radius:14px;padding:13px 14px;color:#fff;display:flex;flex-direction:column;gap:7px;">
+    <div style="font-size:13px;opacity:.85;">Not sure what you need?</div>
+    <div style="font-family:'Gaegu';font-weight:700;font-size:17px;">Take the health assessment</div>
+    <div style="background:#fff;color:#1f2a44;border-radius:8px;padding:8px;text-align:center;font-size:13px;font-weight:700;width:120px;">Start · 5 min</div>
+  </div>
+  <div style="font-size:13px;color:#888;">Packages (CRAWFURD)</div>
+  <div style="display:flex;gap:9px;align-items:center;border:1.5px solid #ddd;border-radius:12px;padding:10px;"><span style="width:30px;height:30px;border-radius:50%;background:#4a9d6e;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;">C</span><div style="flex:1;"><div style="font-size:13px;color:#333;font-weight:700;">Commence</div><div style="font-size:11px;color:#999;">Essentials · 12 tests</div></div></div>
+  <div style="display:flex;gap:9px;align-items:center;border:1.5px solid #ddd;border-radius:12px;padding:10px;"><span style="width:30px;height:30px;border-radius:50%;background:#45a7d9;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;">W</span><div style="flex:1;"><div style="font-size:13px;color:#333;font-weight:700;">Wayfind</div><div style="font-size:11px;color:#999;">Advanced · 38 tests</div></div></div>
+  <div style="display:flex;gap:9px;align-items:center;border:1.5px solid #ddd;border-radius:12px;padding:10px;"><span style="width:30px;height:30px;border-radius:50%;background:#c79a52;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;">D</span><div style="flex:1;"><div style="font-size:13px;color:#333;font-weight:700;">Discovery</div><div style="font-size:11px;color:#999;">Comprehensive · 90+</div></div></div>
+  <div style="font-size:13px;color:#888;margin-top:2px;">Individual tests</div>
+  <div style="display:flex;justify-content:space-between;border:1.5px solid #ddd;border-radius:12px;padding:10px;font-size:13px;color:#444;"><span>Lipid panel</span></div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ isAssessment }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" gap="14px" hint-size="290px,600px">
+  <div style="display:flex;align-items:center;gap:8px;"><div style="flex:1;height:5px;background:#ececec;border-radius:3px;"><div style="width:40%;height:5px;background:#1f2a44;border-radius:3px;"></div></div><span style="font-size:12px;color:#999;">5/12</span></div>
+  <div style="font-size:12px;color:#999;">Lifestyle</div>
+  <div style="font-family:'Gaegu';font-weight:700;font-size:20px;color:#222;">How would you rate your energy lately?</div>
+  <div style="display:flex;flex-direction:column;gap:9px;">
+    <div style="border:1.5px solid #cfcfcf;border-radius:10px;padding:12px;font-size:14px;color:#555;">Consistently high</div>
+    <div style="border:1.5px solid #1f2a44;background:#f3f5f9;border-radius:10px;padding:12px;font-size:14px;color:#1f2a44;font-weight:700;">Some afternoon dips</div>
+    <div style="border:1.5px solid #cfcfcf;border-radius:10px;padding:12px;font-size:14px;color:#555;">Often tired</div>
+    <div style="border:1.5px solid #cfcfcf;border-radius:10px;padding:12px;font-size:14px;color:#555;">Exhausted most days</div>
+  </div>
+  <div style="flex:1;"></div>
+  <div style="display:flex;gap:10px;"><div style="flex:1;border:1.5px solid #1f2a44;color:#1f2a44;border-radius:10px;padding:11px;text-align:center;font-size:14px;">Back</div><div style="flex:1;background:#1f2a44;color:#fff;border-radius:10px;padding:11px;text-align:center;font-weight:700;font-size:14px;">Next</div></div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ isRecommendation }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" hint-size="290px,600px">
+  <div style="font-size:13px;color:#999;">Based on your answers</div>
+  <div style="font-family:'Gaegu';font-weight:700;font-size:20px;color:#222;">We recommend Wayfind</div>
+  <div style="border:1.5px solid #45a7d9;border-radius:14px;padding:13px;display:flex;flex-direction:column;gap:8px;">
+    <div style="display:flex;gap:10px;align-items:center;"><span style="width:38px;height:38px;border-radius:50%;background:#45a7d9;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px;">W</span><div><div style="font-size:14px;font-weight:700;color:#333;">Wayfind · Advanced</div><div style="font-size:11px;color:#999;">Best match · 38 tests</div></div></div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;"><span style="background:#eef5fb;border-radius:12px;padding:4px 9px;font-size:11px;color:#2f6fd0;">Energy</span><span style="background:#eef5fb;border-radius:12px;padding:4px 9px;font-size:11px;color:#2f6fd0;">Heart</span><span style="background:#eef5fb;border-radius:12px;padding:4px 9px;font-size:11px;color:#2f6fd0;">Hormones</span></div>
+  </div>
+  <div style="font-size:13px;color:#888;">Why this fits you</div>
+  <div style="height:8px;width:100%;background:#ececec;border-radius:4px;"></div>
+  <div style="height:8px;width:85%;background:#ececec;border-radius:4px;"></div>
+  <div style="border:1.5px solid #ddd;border-radius:12px;padding:10px;font-size:13px;color:#444;display:flex;justify-content:space-between;">Compare with Ascent / Discovery <span style="color:#bbb;">›</span></div>
+  <div style="flex:1;"></div>
+  <div style="background:#1f2a44;color:#fff;border-radius:10px;padding:12px;text-align:center;font-weight:700;font-size:15px;">Add Wayfind</div>
+  <div style="text-align:center;font-size:13px;color:#9a9a9a;">See all packages</div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ isSelection }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" gap="10px" hint-size="290px,600px">
+  <div style="font-family:'Gaegu';font-weight:700;font-size:18px;color:#222;">Ready to book</div>
+  <div style="font-size:12px;color:#999;">Here's what you've put together</div>
+  <div style="border:1.5px solid #ddd;border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:7px;">
+    <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="display:flex;gap:7px;align-items:center;"><span style="width:22px;height:22px;border-radius:50%;background:#45a7d9;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">W</span><span style="color:#333;font-weight:700;">Wayfind package</span></span></div>
+    <div style="font-size:13px;color:#555;">+ Vitamin D add-on</div>
+    <div style="border-top:1px dashed #e5e5e5;margin:2px 0;"></div>
+    <div style="font-size:12px;color:#888;">Assessment ref #A-2481</div>
+  </div>
+  <div style="background:#f6f4ee;border-radius:10px;padding:9px 11px;font-size:12px;color:#7a7361;">No in-app booking — send this to our team and they'll arrange the appointment for you.</div>
+  <div style="flex:1;"></div>
+  <div style="background:#1f2a44;color:#fff;border-radius:10px;padding:12px;text-align:center;font-weight:700;font-size:15px;">Book with our team</div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ isReach }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" gap="10px" hint-size="290px,600px">
+  <div style="font-family:'Gaegu';font-weight:700;font-size:18px;color:#222;">Send us your selection</div>
+  <div style="font-size:12px;color:#999;">Our team sets up the appointment (and a portal account, if you like) for you.</div>
+  <div style="display:flex;flex-direction:column;gap:8px;">
+    <div style="border:1.5px solid #cdd6c9;background:#f4f8f2;border-radius:10px;padding:11px;display:flex;gap:9px;align-items:center;"><span style="width:30px;height:30px;border-radius:8px;background:#25d366;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;">W</span><div style="flex:1;"><div style="font-size:13px;color:#2a5238;font-weight:700;">WhatsApp us</div><div style="font-size:11px;color:#6f8f7a;">Pre-filled message ready</div></div><span style="color:#9cc4ad;">›</span></div>
+    <div style="border:1.5px solid #ddd;border-radius:10px;padding:11px;display:flex;gap:9px;align-items:center;"><span style="width:30px;height:30px;border-radius:8px;background:#1f2a44;color:#fff;display:flex;align-items:center;justify-content:center;">✉</span><div style="flex:1;"><div style="font-size:13px;color:#333;font-weight:700;">Email us</div><div style="font-size:11px;color:#999;">care@crawfurd.sg · pre-filled</div></div><span style="color:#bbb;">›</span></div>
+    <div style="border:1.5px solid #ddd;border-radius:10px;padding:11px;display:flex;gap:9px;align-items:center;"><span style="width:30px;height:30px;border-radius:8px;background:#1f2a44;color:#fff;display:flex;align-items:center;justify-content:center;">☏</span><div style="flex:1;"><div style="font-size:13px;color:#333;font-weight:700;">Call the clinic</div><div style="font-size:11px;color:#999;">+65 6730 0000 · Mon–Sat</div></div><span style="color:#bbb;">›</span></div>
+  </div>
+  <div style="font-size:12px;color:#888;margin-top:2px;">Message preview</div>
+  <div style="background:#f6f4ee;border-radius:10px;padding:10px;font-size:12px;color:#6f6650;line-height:1.5;flex:1;overflow:hidden;">"Hi Crawfurd, I'd like to book the <b>Wayfind package + Vitamin D</b> at Suntec City. My assessment ref is <b>#A-2481</b>. When are your next available slots?"</div>
+  <div style="background:#25d366;color:#fff;border-radius:10px;padding:12px;text-align:center;font-weight:700;font-size:15px;">Open WhatsApp</div>
+</dc-import>
+</sc-if>
+
+
+
+
+
+
+
+
+
+
+
+<sc-if value="{{ isReport }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" title="Health Report · Apr 2025" action="⤓ Export" on-action="{{ openReportExport }}" gap="9px" hint-size="290px,600px">
+  <div style="display:flex;gap:6px;flex:none;"><span style="background:#1f2a44;color:#fff;border-radius:12px;padding:3px 9px;font-size:11px;">Recommendations</span><span style="border:1.5px solid #ddd;border-radius:12px;padding:3px 9px;font-size:11px;color:#777;">Results</span><span style="border:1.5px solid #ddd;border-radius:12px;padding:3px 9px;font-size:11px;color:#777;">Risk scores</span></div>
+
+    <!-- BODY MAP · systems you were tested on -->
+    <div style="flex:none;height:478px;display:flex;">
+      <dc-import name="BodyMap" mode="status" variant="A" heading="What you screened" subheading="6 systems tested · tap an area for results" style="flex:1;width:100%;min-width:0;" hint-size="100%,100%"></dc-import>
+    </div>
+
+    <div style="display:flex;gap:5px;font-size:10px;color:#888;border-bottom:1.5px solid #eee;padding-bottom:6px;font-weight:700;"><span style="flex:1;">FLAGGED RESULT</span><span style="flex:1.2;">RECOMMENDATION</span></div>
+    <div style="display:flex;gap:6px;border-bottom:1px solid #f3f3f3;padding-bottom:7px;">
+      <div style="flex:1;"><div style="font-size:11px;font-weight:700;color:#e2664f;">LDL Cholesterol</div><div style="font-size:11px;color:#e2664f;">185 mg/dL ▲</div><div style="font-size:10px;color:#aaa;">target &lt;130</div></div>
+      <div style="flex:1.2;font-size:11px;color:#555;line-height:1.4;">Reduce LDL. Lifestyle + diet changes. Retest in 3 months.</div>
+    </div>
+    <div style="display:flex;gap:6px;border-bottom:1px solid #f3f3f3;padding-bottom:7px;">
+      <div style="flex:1;"><div style="font-size:11px;font-weight:700;color:#e2664f;">Lipoprotein (a)</div><div style="font-size:11px;color:#e2664f;">&gt;90 mg/dL ▲</div><div style="font-size:10px;color:#aaa;">target ≤30</div></div>
+      <div style="flex:1.2;font-size:11px;color:#555;line-height:1.4;">Genetic cardiac risk factor. Discuss with doctor.</div>
+    </div>
+    <div style="display:flex;gap:6px;border-bottom:1px solid #f3f3f3;padding-bottom:7px;">
+      <div style="flex:1;"><div style="font-size:11px;font-weight:700;color:#e2664f;">Ferritin</div><div style="font-size:11px;color:#e2664f;">341.9 ng/mL ▲</div><div style="font-size:10px;color:#aaa;">target 22–275</div></div>
+      <div style="flex:1.2;font-size:11px;color:#555;line-height:1.4;">Raised — rule out liver, thyroid or blood disorder.</div>
+    </div>
+    <div style="display:flex;gap:6px;">
+      <div style="flex:1;"><div style="font-size:11px;font-weight:700;color:#c79a52;">Vitamin D</div><div style="font-size:11px;color:#c79a52;">15.6 ng/mL ↓</div><div style="font-size:10px;color:#aaa;">deficient</div></div>
+      <div style="flex:1.2;font-size:11px;color:#555;line-height:1.4;">Supplement + sun. Recheck in 3 months.</div>
+    </div>
+
+  <div style="background:#1f2a44;color:#fff;border-radius:10px;padding:11px;text-align:center;font-weight:700;font-size:14px;">See recommended tests →</div>
+
+  <sc-if value="{{ reportExportOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeReportExport }}" style="position:absolute;inset:0;background:rgba(20,24,38,.45);border-radius:28px;z-index:5;"></div>
+  <div style="position:absolute;left:10px;right:10px;bottom:10px;z-index:6;background:#fff;border:1.5px solid #2b2b2b;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 -6px 16px rgba(0,0,0,.18);">
+    <div style="width:40px;height:4px;border-radius:2px;background:#ddd;align-self:center;"></div>
+
+    <sc-if value="{{ reportExportIdle }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-family:'Gaegu';font-weight:700;font-size:16px;color:#222;">Export report</span><span onClick="{{ closeReportExport }}" style="font-size:14px;color:#bbb;cursor:pointer;">✕</span></div>
+    <div onClick="{{ downloadReportPDF }}" style="display:flex;justify-content:space-between;border:1.5px solid #ddd;border-radius:10px;padding:11px;font-size:13px;color:#444;align-items:center;cursor:pointer;"><span>Download PDF</span><span style="color:#bbb;">⤓</span></div>
+    <div onClick="{{ downloadReportPDF }}" style="display:flex;justify-content:space-between;border:1.5px solid #ddd;border-radius:10px;padding:11px;font-size:13px;color:#444;align-items:center;cursor:pointer;"><span>Email to me</span><span style="color:#bbb;">✉</span></div>
+    <div onClick="{{ downloadReportPDF }}" style="display:flex;justify-content:space-between;border:1.5px solid #ddd;border-radius:10px;padding:11px;font-size:13px;color:#444;align-items:center;cursor:pointer;"><span>Share with GP</span><span style="color:#bbb;">↗</span></div>
+    <div style="font-size:11px;color:#aaa;text-align:center;">🔒 Secure link · expires in 7 days</div>
+    </sc-if>
+
+    <sc-if value="{{ reportExportPreparing }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:11px;padding:16px 0 10px;">
+      <div style="width:34px;height:34px;border-radius:50%;border:4px solid #eef0f3;border-top-color:#1f2a44;animation:dcspin 0.8s linear infinite;"></div>
+      <div style="font-size:13px;color:#666;">Preparing your PDF…</div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ reportExportDone }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 0 6px;">
+      <div style="width:38px;height:38px;border-radius:50%;background:#e9f6ee;color:#2a8a55;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;">✓</div>
+      <div style="font-family:'Gaegu';font-weight:700;font-size:15px;color:#222;">Health Report · Apr 2025.pdf</div>
+      <div style="font-size:12px;color:#999;">Saved to your device</div>
+      <div onClick="{{ closeReportExport }}" style="margin-top:4px;background:#1f2a44;color:#fff;border-radius:10px;padding:9px 24px;font-size:13px;font-weight:700;cursor:pointer;">Done</div>
+    </div>
+    </sc-if>
+
+  </div>
+  </sc-if>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ isFollowup }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" hint-size="290px,600px">
+  <div style="font-family:'Gaegu';font-weight:700;font-size:21px;color:#222;">Recommended follow-up</div>
+  <div style="border:1.5px solid #f0d9d3;background:#fdf4f1;border-radius:12px;padding:12px;font-size:13px;color:#9a4a36;">Repeat lipids + doctor review</div>
+  <div style="font-size:12px;color:#9a9a9a;">Arrange with your HRM — our team will sort the appointment for you.</div>
+  <div style="font-size:13px;color:#888;margin-top:2px;">Get in touch</div>
+  <div style="display:flex;gap:10px;">
+    <div style="flex:1;border:1.5px solid #cdd6c9;background:#f4f8f2;border-radius:10px;padding:12px;text-align:center;font-size:13px;color:#2a5238;font-weight:700;">WhatsApp</div>
+    <div style="flex:1;border:1.5px solid #cfcfcf;border-radius:10px;padding:12px;text-align:center;font-size:13px;color:#666;">Call</div>
+  </div>
+  <div style="border:1.5px solid #ddd;border-radius:12px;padding:11px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#444;">Your HRM · Daniel <span style="color:#bbb;">›</span></div>
+  <div style="flex:1;"></div>
+  <div style="background:#1f2a44;color:#fff;border-radius:10px;padding:12px;text-align:center;font-weight:700;font-size:15px;">Message my HRM</div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_verifycode }}" hint-placeholder-val="{{ true }}">
+<dc-import name="AuthScreen" gap="0px" show-back="{{ true }}" hint-size="290px,600px">
+          <div style="padding:0 6px;display:flex;flex-direction:column;gap:16px;">
+            <div style="font-family:'Gaegu';font-weight:700;font-size:22px;color:#222;">Enter the 6-digit code</div>
+            <div style="font-size:13px;color:#9a9a9a;">Sent to +65 9•• ••• 321</div>
+            <div style="display:flex;gap:7px;justify-content:space-between;">
+              <div style="width:36px;height:46px;border:1.5px solid #1f2a44;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;color:#1f2a44;">4</div>
+              <div style="width:36px;height:46px;border:1.5px solid #1f2a44;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;color:#1f2a44;">9</div>
+              <div style="width:36px;height:46px;border:1.5px solid #cfcfcf;border-radius:8px;"></div>
+              <div style="width:36px;height:46px;border:1.5px solid #cfcfcf;border-radius:8px;"></div>
+              <div style="width:36px;height:46px;border:1.5px solid #cfcfcf;border-radius:8px;"></div>
+              <div style="width:36px;height:46px;border:1.5px solid #cfcfcf;border-radius:8px;"></div>
+            </div>
+            <div style="background:#1f2a44;color:#fff;border-radius:10px;padding:12px;text-align:center;font-weight:700;font-size:15px;margin-top:4px;">Verify</div>
+            <div style="font-size:13px;color:#9a9a9a;text-align:center;">Resend code in 0:24</div>
+          </div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_createprofile }}" hint-placeholder-val="{{ true }}">
+<dc-import name="AuthScreen" gap="0px" show-back="{{ true }}" hint-size="290px,600px">
+          <div style="padding:0 6px;display:flex;flex-direction:column;gap:13px;">
+            <div style="font-family:'Gaegu';font-weight:700;font-size:21px;color:#222;">Set up your profile</div>
+            <div style="display:flex;justify-content:center;"><div style="width:64px;height:64px;border-radius:50%;border:1.5px dashed #c0c0c0;background:#f1f1f1;display:flex;align-items:center;justify-content:center;font-size:11px;color:#aaa;">photo</div></div>
+            <div style="border:1.5px solid #cfcfcf;border-radius:8px;padding:11px;font-size:13px;color:#888;">Full name</div>
+            <div style="display:flex;gap:8px;">
+              <div style="border:1.5px solid #cfcfcf;border-radius:8px;padding:11px;font-size:13px;color:#888;flex:1;">DOB</div>
+              <div style="border:1.5px solid #cfcfcf;border-radius:8px;padding:11px;font-size:13px;color:#888;flex:1;">Sex ▾</div>
+            </div>
+            <div style="border:1.5px solid #cfcfcf;border-radius:8px;padding:11px;font-size:13px;color:#888;">Email (for reports)</div>
+            <div style="background:#1f2a44;color:#fff;border-radius:10px;padding:12px;text-align:center;font-weight:700;font-size:15px;margin-top:2px;">Continue</div>
+          </div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_selfonboarding }}" hint-placeholder-val="{{ true }}">
+<dc-import name="AuthScreen" gap="0px" show-back="{{ true }}" hint-size="290px,600px">
+          <div style="height:5px;background:#ececec;border-radius:3px;margin:0 6px 14px;"><div style="width:60%;height:5px;background:#1f2a44;border-radius:3px;"></div></div>
+          <div style="padding:0 6px;display:flex;flex-direction:column;gap:12px;">
+            <div style="font-family:'Gaegu';font-weight:700;font-size:20px;color:#222;">What brings you here?</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <span style="border:1.5px solid #1f2a44;background:#1f2a44;color:#fff;border-radius:16px;padding:7px 12px;font-size:13px;">General check-up</span>
+              <span style="border:1.5px solid #cfcfcf;border-radius:16px;padding:7px 12px;font-size:13px;color:#777;">Energy / sleep</span>
+              <span style="border:1.5px solid #cfcfcf;border-radius:16px;padding:7px 12px;font-size:13px;color:#777;">Heart health</span>
+              <span style="border:1.5px solid #cfcfcf;border-radius:16px;padding:7px 12px;font-size:13px;color:#777;">Hormones</span>
+              <span style="border:1.5px solid #cfcfcf;border-radius:16px;padding:7px 12px;font-size:13px;color:#777;">Longevity</span>
+            </div>
+            <div style="font-size:13px;color:#888;margin-top:4px;">Any known conditions?</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#666;"><span style="width:18px;height:18px;border:1.5px solid #1f2a44;border-radius:4px;background:#1f2a44;"></span>Diabetes</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#666;"><span style="width:18px;height:18px;border:1.5px solid #cfcfcf;border-radius:4px;"></span>Thyroid</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#666;"><span style="width:18px;height:18px;border:1.5px solid #cfcfcf;border-radius:4px;"></span>High blood pressure</div>
+            <div style="background:#1f2a44;color:#fff;border-radius:10px;padding:12px;text-align:center;font-weight:700;font-size:15px;margin-top:6px;">Continue</div>
+            <div style="text-align:center;font-size:13px;color:#9a9a9a;">Skip for now</div>
+          </div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_bodymapfirst }}" hint-placeholder-val="{{ true }}">
+<dc-import name="MenuScreen" active-tab="Body" hint-size="290px,600px">
+          <div style="display:flex;justify-content:space-between;align-items:center;"><div style="font-family:'Gaegu';font-weight:700;font-size:18px;color:#222;">Your body, today</div><div style="width:34px;height:34px;border-radius:50%;background:#eee;"></div></div>
+          <div style="position:relative;flex:1;border:1.5px dashed #cfcfcf;border-radius:14px;background:#f7f7f7;display:flex;align-items:center;justify-content:center;">
+            <div style="width:46px;height:200px;border-radius:30px;background:#e4e4e4;position:relative;">
+              <div style="position:absolute;top:-26px;left:50%;transform:translateX(-50%);width:26px;height:26px;border-radius:50%;background:#e4e4e4;"></div>
+            </div>
+            <span style="position:absolute;top:60px;left:96px;width:20px;height:20px;border-radius:50%;background:#4fb6ab;border:2px solid #fff;"></span>
+            <span style="position:absolute;top:120px;left:150px;width:20px;height:20px;border-radius:50%;background:#e2664f;border:2px solid #fff;"></span>
+            <span style="position:absolute;top:190px;left:104px;width:20px;height:20px;border-radius:50%;background:#45a7d9;border:2px solid #fff;"></span>
+            <span style="position:absolute;bottom:8px;left:10px;font-size:11px;color:#aaa;">tap an organ →</span>
+          </div>
+          <div style="border:1.5px solid #e2664f;border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:5px;"><div style="font-size:12px;color:#e2664f;font-weight:700;">Attention · Heart</div><div style="font-size:13px;color:#444;">2 markers above range — see recommendation</div></div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_packagedetail }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" gap="10px" hint-size="290px,600px">
+          <div style="display:flex;gap:11px;align-items:center;"><span style="width:44px;height:44px;border-radius:50%;background:#45a7d9;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;">W</span><div><div style="font-family:'Gaegu';font-weight:700;font-size:19px;color:#222;">Wayfind</div><div style="font-size:12px;color:#999;">Advanced panel · 38 tests</div></div></div>
+          <div style="height:8px;width:100%;background:#ececec;border-radius:4px;"></div>
+          <div style="height:8px;width:80%;background:#ececec;border-radius:4px;"></div>
+          <div style="font-size:13px;color:#888;margin-top:2px;">What's covered</div>
+          <div style="display:flex;flex-wrap:wrap;gap:7px;">
+            <span style="border:1.5px solid #ddd;border-radius:14px;padding:5px 10px;font-size:12px;color:#666;">Heart</span>
+            <span style="border:1.5px solid #ddd;border-radius:14px;padding:5px 10px;font-size:12px;color:#666;">Liver</span>
+            <span style="border:1.5px solid #ddd;border-radius:14px;padding:5px 10px;font-size:12px;color:#666;">Kidneys</span>
+            <span style="border:1.5px solid #ddd;border-radius:14px;padding:5px 10px;font-size:12px;color:#666;">Thyroid</span>
+            <span style="border:1.5px solid #ddd;border-radius:14px;padding:5px 10px;font-size:12px;color:#666;">Hormones</span>
+            <span style="border:1.5px solid #ddd;border-radius:14px;padding:5px 10px;font-size:12px;color:#666;">+12 more</span>
+          </div>
+          <div style="border:1.5px solid #ddd;border-radius:12px;padding:10px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#444;">View full test list <span style="color:#bbb;">›</span></div>
+          <div style="flex:1;"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;border-top:1.5px solid #eee;padding-top:10px;"><div><div style="font-size:11px;color:#999;">Advanced panel</div><div style="font-family:'Gaegu';font-weight:700;font-size:16px;color:#222;">38 tests</div></div><div style="background:#1f2a44;color:#fff;border-radius:10px;padding:11px 22px;font-weight:700;font-size:14px;">Add</div></div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_testexplainer }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" gap="10px" hint-size="290px,600px">
+          <div style="font-family:'Gaegu';font-weight:700;font-size:19px;color:#222;">Lipid panel</div>
+          <div style="display:flex;gap:6px;"><span style="border:1.5px solid #ddd;border-radius:12px;padding:3px 9px;font-size:11px;color:#777;">Heart</span><span style="border:1.5px solid #ddd;border-radius:12px;padding:3px 9px;font-size:11px;color:#777;">Blood draw</span></div>
+          <div style="font-size:13px;color:#888;margin-top:2px;">What it measures</div>
+          <div style="height:8px;width:100%;background:#ececec;border-radius:4px;"></div>
+          <div style="height:8px;width:90%;background:#ececec;border-radius:4px;"></div>
+          <div style="height:8px;width:70%;background:#ececec;border-radius:4px;"></div>
+          <div style="font-size:13px;color:#888;margin-top:4px;">Why it matters</div>
+          <div style="height:8px;width:95%;background:#ececec;border-radius:4px;"></div>
+          <div style="height:8px;width:60%;background:#ececec;border-radius:4px;"></div>
+          <div style="border:1.5px solid #ddd;border-radius:12px;padding:10px;font-size:13px;color:#444;display:flex;justify-content:space-between;">Sample &amp; prep <span style="color:#bbb;">›</span></div>
+          <div style="flex:1;"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;border-top:1.5px solid #eee;padding-top:10px;"><div style="font-size:13px;color:#999;">Single blood test</div><div style="background:#1f2a44;color:#fff;border-radius:10px;padding:11px 22px;font-weight:700;font-size:14px;">Add to selection</div></div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_yourselection }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" gap="10px" hint-size="290px,600px">
+          <div style="font-family:'Gaegu';font-weight:700;font-size:18px;color:#222;">Your selection</div>
+          <div style="display:flex;justify-content:space-between;border:1.5px solid #ddd;border-radius:12px;padding:10px;align-items:center;"><div style="display:flex;gap:8px;align-items:center;"><span style="width:26px;height:26px;border-radius:50%;background:#45a7d9;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">W</span><div style="font-size:13px;color:#333;">Wayfind package</div></div></div>
+          <div style="display:flex;justify-content:space-between;border:1.5px solid #ddd;border-radius:12px;padding:10px;align-items:center;"><span style="font-size:13px;color:#333;">+ Vitamin D add-on</span></div>
+          <div style="border:1.5px dashed #cfcfcf;border-radius:12px;padding:10px;font-size:13px;color:#999;text-align:center;">+ Add another test</div>
+          <div style="flex:1;"></div>
+          <div style="background:#f6f4ee;border-radius:10px;padding:9px 11px;font-size:12px;color:#7a7361;">Our team arranges the appointment — no in-app booking.</div>
+          <div style="background:#1f2a44;color:#fff;border-radius:10px;padding:12px;text-align:center;font-weight:700;font-size:15px;">Book with our team</div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_catalogdesktoptablet }}" hint-placeholder-val="{{ true }}">
+<div style="font-family:'Gaegu',sans-serif;width:560px;height:600px;background:#fff;border:1.5px solid #2b2b2b;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px;overflow:hidden;">
+          <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1.5px solid #eee;padding-bottom:10px;"><div style="display:flex;gap:16px;align-items:center;"><span style="font-family:'Gaegu';font-weight:700;color:#1f2a44;">Portal</span><span style="font-size:12px;color:#999;">Home</span><span style="font-size:12px;color:#1f2a44;font-weight:700;">Tests</span><span style="font-size:12px;color:#999;">Body</span><span style="font-size:12px;color:#999;">Reports</span></div><div style="display:flex;gap:10px;align-items:center;"><span style="font-size:12px;color:#999;">Selection · 2</span><span style="width:28px;height:28px;border-radius:50%;background:#eee;"></span></div></div>
+          <div style="display:flex;gap:14px;flex:1;overflow:hidden;">
+            <div style="width:150px;display:flex;flex-direction:column;gap:8px;">
+              <div style="font-size:12px;color:#888;font-weight:700;">Filter by system</div>
+              <div style="font-size:13px;color:#1f2a44;">All systems</div>
+              <div style="font-size:13px;color:#777;">Heart</div>
+              <div style="font-size:13px;color:#777;">Liver</div>
+              <div style="font-size:13px;color:#777;">Kidneys</div>
+              <div style="font-size:13px;color:#777;">Hormones</div>
+              <div style="font-size:12px;color:#888;font-weight:700;margin-top:8px;">Package tier</div>
+              <div style="display:flex;gap:5px;flex-wrap:wrap;"><span style="width:18px;height:18px;border-radius:50%;background:#4a9d6e;"></span><span style="width:18px;height:18px;border-radius:50%;background:#4fb6ab;"></span><span style="width:18px;height:18px;border-radius:50%;background:#45a7d9;"></span><span style="width:18px;height:18px;border-radius:50%;background:#2f6fd0;"></span><span style="width:18px;height:18px;border-radius:50%;background:#e2664f;"></span><span style="width:18px;height:18px;border-radius:50%;background:#c79a52;"></span></div>
+            </div>
+            <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:start;">
+              <div style="border:1.5px solid #ddd;border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:7px;"><span style="width:30px;height:30px;border-radius:50%;background:#4a9d6e;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;">C</span><div style="font-size:13px;font-weight:700;color:#333;">Commence</div><div style="height:7px;width:80%;background:#ececec;border-radius:4px;"></div></div>
+              <div style="border:1.5px solid #ddd;border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:7px;"><span style="width:30px;height:30px;border-radius:50%;background:#4fb6ab;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;">A</span><div style="font-size:13px;font-weight:700;color:#333;">Ascent</div><div style="height:7px;width:80%;background:#ececec;border-radius:4px;"></div></div>
+              <div style="border:1.5px solid #ddd;border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:7px;"><span style="width:30px;height:30px;border-radius:50%;background:#45a7d9;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;">W</span><div style="font-size:13px;font-weight:700;color:#333;">Wayfind</div><div style="height:7px;width:80%;background:#ececec;border-radius:4px;"></div></div>
+              <div style="border:1.5px solid #ddd;border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:7px;"><span style="width:30px;height:30px;border-radius:50%;background:#c79a52;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;">D</span><div style="font-size:13px;font-weight:700;color:#333;">Discovery</div><div style="height:7px;width:80%;background:#ececec;border-radius:4px;"></div></div>
+            </div>
+          </div>
+        </div>
+</sc-if>
+
+<sc-if value="{{ is_assessmentintro }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" gap="12px" hint-size="290px,600px">
+          <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px;text-align:center;padding:0 6px;">
+            <div style="width:80px;height:80px;border-radius:50%;border:1.5px dashed #cfcfcf;background:#f5f5f5;align-self:center;display:flex;align-items:center;justify-content:center;font-size:12px;color:#aaa;">Health</div>
+            <div style="font-family:'Gaegu';font-weight:700;font-size:21px;color:#222;">Find the right tests in 5 minutes</div>
+            <div style="font-size:13px;color:#888;">Answer a few questions about your health, history &amp; goals. We'll recommend a package and map it to your body systems.</div>
+            <div style="display:flex;flex-direction:column;gap:7px;text-align:left;padding:0 6px;">
+              <div style="font-size:13px;color:#666;">• ~12 questions</div>
+              <div style="font-size:13px;color:#666;">• Private &amp; editable later</div>
+              <div style="font-size:13px;color:#666;">• Builds your trend baseline</div>
+            </div>
+          </div>
+          <div style="background:#1f2a44;color:#fff;border-radius:10px;padding:12px;text-align:center;font-weight:700;font-size:15px;">Begin assessment</div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_requestsent }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" gap="10px" hint-size="290px,600px">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:0 6px;">
+            <div style="width:56px;height:56px;border-radius:50%;background:#eef4f0;border:2px solid #4a9d6e;display:flex;align-items:center;justify-content:center;font-size:26px;">↗</div>
+            <div style="font-family:'Gaegu';font-weight:700;font-size:20px;color:#222;">Request sent!</div>
+            <div style="font-size:13px;color:#888;">Our team has your selection and will arrange your appointment.</div>
+            <div style="border:1.5px solid #ddd;border-radius:12px;padding:11px;width:100%;text-align:left;display:flex;flex-direction:column;gap:6px;"><div style="display:flex;gap:7px;font-size:13px;color:#444;align-items:center;"><span style="color:#4a9d6e;">●</span>We'll reply within 2 working hours</div><div style="display:flex;gap:7px;font-size:13px;color:#444;align-items:center;"><span style="color:#bbb;">●</span>You'll get a confirmation by SMS</div><div style="display:flex;gap:7px;font-size:13px;color:#444;align-items:center;"><span style="color:#bbb;">●</span>We can set up your portal account too</div></div>
+            <div style="font-size:12px;color:#aaa;">Ref #A-2481 · keep browsing meanwhile</div>
+          </div>
+          <div style="border:1.5px solid #ddd;border-radius:10px;padding:11px;text-align:center;font-size:14px;color:#444;">Back to browsing</div>
+</dc-import>
+</sc-if>
+
+
+
+
+
+
+
+<sc-if value="{{ is_silhouettemap }}" hint-placeholder-val="{{ true }}">
+<dc-import name="MenuScreen" active-tab="Body" gap="10px" hint-size="290px,600px">
+          <div style="display:flex;justify-content:space-between;align-items:center;"><div style="font-family:'Gaegu';font-weight:700;font-size:18px;color:#222;">Body systems</div><span style="font-size:12px;color:#999;">Filter ▾</span></div>
+          <div style="display:flex;gap:6px;"><span style="background:#1f2a44;color:#fff;border-radius:14px;padding:4px 10px;font-size:11px;">All</span><span style="border:1.5px solid #ddd;border-radius:14px;padding:4px 10px;font-size:11px;color:#777;">Attention</span><span style="border:1.5px solid #ddd;border-radius:14px;padding:4px 10px;font-size:11px;color:#777;">Normal</span></div>
+          <div style="position:relative;flex:1;border:1.5px dashed #cfcfcf;border-radius:14px;background:#f7f7f7;display:flex;align-items:center;justify-content:center;">
+            <div style="width:50px;height:300px;border-radius:34px;background:#e6e6e6;position:relative;">
+              <div style="position:absolute;top:-30px;left:50%;transform:translateX(-50%);width:30px;height:30px;border-radius:50%;background:#e6e6e6;"></div>
+            </div>
+            <span style="position:absolute;top:30px;left:50%;transform:translateX(-50%);width:22px;height:22px;border-radius:50%;background:#1f2a44;border:2px solid #fff;"></span>
+            <span style="position:absolute;top:120px;left:96px;width:22px;height:22px;border-radius:50%;background:#e2664f;border:2px solid #fff;"></span>
+            <span style="position:absolute;top:120px;left:150px;width:22px;height:22px;border-radius:50%;background:#1f2a44;border:2px solid #fff;"></span>
+            <span style="position:absolute;top:185px;left:108px;width:22px;height:22px;border-radius:50%;background:#c79a52;border:2px solid #fff;"></span>
+            <span style="position:absolute;top:185px;left:150px;width:22px;height:22px;border-radius:50%;background:#1f2a44;border:2px solid #fff;"></span>
+            <span style="position:absolute;top:250px;left:128px;width:22px;height:22px;border-radius:50%;background:#1f2a44;border:2px solid #fff;"></span>
+            <span style="position:absolute;bottom:8px;right:10px;font-size:10px;color:#aaa;">tap node →</span>
+          </div>
+          <div style="display:flex;gap:12px;font-size:11px;color:#777;"><span style="display:flex;gap:5px;align-items:center;"><span style="width:11px;height:11px;border-radius:50%;background:#1f2a44;"></span>Normal</span><span style="display:flex;gap:5px;align-items:center;"><span style="width:11px;height:11px;border-radius:50%;background:#e2664f;"></span>Attention</span><span style="display:flex;gap:5px;align-items:center;"><span style="width:11px;height:11px;border-radius:50%;background:#c79a52;"></span>No data</span></div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_systemsgrid }}" hint-placeholder-val="{{ true }}">
+<dc-import name="MenuScreen" active-tab="Body" gap="10px" hint-size="290px,600px">
+          <div style="font-family:'Gaegu';font-weight:700;font-size:18px;color:#222;">Your systems</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;align-content:start;">
+            <div style="border:1.5px solid #ddd;border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:7px;"><span style="width:30px;height:30px;border-radius:8px;background:#1f2a44;"></span><span style="font-size:13px;color:#333;font-weight:700;">Brain</span><span style="font-size:11px;color:#4a9d6e;">Normal</span></div>
+            <div style="border:1.5px solid #e2664f;border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:7px;"><span style="width:30px;height:30px;border-radius:8px;background:#1f2a44;"></span><span style="font-size:13px;color:#333;font-weight:700;">Heart</span><span style="font-size:11px;color:#e2664f;">Attention</span></div>
+            <div style="border:1.5px solid #ddd;border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:7px;"><span style="width:30px;height:30px;border-radius:8px;background:#1f2a44;"></span><span style="font-size:13px;color:#333;font-weight:700;">Liver</span><span style="font-size:11px;color:#4a9d6e;">Normal</span></div>
+            <div style="border:1.5px solid #ddd;border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:7px;"><span style="width:30px;height:30px;border-radius:8px;background:#1f2a44;"></span><span style="font-size:13px;color:#333;font-weight:700;">Kidneys</span><span style="font-size:11px;color:#4a9d6e;">Normal</span></div>
+            <div style="border:1.5px solid #c79a52;border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:7px;"><span style="width:30px;height:30px;border-radius:8px;background:#1f2a44;"></span><span style="font-size:13px;color:#333;font-weight:700;">Thyroid</span><span style="font-size:11px;color:#c79a52;">No data</span></div>
+            <div style="border:1.5px solid #ddd;border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:7px;"><span style="width:30px;height:30px;border-radius:8px;background:#1f2a44;"></span><span style="font-size:13px;color:#333;font-weight:700;">Lungs</span><span style="font-size:11px;color:#4a9d6e;">Normal</span></div>
+          </div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_organdetailcta }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" hint-size="290px,600px">
+          <div style="display:flex;gap:11px;align-items:center;"><span style="width:44px;height:44px;border-radius:50%;background:#1f2a44;"></span><div><div style="font-family:'Gaegu';font-weight:700;font-size:19px;color:#222;">Heart</div><div style="font-size:12px;color:#e2664f;">2 markers need attention</div></div></div>
+          <div style="display:flex;justify-content:space-between;border:1.5px solid #ddd;border-radius:10px;padding:10px;font-size:13px;color:#444;align-items:center;"><span>LDL cholesterol</span><span style="color:#e2664f;font-weight:700;">High ▲</span></div>
+          <div style="display:flex;justify-content:space-between;border:1.5px solid #ddd;border-radius:10px;padding:10px;font-size:13px;color:#444;align-items:center;"><span>Blood pressure</span><span style="color:#e2664f;font-weight:700;">High ▲</span></div>
+          <div style="display:flex;justify-content:space-between;border:1.5px solid #ddd;border-radius:10px;padding:10px;font-size:13px;color:#444;align-items:center;"><span>Resting HR</span><span style="color:#4a9d6e;">Normal</span></div>
+          <div style="background:#fbeeea;border:1.5px solid #e2664f;border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:7px;">
+            <div style="font-size:12px;color:#c1492f;font-weight:700;">Recommended</div>
+            <div style="font-size:13px;color:#444;">Re-test lipids in 3 months + add the Wayfind heart panel</div>
+            <div style="background:#1f2a44;color:#fff;border-radius:8px;padding:9px;text-align:center;font-size:13px;font-weight:700;">Add recommended tests</div>
+          </div>
+          <div style="flex:1;"></div>
+          <div style="border:1.5px solid #1f2a44;color:#1f2a44;border-radius:10px;padding:10px;text-align:center;font-size:13px;font-weight:700;">View heart trend</div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_healthtrendviz }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" hint-size="290px,600px">
+          <div style="font-family:'Gaegu';font-weight:700;font-size:18px;color:#222;">LDL cholesterol — trend</div>
+          <div style="display:flex;gap:6px;"><span style="background:#1f2a44;color:#fff;border-radius:12px;padding:3px 10px;font-size:11px;">1Y</span><span style="border:1.5px solid #ddd;border-radius:12px;padding:3px 10px;font-size:11px;color:#777;">2Y</span><span style="border:1.5px solid #ddd;border-radius:12px;padding:3px 10px;font-size:11px;color:#777;">All</span></div>
+          <div style="border:1.5px solid #eee;border-radius:12px;padding:12px;height:170px;position:relative;display:flex;align-items:flex-end;gap:10px;">
+            <div style="position:absolute;left:10px;right:10px;top:46px;border-top:1.5px dashed #e2664f;"></div>
+            <span style="position:absolute;top:38px;right:12px;font-size:10px;color:#e2664f;">target</span>
+            <span style="flex:1;height:75%;background:#cfd6e2;border-radius:3px;"></span>
+            <span style="flex:1;height:68%;background:#cfd6e2;border-radius:3px;"></span>
+            <span style="flex:1;height:80%;background:#cfd6e2;border-radius:3px;"></span>
+            <span style="flex:1;height:60%;background:#cfd6e2;border-radius:3px;"></span>
+            <span style="flex:1;height:52%;background:#1f2a44;border-radius:3px;"></span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:#999;padding:0 4px;"><span>'22</span><span>'23</span><span>'24</span><span>'25</span><span>now</span></div>
+          <div style="border:1.5px solid #ddd;border-radius:12px;padding:10px;font-size:13px;color:#444;">Down 18% since your last report — keep it up.</div>
+          <div style="flex:1;"></div>
+          <div style="border:1.5px solid #1f2a44;color:#1f2a44;border-radius:10px;padding:10px;text-align:center;font-size:13px;font-weight:700;">Compare with another marker</div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_reportslist }}" hint-placeholder-val="{{ true }}">
+<dc-import name="MenuScreen" active-tab="Reports" gap="10px" hint-size="290px,600px">
+          <div style="font-family:'Gaegu';font-weight:700;font-size:18px;color:#222;">My reports</div>
+          <div style="display:flex;gap:6px;"><span style="background:#1f2a44;color:#fff;border-radius:14px;padding:4px 10px;font-size:11px;">All</span><span style="border:1.5px solid #ddd;border-radius:14px;padding:4px 10px;font-size:11px;color:#777;">Health</span><span style="border:1.5px solid #ddd;border-radius:14px;padding:4px 10px;font-size:11px;color:#777;">Simple</span></div>
+          <div style="border:1.5px solid #ddd;border-radius:12px;padding:11px;display:flex;justify-content:space-between;align-items:center;"><div style="display:flex;gap:9px;align-items:center;"><span style="width:30px;height:38px;border-radius:5px;background:#eef3fb;border:1.5px solid #cdd8ea;"></span><div><div style="font-size:13px;color:#333;font-weight:700;">Health Report</div><div style="font-size:11px;color:#999;">Aug 2025 · ready</div></div></div><span style="font-size:18px;color:#bbb;">›</span></div>
+          <div style="border:1.5px solid #ddd;border-radius:12px;padding:11px;display:flex;justify-content:space-between;align-items:center;"><div style="display:flex;gap:9px;align-items:center;"><span style="width:30px;height:38px;border-radius:5px;background:#f2f6ef;border:1.5px solid #d4e0cd;"></span><div><div style="font-size:13px;color:#333;font-weight:700;">Lipid panel</div><div style="font-size:11px;color:#999;">Simple · Jul 2025</div></div></div><span style="font-size:18px;color:#bbb;">›</span></div>
+          <div style="border:1.5px solid #ddd;border-radius:12px;padding:11px;display:flex;justify-content:space-between;align-items:center;"><div style="display:flex;gap:9px;align-items:center;"><span style="width:30px;height:38px;border-radius:5px;background:#f7f1eb;border:1.5px solid #e3d3c3;"></span><div><div style="font-size:13px;color:#333;font-weight:700;">Thyroid panel</div><div style="font-size:11px;color:#c79a52;">Processing…</div></div></div><span style="font-size:18px;color:#bbb;">›</span></div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_recommendedtestsfromreport }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" gap="8px" hint-size="290px,600px">
+  <div style="flex:1;min-height:0;display:flex;"><dc-import name="BodyMap" mode="coverage" variant="A" pkg="none" preselected="heart:0,heart:3,blood:1,hormones:2" heading="Recommended tests" subheading="From your Apr 2025 report · adjust anything" style="flex:1;width:100%;min-width:0;" hint-size="100%,100%"></dc-import></div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_simplereport }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" gap="10px" action="⤓ PDF" hint-size="290px,600px">
+          <div style="font-family:'Gaegu';font-weight:700;font-size:17px;color:#222;">Lipid panel · Jul 2025</div>
+          <div style="font-size:11px;color:#999;">Auto-extracted from lab PDF</div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:#999;border-bottom:1.5px solid #eee;padding-bottom:5px;"><span>Marker</span><span>Result · Range</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:#444;align-items:center;"><span>Total cholesterol</span><span style="color:#e2664f;font-weight:700;">5.9 ▲</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:#444;align-items:center;"><span>LDL</span><span style="color:#e2664f;font-weight:700;">3.8 ▲</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:#444;align-items:center;"><span>HDL</span><span style="color:#4a9d6e;">1.4 ✓</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:#444;align-items:center;"><span>Triglycerides</span><span style="color:#4a9d6e;">1.1 ✓</span></div>
+          <div style="background:#f2efe6;border:1.5px solid #d8cfa8;border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:5px;"><div style="font-size:11px;color:#8a7b3f;font-weight:700;">Admin recommendation</div><div style="font-size:13px;color:#5f5320;">Repeat in 3 months + lifestyle review.</div></div>
+          <div style="flex:1;"></div>
+          <div style="background:#1f2a44;color:#fff;border-radius:10px;padding:11px;text-align:center;font-weight:700;font-size:14px;">Add to selection</div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_exportshare }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" title="Export report" gap="11px" hint-size="290px,600px">
+          <div style="flex:1;min-height:120px;background:#f6f6f6;border:1.5px dashed #d2d2d2;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#aaa;">report preview</div>
+          <div style="display:flex;justify-content:space-between;border:1.5px solid #ddd;border-radius:10px;padding:11px;font-size:13px;color:#444;align-items:center;"><span>Download PDF</span><span style="color:#bbb;">⤓</span></div>
+          <div style="display:flex;justify-content:space-between;border:1.5px solid #ddd;border-radius:10px;padding:11px;font-size:13px;color:#444;align-items:center;"><span>Email to me</span><span style="color:#bbb;">✉</span></div>
+          <div style="display:flex;align-items:center;gap:8px;border:1.5px solid #ddd;border-radius:10px;padding:9px 9px 9px 11px;background:#fafafa;">
+            <span style="color:#bbb;font-size:13px;">🔗</span>
+            <span style="flex:1;font-size:12px;color:#888;font-family:ui-monospace,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">crawfurd.health/r/8f3kd9</span>
+            <span style="background:#1f2a44;color:#fff;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;">Copy link</span>
+          </div>
+          <div style="font-size:11px;color:#aaa;text-align:center;">🔒 Secure link · expires in 7 days</div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_annualnudge }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" gap="12px" hint-size="290px,600px">
+          <div style="border:1.5px solid #e4dfd4;border-radius:10px;padding:9px 11px;font-size:12px;color:#9a8f7d;">It's been ~12 months since your last screening</div>
+          <div style="font-family:'Gaegu';font-weight:700;font-size:21px;color:#222;">Time for your annual screening</div>
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;"><div style="width:120px;height:120px;border-radius:50%;border:8px solid #eef0f3;border-top-color:#45a7d9;"></div></div>
+          <div style="border:1.5px solid #1f2a44;color:#1f2a44;border-radius:10px;padding:11px;text-align:center;font-size:14px;font-weight:700;">See year in review</div>
+          <div style="background:#1f2a44;color:#fff;border-radius:10px;padding:12px;text-align:center;font-weight:700;font-size:15px;">Re-book with our team</div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_yearinreviewcover }}" hint-placeholder-val="{{ true }}">
+<dc-import name="AuthScreen" bg="#1f2a44" gap="0px" hint-size="290px,600px">
+          <div style="display:flex;gap:5px;margin:6px 4px 0;"><span style="flex:1;height:3px;border-radius:2px;background:#fff;"></span><span style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.3);"></span><span style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.3);"></span><span style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.3);"></span></div>
+          <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:0 6px;">
+            <div style="font-family:'Caveat',cursive;font-weight:700;font-size:22px;color:#7fd0a0;">2025</div>
+            <div style="font-family:'Gaegu';font-weight:700;font-size:30px;line-height:1.1;">Your Health<br>Year in Review</div>
+            <div style="font-size:13px;color:rgba(255,255,255,.75);">3 health assessments · 28 markers tracked · 6 systems mapped</div>
+          </div>
+          <div style="background:#fff;color:#1f2a44;border-radius:10px;padding:12px;text-align:center;font-weight:700;font-size:15px;">Tap to begin →</div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_recapstatcard }}" hint-placeholder-val="{{ true }}">
+<dc-import name="AuthScreen" gap="0px" hint-size="290px,600px">
+          <div style="display:flex;gap:5px;margin:6px 4px 0;"><span style="flex:1;height:3px;border-radius:2px;background:#1f2a44;"></span><span style="flex:1;height:3px;border-radius:2px;background:#1f2a44;"></span><span style="flex:1;height:3px;border-radius:2px;background:#ddd;"></span><span style="flex:1;height:3px;border-radius:2px;background:#ddd;"></span></div>
+          <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;text-align:center;padding:0 8px;">
+            <div style="font-size:13px;color:#999;">Your biggest win</div>
+            <div style="font-family:'Gaegu';font-weight:700;font-size:46px;color:#1f2a44;">−18%</div>
+            <div style="font-family:'Gaegu';font-weight:700;font-size:18px;color:#333;">LDL cholesterol</div>
+            <div style="font-size:13px;color:#888;">down from 4.6 to 3.8 across three assessments this year</div>
+            <div style="display:flex;align-items:flex-end;gap:8px;height:70px;justify-content:center;margin-top:6px;"><span style="width:30px;height:90%;background:#cfd6e2;border-radius:4px;"></span><span style="width:30px;height:70%;background:#cfd6e2;border-radius:4px;"></span><span style="width:30px;height:55%;background:#7fd0a0;border-radius:4px;"></span></div>
+          </div>
+          <div style="text-align:center;font-size:12px;color:#aaa;">swipe →</div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_trendstory }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" hint-size="290px,600px">
+          <div style="font-family:'Gaegu';font-weight:700;font-size:19px;color:#222;">Your Trend Story</div>
+          <div style="font-size:13px;color:#888;">A narrative built only from your health data over time.</div>
+          <div style="border-left:3px solid #4a9d6e;padding-left:10px;display:flex;flex-direction:column;gap:5px;"><div style="font-size:12px;color:#4a9d6e;font-weight:700;">Q1 · improving</div><div style="height:7px;width:100%;background:#ececec;border-radius:4px;"></div><div style="height:7px;width:75%;background:#ececec;border-radius:4px;"></div></div>
+          <div style="border-left:3px solid #c79a52;padding-left:10px;display:flex;flex-direction:column;gap:5px;"><div style="font-size:12px;color:#c79a52;font-weight:700;">Q2 · plateau</div><div style="height:7px;width:90%;background:#ececec;border-radius:4px;"></div><div style="height:7px;width:60%;background:#ececec;border-radius:4px;"></div></div>
+          <div style="border-left:3px solid #e2664f;padding-left:10px;display:flex;flex-direction:column;gap:5px;"><div style="font-size:12px;color:#e2664f;font-weight:700;">Q3 · watch heart</div><div style="height:7px;width:95%;background:#ececec;border-radius:4px;"></div><div style="height:7px;width:70%;background:#ececec;border-radius:4px;"></div></div>
+          <div style="flex:1;"></div>
+          <div style="display:flex;gap:10px;"><div style="flex:1;border:1.5px solid #1f2a44;color:#1f2a44;border-radius:10px;padding:10px;text-align:center;font-size:13px;">Share story</div><div style="flex:1;background:#1f2a44;color:#fff;border-radius:10px;padding:10px;text-align:center;font-weight:700;font-size:13px;">Next steps</div></div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_profilemanagement }}" hint-placeholder-val="{{ true }}">
+<dc-import name="MenuScreen" active-tab="Profile" gap="10px" hint-size="290px,600px">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:7px;"><div style="width:60px;height:60px;border-radius:50%;background:#eee;"></div><div style="font-family:'Gaegu';font-weight:700;font-size:17px;color:#222;">Aisha Khan</div><div style="font-size:12px;color:#999;">+65 9•• ••• 321</div></div>
+          <div style="border:1.5px solid #ddd;border-radius:10px;padding:11px;font-size:13px;color:#444;display:flex;justify-content:space-between;">Personal details <span style="color:#bbb;">›</span></div>
+          <div style="border:1.5px solid #ddd;border-radius:10px;padding:11px;font-size:13px;color:#444;display:flex;justify-content:space-between;">Health profile &amp; conditions <span style="color:#bbb;">›</span></div>
+          <div style="border:1.5px solid #ddd;border-radius:10px;padding:11px;font-size:13px;color:#444;display:flex;justify-content:space-between;">Notifications &amp; reminders <span style="color:#bbb;">›</span></div>
+          <div style="border:1.5px solid #ddd;border-radius:10px;padding:11px;font-size:13px;color:#444;display:flex;justify-content:space-between;">Privacy &amp; data <span style="color:#bbb;">›</span></div>
+          <div style="border:1.5px solid #ddd;border-radius:10px;padding:11px;font-size:13px;color:#444;display:flex;justify-content:space-between;">My bookings <span style="color:#bbb;">›</span></div>
+          <div style="flex:1;"></div>
+          <div style="border:1.5px solid #e2664f;color:#e2664f;border-radius:10px;padding:10px;text-align:center;font-size:13px;">Sign out</div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_notifications }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" hint-size="290px,600px">
+          <div style="font-family:'Gaegu';font-weight:700;font-size:18px;color:#222;">Notifications &amp; reminders</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;border:1.5px solid #ddd;border-radius:10px;padding:11px;"><div style="font-size:13px;color:#333;">Report ready (email)</div><div style="width:40px;height:23px;border-radius:12px;background:#1f2a44;position:relative;"><span style="position:absolute;right:2px;top:2px;width:19px;height:19px;border-radius:50%;background:#fff;"></span></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;border:1.5px solid #ddd;border-radius:10px;padding:11px;"><div style="font-size:13px;color:#333;">Re-test reminders</div><div style="width:40px;height:23px;border-radius:12px;background:#1f2a44;position:relative;"><span style="position:absolute;right:2px;top:2px;width:19px;height:19px;border-radius:50%;background:#fff;"></span></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;border:1.5px solid #ddd;border-radius:10px;padding:11px;"><div style="font-size:13px;color:#333;">Assessment prompts</div><div style="width:40px;height:23px;border-radius:12px;background:#ddd;position:relative;"><span style="position:absolute;left:2px;top:2px;width:19px;height:19px;border-radius:50%;background:#fff;"></span></div></div>
+          <div style="font-size:13px;color:#888;margin-top:2px;">Recent</div>
+          <div style="border:1.5px solid #ddd;border-radius:10px;padding:10px;display:flex;gap:9px;align-items:center;"><span style="width:28px;height:28px;border-radius:8px;background:#eef3fb;flex:none;"></span><div style="flex:1;"><div style="font-size:13px;color:#333;">Your health report is ready</div><div style="font-size:11px;color:#aaa;">2h ago</div></div></div>
+          <div style="border:1.5px solid #ddd;border-radius:10px;padding:10px;display:flex;gap:9px;align-items:center;"><span style="width:28px;height:28px;border-radius:8px;background:#fbeeea;flex:none;"></span><div style="flex:1;"><div style="font-size:13px;color:#333;">Time to re-test lipids</div><div style="font-size:11px;color:#aaa;">Yesterday</div></div></div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_homedesktopresponsive }}" hint-placeholder-val="{{ true }}">
+<div style="font-family:'Gaegu',sans-serif;width:560px;height:600px;background:#fff;border:1.5px solid #2b2b2b;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px;overflow:hidden;">
+          <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1.5px solid #eee;padding-bottom:10px;"><div style="display:flex;gap:16px;align-items:center;"><span style="font-family:'Gaegu';font-weight:700;color:#1f2a44;">Portal</span><span style="font-size:12px;color:#1f2a44;font-weight:700;">Home</span><span style="font-size:12px;color:#999;">Tests</span><span style="font-size:12px;color:#999;">Body</span><span style="font-size:12px;color:#999;">Reports</span></div><span style="width:28px;height:28px;border-radius:50%;background:#eee;"></span></div>
+          <div style="display:flex;gap:12px;flex:1;overflow:hidden;">
+            <div style="flex:1.4;display:flex;flex-direction:column;gap:12px;">
+              <div style="background:#1f2a44;border-radius:14px;padding:16px;color:#fff;display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:12px;opacity:.85;">Recommended next step</div><div style="font-family:'Gaegu';font-weight:700;font-size:18px;">Complete your health assessment</div></div><div style="background:#fff;color:#1f2a44;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;">Start</div></div>
+              <div style="display:flex;gap:12px;">
+                <div style="flex:1;border:1.5px solid #ddd;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:7px;"><span style="width:26px;height:26px;border-radius:7px;background:#eee;"></span><span style="font-size:13px;color:#555;">Browse tests</span></div>
+                <div style="flex:1;border:1.5px solid #ddd;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:7px;"><span style="width:26px;height:26px;border-radius:7px;background:#eee;"></span><span style="font-size:13px;color:#555;">My reports</span></div>
+                <div style="flex:1;border:1.5px solid #ddd;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:7px;"><span style="width:26px;height:26px;border-radius:7px;background:#eee;"></span><span style="font-size:13px;color:#555;">Trends</span></div>
+              </div>
+              <div style="border:1.5px solid #eee;border-radius:12px;padding:14px;flex:1;"><div style="font-size:12px;color:#999;margin-bottom:8px;">Health score trend</div><div style="display:flex;align-items:flex-end;gap:8px;height:90px;"><span style="flex:1;height:45%;background:#cfd6e2;border-radius:3px;"></span><span style="flex:1;height:60%;background:#cfd6e2;border-radius:3px;"></span><span style="flex:1;height:52%;background:#cfd6e2;border-radius:3px;"></span><span style="flex:1;height:72%;background:#cfd6e2;border-radius:3px;"></span><span style="flex:1;height:88%;background:#1f2a44;border-radius:3px;"></span></div></div>
+            </div>
+            <div style="flex:1;border:1.5px dashed #cfcfcf;border-radius:14px;background:#f7f7f7;position:relative;display:flex;align-items:center;justify-content:center;">
+              <div style="width:38px;height:170px;border-radius:24px;background:#e6e6e6;position:relative;"><div style="position:absolute;top:-22px;left:50%;transform:translateX(-50%);width:22px;height:22px;border-radius:50%;background:#e6e6e6;"></div></div>
+              <span style="position:absolute;top:70px;left:54%;width:18px;height:18px;border-radius:50%;background:#e2664f;border:2px solid #fff;"></span>
+              <span style="position:absolute;top:120px;left:40%;width:18px;height:18px;border-radius:50%;background:#1f2a44;border:2px solid #fff;"></span>
+              <span style="position:absolute;bottom:10px;left:12px;font-size:11px;color:#aaa;">Body map</span>
+            </div>
+          </div>
+        </div>
+</sc-if>
+
+<sc-if value="{{ is_trendshub }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" title="Health trends" gap="10px" hint-size="290px,600px">
+  <div style="font-size:12px;color:#999;">From 3 screenings · Aug 2024 – May 2026</div>
+
+  <div style="background:#1f2a44;border-radius:14px;padding:13px;color:#fff;display:flex;flex-direction:column;gap:10px;">
+    <div style="font-size:12px;opacity:.8;">Your year in numbers</div>
+    <div style="display:flex;gap:16px;">
+      <div><div style="font-family:'Gaegu';font-weight:700;font-size:22px;line-height:1;">6</div><div style="font-size:10px;opacity:.75;line-height:1.2;margin-top:3px;">markers<br>improving</div></div>
+      <div><div style="font-family:'Gaegu';font-weight:700;font-size:22px;line-height:1;">2</div><div style="font-size:10px;opacity:.75;line-height:1.2;margin-top:3px;">need<br>attention</div></div>
+      <div><div style="font-family:'Gaegu';font-weight:700;font-size:22px;line-height:1;">28</div><div style="font-size:10px;opacity:.75;line-height:1.2;margin-top:3px;">markers<br>tracked</div></div>
+    </div>
+    <div style="background:#fff;color:#1f2a44;border-radius:8px;padding:8px;text-align:center;font-size:12px;font-weight:700;">See Year in Review →</div>
+  </div>
+
+  <div style="display:flex;gap:6px;flex:none;"><span style="background:#1f2a44;color:#fff;border-radius:12px;padding:3px 10px;font-size:11px;">1Y</span><span style="border:1.5px solid #ddd;border-radius:12px;padding:3px 10px;font-size:11px;color:#777;">2Y</span><span style="border:1.5px solid #ddd;border-radius:12px;padding:3px 10px;font-size:11px;color:#777;">All</span></div>
+
+  <div style="font-size:13px;color:#888;">Tracked markers</div>
+
+  <div style="border:1.5px solid #ddd;border-radius:12px;padding:10px;display:flex;align-items:center;gap:9px;">
+    <div style="flex:1;min-width:0;"><div style="font-size:13px;color:#333;font-weight:700;">LDL cholesterol</div><div style="font-size:11px;color:#999;">3.8 mmol/L</div></div>
+    <svg viewBox="0 0 56 22" width="56" height="22" style="flex:none;"><polyline points="2,5 19,9 37,13 54,17" fill="none" stroke="#4a9d6e" stroke-width="2"/></svg>
+    <div style="font-size:12px;color:#4a9d6e;font-weight:700;flex:none;">↓ 18%</div>
+    <span style="color:#bbb;flex:none;">›</span>
+  </div>
+
+  <div style="border:1.5px solid #ddd;border-radius:12px;padding:10px;display:flex;align-items:center;gap:9px;">
+    <div style="flex:1;min-width:0;"><div style="font-size:13px;color:#333;font-weight:700;">Total cholesterol</div><div style="font-size:11px;color:#999;">5.9 mmol/L</div></div>
+    <svg viewBox="0 0 56 22" width="56" height="22" style="flex:none;"><polyline points="2,6 19,10 37,13 54,15" fill="none" stroke="#4a9d6e" stroke-width="2"/></svg>
+    <div style="font-size:12px;color:#4a9d6e;font-weight:700;flex:none;">↓ 9%</div>
+    <span style="color:#bbb;flex:none;">›</span>
+  </div>
+
+  <div style="border:1.5px solid #ddd;border-radius:12px;padding:10px;display:flex;align-items:center;gap:9px;">
+    <div style="flex:1;min-width:0;"><div style="font-size:13px;color:#333;font-weight:700;">HDL cholesterol</div><div style="font-size:11px;color:#999;">1.4 mmol/L</div></div>
+    <svg viewBox="0 0 56 22" width="56" height="22" style="flex:none;"><polyline points="2,13 19,12 37,11 54,12" fill="none" stroke="#999" stroke-width="2"/></svg>
+    <div style="font-size:12px;color:#999;font-weight:700;flex:none;">→ flat</div>
+    <span style="color:#bbb;flex:none;">›</span>
+  </div>
+
+  <div style="border:1.5px solid #ddd;border-radius:12px;padding:10px;display:flex;align-items:center;gap:9px;">
+    <div style="flex:1;min-width:0;"><div style="font-size:13px;color:#333;font-weight:700;">Triglycerides</div><div style="font-size:11px;color:#999;">1.1 mmol/L</div></div>
+    <svg viewBox="0 0 56 22" width="56" height="22" style="flex:none;"><polyline points="2,11 19,13 37,10 54,12" fill="none" stroke="#999" stroke-width="2"/></svg>
+    <div style="font-size:12px;color:#999;font-weight:700;flex:none;">→ flat</div>
+    <span style="color:#bbb;flex:none;">›</span>
+  </div>
+
+  <div style="border:1.5px solid #ecd9b0;background:#fbf6ea;border-radius:12px;padding:10px;display:flex;align-items:center;gap:9px;">
+    <div style="flex:1;min-width:0;"><div style="font-size:13px;color:#333;font-weight:700;">Ferritin</div><div style="font-size:11px;color:#c79a52;">342 ng/mL · above range</div></div>
+    <svg viewBox="0 0 56 22" width="56" height="22" style="flex:none;"><polyline points="2,17 19,13 37,8 54,4" fill="none" stroke="#c79a52" stroke-width="2"/></svg>
+    <div style="font-size:12px;color:#c79a52;font-weight:700;flex:none;">↑ 12%</div>
+    <span style="color:#bbb;flex:none;">›</span>
+  </div>
+
+  <div style="font-size:11px;color:#aaa;text-align:center;margin-top:2px;">Trends use your report data only — no estimates.</div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_lipidstrend }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" title="Cholesterol — year" gap="10px" hint-size="290px,600px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+    <div><div style="font-family:'Gaegu';font-weight:700;font-size:18px;color:#222;">Lipid panel</div><div style="font-size:11px;color:#999;">4 markers · 3 screenings this year</div></div>
+    <div style="text-align:right;"><div style="font-family:'Gaegu';font-weight:700;font-size:20px;color:#4a9d6e;">↓ 18%</div><div style="font-size:10px;color:#999;">LDL vs Aug ’24</div></div>
+  </div>
+
+  <div style="display:flex;gap:6px;flex:none;"><span style="background:#1f2a44;color:#fff;border-radius:12px;padding:3px 10px;font-size:11px;">1Y</span><span style="border:1.5px solid #ddd;border-radius:12px;padding:3px 10px;font-size:11px;color:#777;">2Y</span><span style="border:1.5px solid #ddd;border-radius:12px;padding:3px 10px;font-size:11px;color:#777;">All</span></div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:10px;font-size:11px;color:#666;">
+    <span style="display:flex;gap:5px;align-items:center;"><span style="width:11px;height:3px;border-radius:2px;background:#1f2a44;"></span>Total</span>
+    <span style="display:flex;gap:5px;align-items:center;"><span style="width:11px;height:3px;border-radius:2px;background:#e2664f;"></span>LDL</span>
+    <span style="display:flex;gap:5px;align-items:center;"><span style="width:11px;height:3px;border-radius:2px;background:#4a9d6e;"></span>HDL</span>
+    <span style="display:flex;gap:5px;align-items:center;"><span style="width:11px;height:3px;border-radius:2px;background:#c79a52;"></span>Trig</span>
+  </div>
+
+  <div style="border:1.5px solid #eee;border-radius:12px;padding:8px 6px 4px;">
+    <svg viewBox="0 0 260 160" width="100%" height="166" style="display:block;">
+      <line x1="14" y1="40" x2="248" y2="40" stroke="#f1f1f1" stroke-width="1"/>
+      <line x1="14" y1="72" x2="248" y2="72" stroke="#f1f1f1" stroke-width="1"/>
+      <line x1="14" y1="104" x2="248" y2="104" stroke="#f1f1f1" stroke-width="1"/>
+      <line x1="14" y1="136" x2="248" y2="136" stroke="#f1f1f1" stroke-width="1"/>
+      <line x1="14" y1="120" x2="248" y2="120" stroke="#e2664f" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <text x="246" y="115" text-anchor="end" font-family="Gaegu, sans-serif" font-size="9" fill="#e2664f">LDL target &lt;3.4</text>
+      <polyline points="22,38 96,52 170,66 240,76" fill="none" stroke="#1f2a44" stroke-width="2.5"/>
+      <polyline points="22,58 96,78 170,104 240,120" fill="none" stroke="#e2664f" stroke-width="2.5"/>
+      <polyline points="22,122 96,120 170,114 240,116" fill="none" stroke="#4a9d6e" stroke-width="2"/>
+      <polyline points="22,96 96,100 170,94 240,98" fill="none" stroke="#c79a52" stroke-width="2"/>
+      <circle cx="22" cy="58" r="3" fill="#e2664f"/><circle cx="96" cy="78" r="3" fill="#e2664f"/><circle cx="170" cy="104" r="3" fill="#e2664f"/><circle cx="240" cy="120" r="3.5" fill="#fff" stroke="#e2664f" stroke-width="2"/>
+      <text x="22" y="154" text-anchor="middle" font-family="Gaegu, sans-serif" font-size="9" fill="#aaa">Aug ’24</text>
+      <text x="96" y="154" text-anchor="middle" font-family="Gaegu, sans-serif" font-size="9" fill="#aaa">Jan ’25</text>
+      <text x="170" y="154" text-anchor="middle" font-family="Gaegu, sans-serif" font-size="9" fill="#aaa">Sep ’25</text>
+      <text x="240" y="154" text-anchor="middle" font-family="Gaegu, sans-serif" font-size="9" fill="#aaa">May ’26</text>
+    </svg>
+  </div>
+
+  <div style="border:1.5px solid #cdd6c9;background:#f4f8f2;border-radius:12px;padding:10px;font-size:13px;color:#2a5238;line-height:1.4;">LDL dropped below target for the first time this year — down from 5.0 to 3.8 mmol/L.</div>
+
+  <div style="display:flex;justify-content:space-between;font-size:11px;color:#aaa;border-bottom:1.5px solid #eee;padding-bottom:5px;"><span>Marker</span><span>Latest · vs target</span></div>
+  <div style="display:flex;justify-content:space-between;font-size:13px;color:#444;"><span>LDL cholesterol</span><span style="color:#4a9d6e;font-weight:700;">3.8 ✓</span></div>
+  <div style="display:flex;justify-content:space-between;font-size:13px;color:#444;"><span>Total cholesterol</span><span style="color:#c79a52;font-weight:700;">5.9 ▲</span></div>
+  <div style="display:flex;justify-content:space-between;font-size:13px;color:#444;"><span>HDL cholesterol</span><span style="color:#4a9d6e;">1.4 ✓</span></div>
+  <div style="display:flex;justify-content:space-between;font-size:13px;color:#444;"><span>Triglycerides</span><span style="color:#4a9d6e;">1.1 ✓</span></div>
+
+  <div style="flex:1;"></div>
+  <div style="border:1.5px solid #1f2a44;color:#1f2a44;border-radius:10px;padding:10px;text-align:center;font-size:13px;font-weight:700;">Compare with another marker</div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_ferritintrend }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" title="Ferritin — year" gap="10px" hint-size="290px,600px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+    <div><div style="font-family:'Gaegu';font-weight:700;font-size:18px;color:#222;">Ferritin</div><div style="font-size:11px;color:#999;">Iron stores · 3 screenings this year</div></div>
+    <div style="text-align:right;"><div style="font-family:'Gaegu';font-weight:700;font-size:20px;color:#c79a52;">↑ 12%</div><div style="font-size:10px;color:#999;">vs Aug ’24</div></div>
+  </div>
+
+  <div style="display:flex;gap:6px;flex:none;"><span style="background:#1f2a44;color:#fff;border-radius:12px;padding:3px 10px;font-size:11px;">1Y</span><span style="border:1.5px solid #ddd;border-radius:12px;padding:3px 10px;font-size:11px;color:#777;">2Y</span><span style="border:1.5px solid #ddd;border-radius:12px;padding:3px 10px;font-size:11px;color:#777;">All</span></div>
+
+  <div style="border:1.5px solid #eee;border-radius:12px;padding:8px 6px 4px;">
+    <svg viewBox="0 0 260 160" width="100%" height="166" style="display:block;">
+      <rect x="14" y="74" width="234" height="56" fill="#eef4f0"/>
+      <line x1="14" y1="74" x2="248" y2="74" stroke="#cdd9cf" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <line x1="14" y1="130" x2="248" y2="130" stroke="#cdd9cf" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <text x="246" y="86" text-anchor="end" font-family="Gaegu, sans-serif" font-size="9" fill="#6f8f7a">normal range</text>
+      <polyline points="22,124 96,102 170,72 240,44" fill="none" stroke="#1f2a44" stroke-width="2.5"/>
+      <circle cx="22" cy="124" r="3" fill="#1f2a44"/><circle cx="96" cy="102" r="3" fill="#1f2a44"/><circle cx="170" cy="72" r="3" fill="#1f2a44"/><circle cx="240" cy="44" r="4" fill="#e2664f"/>
+      <text x="240" y="36" text-anchor="middle" font-family="Gaegu, sans-serif" font-size="9" fill="#e2664f">342 ▲</text>
+      <text x="22" y="154" text-anchor="middle" font-family="Gaegu, sans-serif" font-size="9" fill="#aaa">Aug ’24</text>
+      <text x="96" y="154" text-anchor="middle" font-family="Gaegu, sans-serif" font-size="9" fill="#aaa">Jan ’25</text>
+      <text x="170" y="154" text-anchor="middle" font-family="Gaegu, sans-serif" font-size="9" fill="#aaa">Sep ’25</text>
+      <text x="240" y="154" text-anchor="middle" font-family="Gaegu, sans-serif" font-size="9" fill="#aaa">May ’26</text>
+    </svg>
+  </div>
+
+  <div style="border:1.5px solid #ecd9b0;background:#fbf6ea;border-radius:12px;padding:10px;font-size:13px;color:#8a6a2a;line-height:1.4;">Climbed above the normal range this year (22–275 ng/mL). Worth discussing with your doctor.</div>
+
+  <div style="display:flex;justify-content:space-between;font-size:13px;color:#444;border-top:1.5px solid #eee;padding-top:8px;"><span>Latest</span><span style="color:#e2664f;font-weight:700;">342 ng/mL ▲</span></div>
+  <div style="display:flex;justify-content:space-between;font-size:13px;color:#444;"><span>Normal range</span><span style="color:#999;">22 – 275 ng/mL</span></div>
+
+  <div style="flex:1;"></div>
+  <div style="background:#1f2a44;color:#fff;border-radius:10px;padding:11px;text-align:center;font-weight:700;font-size:14px;">See recommended tests →</div>
+</dc-import>
+</sc-if>
+
+<sc-if value="{{ is_reviewcomplete }}" hint-placeholder-val="{{ true }}">
+<dc-import name="SubScreen" hint-size="290px,600px">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:0 10px;">
+    <span style="width:64px;height:64px;border-radius:50%;background:#eefaf4;border:2px solid #4a9d6e;color:#2f6b4d;font-size:30px;display:flex;align-items:center;justify-content:center;">✓</span>
+    <div style="font-family:'Gaegu';font-weight:700;font-size:22px;color:#222;">Review arranged</div>
+    <div style="font-size:14px;color:#7a7a7a;line-height:1.5;">Thu 22 May · Doctor consult<br>Arranged by our team — your results will update here afterwards.</div>
+  </div>
+  <div style="border:1.5px solid #1f2a44;color:#1f2a44;border-radius:10px;padding:11px;text-align:center;font-size:14px;font-weight:700;">Add to calendar</div>
+</dc-import>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 290, &quot;height&quot;: 600},
+  &quot;screen&quot;: {&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;splash&quot;,&quot;options&quot;:[&quot;landing&quot;,&quot;splash&quot;,&quot;otp&quot;,&quot;home&quot;,&quot;home_choose&quot;,&quot;home_reactivate&quot;,&quot;home_nextstep&quot;,&quot;home_newreport&quot;,&quot;catalog&quot;,&quot;assessment&quot;,&quot;recommendation&quot;,&quot;selection&quot;,&quot;reach&quot;,&quot;report&quot;,&quot;followup&quot;,&quot;verifycode&quot;,&quot;createprofile&quot;,&quot;selfonboarding&quot;,&quot;bodymapfirst&quot;,&quot;packagedetail&quot;,&quot;testexplainer&quot;,&quot;yourselection&quot;,&quot;catalogdesktoptablet&quot;,&quot;assessmentintro&quot;,&quot;requestsent&quot;,&quot;silhouettemap&quot;,&quot;systemsgrid&quot;,&quot;organdetailcta&quot;,&quot;healthtrendviz&quot;,&quot;trendshub&quot;,&quot;lipidstrend&quot;,&quot;ferritintrend&quot;,&quot;reportslist&quot;,&quot;recommendedtestsfromreport&quot;,&quot;simplereport&quot;,&quot;exportshare&quot;,&quot;annualnudge&quot;,&quot;yearinreviewcover&quot;,&quot;recapstatcard&quot;,&quot;trendstory&quot;,&quot;profilemanagement&quot;,&quot;notifications&quot;,&quot;homedesktopresponsive&quot;,&quot;reviewcomplete&quot;],&quot;tsType&quot;:&quot;string&quot;}
+}">
+class Component extends DCLogic {
+  state = { reportExport: 'closed' };
+  componentWillUnmount() { clearTimeout(this._t); }
+  renderVals() {
+    const s = this.props.screen || 'splash';
+    const is = (k) => s === k;
+    const rx = this.state.reportExport;
+    return {
+      openReportExport: () => this.setState({ reportExport: 'idle' }),
+      closeReportExport: () => { clearTimeout(this._t); this.setState({ reportExport: 'closed' }); },
+      downloadReportPDF: () => {
+        this.setState({ reportExport: 'preparing' });
+        clearTimeout(this._t);
+        this._t = setTimeout(() => this.setState({ reportExport: 'done' }), 1400);
+      },
+      reportExportOpen: rx !== 'closed',
+      reportExportIdle: rx === 'idle',
+      reportExportPreparing: rx === 'preparing',
+      reportExportDone: rx === 'done',
+      isLanding: is('landing'),
+      isSplash: is('splash'),
+      isOtp: is('otp'),
+      isHome: is('home'),
+      is_home_reactivate: is('home_reactivate'),
+      is_home_choose: is('home_choose'),
+      is_home_nextstep: is('home_nextstep'),
+      is_home_newreport: is('home_newreport'),
+      isCatalog: is('catalog'),
+      isAssessment: is('assessment'),
+      isRecommendation: is('recommendation'),
+      isSelection: is('selection'),
+      isReach: is('reach'),
+      isReport: is('report'),
+      isFollowup: is('followup'),
+      is_verifycode: is('verifycode'),
+      is_createprofile: is('createprofile'),
+      is_selfonboarding: is('selfonboarding'),
+      is_bodymapfirst: is('bodymapfirst'),
+      is_packagedetail: is('packagedetail'),
+      is_testexplainer: is('testexplainer'),
+      is_yourselection: is('yourselection'),
+      is_catalogdesktoptablet: is('catalogdesktoptablet'),
+      is_assessmentintro: is('assessmentintro'),
+      is_requestsent: is('requestsent'),
+      is_silhouettemap: is('silhouettemap'),
+      is_systemsgrid: is('systemsgrid'),
+      is_organdetailcta: is('organdetailcta'),
+      is_healthtrendviz: is('healthtrendviz'),
+      is_reportslist: is('reportslist'),
+      is_recommendedtestsfromreport: is('recommendedtestsfromreport'),
+      is_simplereport: is('simplereport'),
+      is_exportshare: is('exportshare'),
+      is_annualnudge: is('annualnudge'),
+      is_yearinreviewcover: is('yearinreviewcover'),
+      is_recapstatcard: is('recapstatcard'),
+      is_trendstory: is('trendstory'),
+      is_profilemanagement: is('profilemanagement'),
+      is_notifications: is('notifications'),
+      is_homedesktopresponsive: is('homedesktopresponsive'),
+      is_trendshub: is('trendshub'),
+      is_lipidstrend: is('lipidstrend'),
+      is_ferritintrend: is('ferritintrend'),
+      is_reviewcomplete: is('reviewcomplete'),
+    };
+  }
+}
+</script>
+</body>
+</html>
+

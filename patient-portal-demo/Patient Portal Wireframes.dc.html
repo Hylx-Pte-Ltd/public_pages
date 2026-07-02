@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&amp;family=Gaegu:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;}
+</style>
+</helmet>
+<template id="__bundler_thumbnail">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#1f2a44"/><rect x="45" y="30" width="10" height="40" rx="2.5" fill="#fff"/><rect x="30" y="45" width="40" height="10" rx="2.5" fill="#fff"/></svg>
+</template>
+<div style="min-width:100%;min-height:100vh;width:max-content;box-sizing:border-box;padding:40px 48px;background:#e7e5df;font-family:'Gaegu',sans-serif;">
+
+  <div style="font-family:'Caveat',cursive;font-weight:700;font-size:44px;color:#1f2a44;line-height:1;">Patient Portal — Wireframe Flows</div>
+  <div style="font-family:'Gaegu',sans-serif;font-size:16px;color:#6a6a6a;max-width:760px;margin-top:10px;">Crawfurd Medical patient portal — PWA wireframes in two views. <b>Journey</b> threads the screens into the end-to-end client experience across the clinic's swimlanes (Client · CA · Reception · Doctor) over the five health-screening phases. <b>Inventory</b> is the screen-by-screen catalogue (10 flows, 45+ frames) — the single source the Journey draws its screens from. Switch in <b>Tweaks ▸ layout</b>; in Inventory use <b>view</b> to isolate a flow. Clients create an account first, then browse, assess &amp; build a selection — booking itself is arranged with our team by phone, email or WhatsApp (no in-app booking).</div>
+  <div style="display:flex;gap:18px;margin-top:16px;flex-wrap:wrap;font-family:'Gaegu';font-size:13px;color:#555;">
+    <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:50%;background:#4a9d6e;"></span>Commence</span>
+    <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:50%;background:#4fb6ab;"></span>Ascent</span>
+    <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:50%;background:#45a7d9;"></span>Wayfind</span>
+    <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:50%;background:#2f6fd0;"></span>Frontier</span>
+    <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:50%;background:#e2664f;"></span>Revelation</span>
+    <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:50%;background:#c79a52;"></span>Discovery</span>
+  </div>
+
+  <div style="height:28px;"></div>
+
+  <sc-if value="{{ showJourney }}" hint-placeholder-val="{{ true }}">
+  <div style="margin-bottom:44px;">
+
+    <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin-bottom:18px;font-family:'Gaegu';font-size:13px;color:#555;">
+      <span>Read each lane left → right. <b style="color:#1f2a44;">→</b> the client moves screen to screen. Dashed = handoffs between people. Each client screen's <span style="color:#2f6fd0;font-weight:700;">ref ↗</span> opens the same page in Inventory:</span>
+      <span style="display:flex;align-items:center;gap:6px;"><span style="flex:none;width:17px;height:17px;border-radius:50%;background:#1f2a44;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;">1</span>account &amp; questionnaire link</span>
+      <span style="display:flex;align-items:center;gap:6px;"><span style="flex:none;width:17px;height:17px;border-radius:50%;background:#1f2a44;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;">2</span>booking &amp; upgrades synced</span>
+      <span style="display:flex;align-items:center;gap:6px;"><span style="flex:none;width:17px;height:17px;border-radius:50%;background:#1f2a44;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;">3</span>appointment → CMS / HIS</span>
+      <span style="display:flex;align-items:center;gap:6px;"><span style="flex:none;width:17px;height:17px;border-radius:50%;background:#1f2a44;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;">4</span>doctor recommendations</span>
+      <span style="display:flex;align-items:center;gap:6px;"><span style="flex:none;width:17px;height:17px;border-radius:50%;background:#1f2a44;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;">5</span>report uploaded → ready</span>
+      <span style="display:flex;align-items:center;gap:6px;"><span style="flex:none;width:17px;height:17px;border-radius:50%;background:#1f2a44;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;">6</span>follow-up scheduled</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:154px repeat(5,max-content);width:max-content;background:#fdfcf9;border:1.5px solid #d8d3c8;border-radius:14px;overflow:hidden;font-family:'Gaegu',sans-serif;">
+
+      <!-- ============ ROW 1 · PHASE HEADERS ============ -->
+      <div style="padding:16px 14px;display:flex;align-items:flex-end;"><div style="font-family:'Caveat';font-weight:700;font-size:18px;color:#9a8f7d;">Phases →</div></div>
+      <div style="border-left:1px dashed #d7d2c6;padding:16px 18px 12px;"><div style="font-family:'Caveat';font-weight:700;font-size:12px;color:#a89c87;letter-spacing:.5px;">PHASE 1</div><div style="font-family:'Caveat';font-weight:700;font-size:25px;color:#1f2a44;line-height:1.05;">Pre-screening</div></div>
+      <div style="border-left:1px dashed #d7d2c6;padding:16px 18px 12px;"><div style="font-family:'Caveat';font-weight:700;font-size:12px;color:#a89c87;letter-spacing:.5px;">PHASE 2</div><div style="font-family:'Caveat';font-weight:700;font-size:25px;color:#1f2a44;line-height:1.05;">During screening</div></div>
+      <div style="border-left:1px dashed #d7d2c6;padding:16px 18px 12px;"><div style="font-family:'Caveat';font-weight:700;font-size:12px;color:#a89c87;letter-spacing:.5px;">PHASE 3</div><div style="font-family:'Caveat';font-weight:700;font-size:25px;color:#1f2a44;line-height:1.05;">Post-screening</div></div>
+      <div style="border-left:1px dashed #d7d2c6;padding:16px 18px 12px;"><div style="font-family:'Caveat';font-weight:700;font-size:12px;color:#a89c87;letter-spacing:.5px;">PHASE 4</div><div style="font-family:'Caveat';font-weight:700;font-size:25px;color:#1f2a44;line-height:1.05;">Review appt.</div></div>
+      <div style="border-left:1px dashed #d7d2c6;padding:16px 18px 12px;"><div style="font-family:'Caveat';font-weight:700;font-size:12px;color:#a89c87;letter-spacing:.5px;">PHASE 5</div><div style="font-family:'Caveat';font-weight:700;font-size:25px;color:#1f2a44;line-height:1.05;">Future</div></div>
+
+      <!-- ============ ROW 2 · CLIENT LANE ============ -->
+      <div style="border-top:2px solid #1f2a44;padding:18px 12px;display:flex;flex-direction:column;gap:7px;justify-content:center;"><div style="font-family:'Caveat';font-weight:700;font-size:24px;color:#1f2a44;line-height:1;">Client</div><div style="font-size:11px;color:#9a8f7d;line-height:1.3;">the patient PWA<br>(new + returning)</div></div>
+
+      <!-- CLIENT · PRE-SCREENING : two tracks → gate → outcomes -->
+      <div style="border-top:2px solid #1f2a44;border-left:1px dashed #d7d2c6;padding:16px 18px;">
+        <div style="display:flex;align-items:center;gap:14px;">
+
+          <div style="display:flex;flex-direction:column;gap:24px;">
+            <!-- GUEST TRACK -->
+            <div>
+              <div style="font-family:'Caveat';font-weight:700;font-size:16px;color:#7d7361;margin-bottom:8px;">NEW · create an account, then pick a path — both land on the body map</div>
+              <div style="display:flex;align-items:flex-start;gap:8px;">
+
+                <div style="flex:none;width:184px;"><div style="font-family:'Caveat';font-weight:700;font-size:13px;color:#3a3a3a;height:18px;display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">N1 · Landing</span><a href="#layout=Inventory&view=Onboarding" title="Open this page in Inventory" style="flex:none;font-family:'Gaegu';font-weight:700;font-size:10px;color:#2f6fd0;text-decoration:none;border:1px solid #cdd9e6;border-radius:5px;padding:0 5px;line-height:15px;">ref&nbsp;↗</a></div><div style="width:184px;height:381px;overflow:hidden;"><div style="width:290px;height:600px;transform:scale(0.6345);transform-origin:top left;"><dc-import name="PortalScreen" screen="landing" hint-size="290px,600px"></dc-import></div></div></div>
+
+                <div style="flex:none;align-self:center;color:#1f2a44;font-size:22px;font-weight:700;margin-top:12px;">→</div>
+
+                <div style="flex:none;width:184px;"><div style="font-family:'Caveat';font-weight:700;font-size:13px;color:#3a3a3a;height:18px;display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">N2 · Log in / Sign up</span><a href="#layout=Inventory&view=Onboarding" title="Open this page in Inventory" style="flex:none;font-family:'Gaegu';font-weight:700;font-size:10px;color:#2f6fd0;text-decoration:none;border:1px solid #cdd9e6;border-radius:5px;padding:0 5px;line-height:15px;">ref&nbsp;↗</a></div><div style="width:184px;height:381px;overflow:hidden;"><div style="width:290px;height:600px;transform:scale(0.6345);transform-origin:top left;"><dc-import name="PortalScreen" screen="otp" hint-size="290px,600px"></dc-import></div></div></div>
+
+                <div style="flex:none;align-self:center;color:#1f2a44;font-size:22px;font-weight:700;margin-top:12px;">→</div>
+
+                <div style="flex:none;width:184px;"><div style="font-family:'Caveat';font-weight:700;font-size:13px;color:#3a3a3a;height:18px;display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">N3 · Home — choose your path</span><a href="#layout=Inventory&view=Home" title="Open this page in Inventory" style="flex:none;font-family:'Gaegu';font-weight:700;font-size:10px;color:#2f6fd0;text-decoration:none;border:1px solid #cdd9e6;border-radius:5px;padding:0 5px;line-height:15px;">ref&nbsp;↗</a></div><div style="width:184px;height:381px;overflow:hidden;"><div style="width:290px;height:600px;transform:scale(0.6345);transform-origin:top left;"><dc-import name="PortalScreen" screen="home_choose" hint-size="290px,600px"></dc-import></div></div></div>
+
+                <div style="flex:none;align-self:center;color:#1f2a44;font-size:22px;font-weight:700;margin-top:12px;">→</div>
+
+                <!-- ===== FORK at G2 : assessment is optional ===== -->
+                <div style="flex:none;display:flex;flex-direction:column;gap:22px;align-self:center;">
+
+                  <!-- OPTION A · assessment, last step lands on the body map -->
+                  <div>
+                    <div style="font-family:'Caveat';font-weight:700;font-size:15px;margin-bottom:6px;"><span style="background:#f3efe6;border:1px dashed #cdbf9f;border-radius:7px;padding:2px 9px;color:#6f6450;">OPTION A · take the assessment first <span style="color:#a89c87;">(optional)</span></span></div>
+                    <div style="display:flex;align-items:flex-start;gap:8px;">
+
+                      <div style="flex:none;width:184px;"><div style="font-family:'Caveat';font-weight:700;font-size:13px;color:#3a3a3a;height:18px;display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">N4 · Health assessment</span><a href="#layout=Inventory&view=Assessment" title="Open this page in Inventory" style="flex:none;font-family:'Gaegu';font-weight:700;font-size:10px;color:#2f6fd0;text-decoration:none;border:1px solid #cdd9e6;border-radius:5px;padding:0 5px;line-height:15px;">ref&nbsp;↗</a></div><div style="width:184px;height:381px;overflow:hidden;"><div style="width:290px;height:600px;transform:scale(0.6345);transform-origin:top left;"><dc-import name="PortalScreen" screen="assessment" hint-size="290px,600px"></dc-import></div></div></div>
+
+                      <div style="flex:none;align-self:center;width:150px;background:#fff;border:1.5px dashed #d8cfb8;border-radius:10px;padding:11px;"><div style="font-family:'Gaegu';font-weight:700;font-size:13px;color:#5f5848;">Last step → body map</div><div style="font-size:11.5px;color:#8a8270;line-height:1.35;margin-top:3px;">The final question hands off straight to the body map with the recommended package preselected — no separate recommendations screen.</div></div>
+
+                    </div>
+                  </div>
+
+                  <!-- OPTION B · express, already know what you want -->
+                  <div>
+                    <div style="font-family:'Caveat';font-weight:700;font-size:15px;margin-bottom:6px;"><span style="background:#f3efe6;border:1px dashed #cdbf9f;border-radius:7px;padding:2px 9px;color:#6f6450;">OPTION B · start choosing packages right away</span></div>
+                    <div style="width:384px;background:#fdfbf7;border:1.5px dashed #d8cfb8;border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;">
+                      <div style="font-family:'Gaegu';font-weight:700;font-size:15px;color:#5f5848;">Skip straight to the body map</div>
+                      <div style="font-size:12.5px;color:#8a8270;line-height:1.45;">No assessment needed — go right to the body map and pick a CRAWFURD package or individual tests by area.</div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- both paths land on the body map -->
+                <div style="flex:none;align-self:center;display:flex;flex-direction:column;align-items:center;gap:3px;"><span style="font-family:'Caveat';font-weight:700;font-size:13px;color:#9a8f7d;width:88px;text-align:center;line-height:1.15;">both&nbsp;paths land on ↓</span><span style="color:#1f2a44;font-size:22px;font-weight:700;">→</span></div>
+
+                <!-- ===== BODY MAP · the hub both paths reach ===== -->
+                <div style="flex:none;width:184px;align-self:center;"><div style="font-family:'Caveat';font-weight:700;font-size:13px;color:#1f2a44;height:18px;display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">★ Body map — pick tests</span><a href="#layout=Inventory&view=Body%20Map" title="Open this page in Inventory" style="flex:none;font-family:'Gaegu';font-weight:700;font-size:10px;color:#2f6fd0;text-decoration:none;border:1px solid #cdd9e6;border-radius:5px;padding:0 5px;line-height:15px;">ref&nbsp;↗</a></div><div style="width:184px;height:381px;overflow:hidden;outline:2px solid #1f2a44;outline-offset:1px;border-radius:30px;"><div style="width:290px;height:600px;transform:scale(0.6345);transform-origin:top left;"><dc-import name="PhoneShell" gap="8px" activeTab="Tests" hint-size="290px,600px"><div style="flex:1;min-height:0;display:flex;"><dc-import name="BodyMap" mode="coverage" variant="A" pkg="wayfind" style="flex:1;width:100%;min-width:0;" hint-size="100%,100%"></dc-import></div></dc-import></div></div></div>
+
+                <div style="flex:none;align-self:center;display:flex;flex-direction:column;align-items:center;gap:3px;"><span style="font-family:'Caveat';font-weight:700;font-size:12px;color:#9a8f7d;width:100px;text-align:center;line-height:1.15;">checkout → package + add-ons</span><span style="color:#1f2a44;font-size:22px;font-weight:700;">→</span></div>
+
+                <div style="flex:none;width:184px;align-self:center;"><div style="font-family:'Caveat';font-weight:700;font-size:13px;color:#3a3a3a;height:18px;display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">N6 · Selection (pkg + add-ons)</span><a href="#layout=Inventory&view=Booking" title="Open this page in Inventory" style="flex:none;font-family:'Gaegu';font-weight:700;font-size:10px;color:#2f6fd0;text-decoration:none;border:1px solid #cdd9e6;border-radius:5px;padding:0 5px;line-height:15px;">ref&nbsp;↗</a></div><div style="width:184px;height:381px;overflow:hidden;"><div style="width:290px;height:600px;transform:scale(0.6345);transform-origin:top left;"><dc-import name="PortalScreen" screen="selection" hint-size="290px,600px"></dc-import></div></div></div>
+
+                <div style="flex:none;align-self:center;color:#1f2a44;font-size:22px;font-weight:700;">→</div>
+              </div>
+            </div>
+
+            <!-- MEMBER TRACK -->
+            <div>
+              <div style="font-family:'Caveat';font-weight:700;font-size:16px;color:#7d7361;margin-bottom:8px;">RETURNING · signed-in / pre-booked by the clinic</div>
+              <div style="display:flex;align-items:flex-start;gap:8px;">
+
+                <div style="flex:none;width:184px;"><div style="font-family:'Caveat';font-weight:700;font-size:13px;color:#3a3a3a;height:18px;display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">M1 · OTP login</span><a href="#layout=Inventory&view=Onboarding" title="Open this page in Inventory" style="flex:none;font-family:'Gaegu';font-weight:700;font-size:10px;color:#2f6fd0;text-decoration:none;border:1px solid #cdd9e6;border-radius:5px;padding:0 5px;line-height:15px;">ref&nbsp;↗</a></div><div style="width:184px;height:381px;overflow:hidden;"><div style="width:290px;height:600px;transform:scale(0.6345);transform-origin:top left;"><dc-import name="PortalScreen" screen="otp" hint-size="290px,600px"></dc-import></div></div></div>
+
+                <div style="flex:none;align-self:center;color:#1f2a44;font-size:22px;font-weight:700;margin-top:12px;">→</div>
+
+                <!-- ===== M2 · HOME — FORKS INTO 3 STATES BY MEMBER STATUS ===== -->
+                <div style="flex:none;align-self:center;display:flex;flex-direction:column;align-items:center;gap:3px;margin-top:12px;"><span style="font-family:'Caveat';font-weight:700;font-size:13px;color:#9a8f7d;width:120px;text-align:center;line-height:1.15;">M2 · Home by status at login</span><span style="font-family:'Caveat';font-size:54px;color:#bdb6a6;line-height:.7;">{</span></div>
+
+                <div style="flex:none;display:flex;flex-direction:column;gap:16px;">
+
+                  <!-- BRANCH A · LAPSED -->
+                  <div style="display:flex;align-items:flex-start;gap:8px;">
+                    <div style="flex:none;align-self:center;width:104px;background:#f3efe6;border:1px dashed #cdbf9f;border-radius:8px;padding:6px 9px;"><div style="font-family:'Caveat';font-weight:700;font-size:14px;color:#6f6450;line-height:1.1;">A · Lapsed</div><div style="font-family:'Gaegu';font-size:10.5px;color:#8a8270;line-height:1.25;margin-top:2px;">no recent assessment</div></div>
+                    <div style="flex:none;width:184px;"><div style="font-family:'Caveat';font-weight:700;font-size:13px;color:#3a3a3a;height:18px;display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">M2a · Home — reactivate</span><a href="#layout=Inventory&view=Home" title="Open this page in Inventory" style="flex:none;font-family:'Gaegu';font-weight:700;font-size:10px;color:#2f6fd0;text-decoration:none;border:1px solid #cdd9e6;border-radius:5px;padding:0 5px;line-height:15px;">ref&nbsp;↗</a></div><div style="width:184px;height:381px;overflow:hidden;"><div style="width:290px;height:600px;transform:scale(0.6345);transform-origin:top left;"><dc-import name="PortalScreen" screen="home_reactivate" hint-size="290px,600px"></dc-import></div></div></div>
+                    <div style="flex:none;align-self:center;color:#1f2a44;font-size:22px;font-weight:700;margin-top:12px;">→</div>
+                    <div style="flex:none;align-self:center;width:150px;background:#fff;border:1.5px dashed #d8cfb8;border-radius:10px;padding:11px;"><div style="font-family:'Gaegu';font-weight:700;font-size:13px;color:#5f5848;">Take the assessment</div><div style="font-size:11.5px;color:#8a8270;line-height:1.35;margin-top:3px;">Rejoins the assessment path → lands on the body map → booking gate.</div></div>
+                  </div>
+
+                  <!-- BRANCH B · ACTIVE, NO BOOKING -->
+                  <div style="display:flex;align-items:flex-start;gap:8px;">
+                    <div style="flex:none;align-self:center;width:104px;background:#f3efe6;border:1px dashed #cdbf9f;border-radius:8px;padding:6px 9px;"><div style="font-family:'Caveat';font-weight:700;font-size:14px;color:#6f6450;line-height:1.1;">B · Active</div><div style="font-family:'Gaegu';font-size:10.5px;color:#8a8270;line-height:1.25;margin-top:2px;">assessed, no booking</div></div>
+                    <div style="flex:none;width:184px;"><div style="font-family:'Caveat';font-weight:700;font-size:13px;color:#3a3a3a;height:18px;display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">M2b · Home — next step</span><a href="#layout=Inventory&view=Home" title="Open this page in Inventory" style="flex:none;font-family:'Gaegu';font-weight:700;font-size:10px;color:#2f6fd0;text-decoration:none;border:1px solid #cdd9e6;border-radius:5px;padding:0 5px;line-height:15px;">ref&nbsp;↗</a></div><div style="width:184px;height:381px;overflow:hidden;"><div style="width:290px;height:600px;transform:scale(0.6345);transform-origin:top left;"><dc-import name="PortalScreen" screen="home_nextstep" hint-size="290px,600px"></dc-import></div></div></div>
+                    <div style="flex:none;align-self:center;color:#1f2a44;font-size:22px;font-weight:700;margin-top:12px;">→</div>
+                    <div style="flex:none;align-self:center;width:150px;background:#fff;border:1.5px dashed #d8cfb8;border-radius:10px;padding:11px;"><div style="font-family:'Gaegu';font-weight:700;font-size:13px;color:#5f5848;">Open the body map</div><div style="font-size:11.5px;color:#8a8270;line-height:1.35;margin-top:3px;">Review recommended tests, add à-la-carte, then send selection to the booking gate.</div></div>
+                  </div>
+
+                  <!-- BRANCH C · PRE-BOOKED (clinic-created account) -->
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <div style="flex:none;width:104px;background:#eef5fb;border:1px solid #cdd9e6;border-radius:8px;padding:6px 9px;"><div style="font-family:'Caveat';font-weight:700;font-size:14px;color:#27506f;line-height:1.1;">C · Pre-booked</div><div style="font-family:'Gaegu';font-size:10.5px;color:#6a7a88;line-height:1.25;margin-top:2px;">account created by clinic</div></div>
+                    <div style="flex:none;color:#1f2a44;font-size:22px;font-weight:700;">→</div>
+                    <div style="flex:none;width:320px;background:#fff;border:1.5px dashed #cdd9e6;border-radius:10px;padding:12px;"><div style="font-family:'Gaegu';font-weight:700;font-size:13px;color:#27506f;">Lands on the standard Home</div><div style="font-size:11.5px;color:#6a7a88;line-height:1.4;margin-top:3px;">The clinic creates the account and arranges the visit offline. The app shows no appointment, pre-visit form or check-in — the member just browses, views reports and reaches us if needed.</div></div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CONVERGE BRACE -->
+          <div style="align-self:center;display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="font-family:'Caveat';font-weight:700;font-size:14px;color:#9a8f7d;">converge</div><div style="font-family:'Caveat';font-size:60px;color:#bdb6a6;line-height:.7;">}</div></div>
+
+          <!-- GATE -->
+          <div style="flex:none;width:170px;align-self:center;display:flex;flex-direction:column;align-items:center;gap:9px;">
+            <div style="width:170px;background:#1f2a44;color:#fff;border-radius:14px;padding:13px;text-align:center;"><div style="font-family:'Gaegu';font-weight:700;font-size:14px;margin-bottom:5px;line-height:1.2;">Booking is done with our team</div><div style="font-size:10.5px;color:#c7cdd9;line-height:1.35;">Phone · email · WhatsApp — no in-app booking</div></div>
+            <div style="font-family:'Caveat';font-weight:700;font-size:14px;color:#9a8f7d;">send your selection ↓</div>
+          </div>
+
+          <div style="flex:none;align-self:center;color:#1f2a44;font-size:22px;font-weight:700;">→</div>
+
+          <!-- OUTCOMES -->
+          <div style="flex:none;display:flex;flex-direction:column;gap:12px;align-self:center;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div style="flex:none;width:188px;background:#fff;border:1.5px solid #cdd6c9;border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:5px;"><div style="display:flex;align-items:center;gap:7px;"><span style="width:22px;height:22px;border-radius:7px;background:#25d366;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">W</span><span style="font-family:'Gaegu';font-weight:700;font-size:13px;color:#2a5238;">Book with our team</span><span style="font-size:9px;color:#9a8f7d;font-weight:700;">PRIMARY</span></div><div style="font-size:11px;color:#6f8f7a;line-height:1.35;">WhatsApp / email / call opens pre-filled with selection + assessment ref → our team books it for you.</div></div>
+
+              <div style="flex:none;align-self:center;color:#1f2a44;font-size:22px;font-weight:700;">→</div>
+
+              <div style="flex:none;width:184px;"><div style="font-family:'Caveat';font-weight:700;font-size:13px;color:#3a3a3a;height:18px;display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">2 · Choose how to reach us</span><a href="#layout=Inventory&view=Booking" title="Open this page in Inventory" style="flex:none;font-family:'Gaegu';font-weight:700;font-size:10px;color:#2f6fd0;text-decoration:none;border:1px solid #cdd9e6;border-radius:5px;padding:0 5px;line-height:15px;">ref&nbsp;↗</a></div><div style="width:184px;height:381px;overflow:hidden;"><div style="width:290px;height:600px;transform:scale(0.6345);transform-origin:top left;"><dc-import name="PortalScreen" screen="reach" hint-size="290px,600px"></dc-import></div></div></div>
+
+              <div style="flex:none;align-self:center;color:#1f2a44;font-size:22px;font-weight:700;">→</div>
+
+              <div style="flex:none;width:184px;"><div style="font-family:'Caveat';font-weight:700;font-size:13px;color:#3a3a3a;height:18px;display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">3 · Request sent</span><a href="#layout=Inventory&view=Booking" title="Open this page in Inventory" style="flex:none;font-family:'Gaegu';font-weight:700;font-size:10px;color:#2f6fd0;text-decoration:none;border:1px solid #cdd9e6;border-radius:5px;padding:0 5px;line-height:15px;">ref&nbsp;↗</a></div><div style="width:184px;height:381px;overflow:hidden;"><div style="width:290px;height:600px;transform:scale(0.6345);transform-origin:top left;"><dc-import name="PortalScreen" screen="requestsent" hint-size="290px,600px"></dc-import></div></div></div>
+            </div>
+            <div style="width:188px;background:#fff;border:1.5px solid #cdd9e6;border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:5px;"><div style="display:flex;align-items:center;gap:7px;"><span style="width:22px;height:22px;border-radius:50%;background:#f3f7fb;border:2px solid #45a7d9;color:#2f6fd0;font-size:12px;display:flex;align-items:center;justify-content:center;">✓</span><span style="font-family:'Gaegu';font-weight:700;font-size:13px;color:#27506f;">Portal access (included)</span></div><div style="font-size:11px;color:#6a7a88;line-height:1.35;">The account created at sign-up unlocks the portal — reports, body map &amp; trends — and ties your selection to a profile.</div></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CLIENT · DURING -->
+      <div style="border-top:2px solid #1f2a44;border-left:1px dashed #d7d2c6;padding:16px 18px;display:flex;align-items:center;gap:8px;">
+        <div style="flex:none;color:#1f2a44;font-size:22px;font-weight:700;">→</div>
+        <div style="flex:none;width:184px;background:#f6f4ee;border:1.5px dashed #d8cfb8;border-radius:12px;padding:14px;"><div style="font-family:'Gaegu';font-weight:700;font-size:14px;color:#5f5848;">At the clinic</div><div style="font-size:12px;color:#8a8270;line-height:1.4;margin-top:4px;">Screening happens in person — no app screen during the visit.</div></div>
+      </div>
+
+      <!-- CLIENT · POST -->
+      <div style="border-top:2px solid #1f2a44;border-left:1px dashed #d7d2c6;padding:16px 18px;display:flex;align-items:center;gap:8px;">
+        <div style="flex:none;color:#1f2a44;font-size:22px;font-weight:700;">→</div>
+        <div style="flex:none;width:184px;"><div style="font-family:'Caveat';font-weight:700;font-size:13px;color:#3a3a3a;height:18px;display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Home · new report</span><a href="#layout=Inventory&view=Home" title="Open this page in Inventory" style="flex:none;font-family:'Gaegu';font-weight:700;font-size:10px;color:#2f6fd0;text-decoration:none;border:1px solid #cdd9e6;border-radius:5px;padding:0 5px;line-height:15px;">ref&nbsp;↗</a></div><div style="width:184px;height:381px;overflow:hidden;"><div style="width:290px;height:600px;transform:scale(0.6345);transform-origin:top left;"><dc-import name="PortalScreen" screen="home_newreport" hint-size="290px,600px"></dc-import></div></div></div>
+        <div style="flex:none;color:#1f2a44;font-size:22px;font-weight:700;">→</div>
+        <div style="flex:none;width:184px;"><div style="font-family:'Caveat';font-weight:700;font-size:13px;color:#3a3a3a;height:18px;display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Health report</span><a href="#layout=Inventory&view=Reports" title="Open this page in Inventory" style="flex:none;font-family:'Gaegu';font-weight:700;font-size:10px;color:#2f6fd0;text-decoration:none;border:1px solid #cdd9e6;border-radius:5px;padding:0 5px;line-height:15px;">ref&nbsp;↗</a></div><div style="width:184px;height:381px;overflow:hidden;"><div style="width:290px;height:600px;transform:scale(0.6345);transform-origin:top left;"><dc-import name="PortalScreen" screen="report" hint-size="290px,600px"></dc-import></div></div></div>
+        <div style="flex:none;align-self:center;color:#1f2a44;font-size:22px;font-weight:700;">→</div>
+        <div style="flex:none;width:184px;"><div style="font-family:'Caveat';font-weight:700;font-size:13px;color:#3a3a3a;height:18px;display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Export / share</span><a href="#layout=Inventory&view=Reports" title="Open this page in Inventory" style="flex:none;font-family:'Gaegu';font-weight:700;font-size:10px;color:#2f6fd0;text-decoration:none;border:1px solid #cdd9e6;border-radius:5px;padding:0 5px;line-height:15px;">ref&nbsp;↗</a></div><div style="width:184px;height:381px;overflow:hidden;"><div style="width:290px;height:600px;transform:scale(0.6345);transform-origin:top left;"><dc-import name="PortalScreen" screen="exportshare" hint-size="290px,600px"></dc-import></div></div></div>
+      </div>
+
+      <!-- CLIENT · REVIEW -->
+      <div style="border-top:2px solid #1f2a44;border-left:1px dashed #d7d2c6;padding:16px 18px;display:flex;align-items:center;gap:8px;">
+        <div style="flex:none;align-self:center;display:flex;flex-direction:column;align-items:center;gap:3px;"><span style="font-family:'Caveat';font-weight:700;font-size:12px;color:#9a8f7d;width:96px;text-align:center;line-height:1.15;">doctor recommends follow-up tests</span><span style="color:#1f2a44;font-size:22px;font-weight:700;">→</span></div>
+
+        <div style="flex:none;width:184px;"><div style="font-family:'Caveat';font-weight:700;font-size:13px;color:#1f2a44;height:18px;display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">★ Body map — pick tests (recs)</span><a href="#layout=Inventory&view=Reports" title="Open this page in Inventory" style="flex:none;font-family:'Gaegu';font-weight:700;font-size:10px;color:#2f6fd0;text-decoration:none;border:1px solid #cdd9e6;border-radius:5px;padding:0 5px;line-height:15px;">ref&nbsp;↗</a></div><div style="width:184px;height:381px;overflow:hidden;outline:2px solid #1f2a44;outline-offset:1px;border-radius:30px;"><div style="width:290px;height:600px;transform:scale(0.6345);transform-origin:top left;"><dc-import name="PortalScreen" screen="recommendedtestsfromreport" hint-size="290px,600px"></dc-import></div></div></div>
+
+        <div style="flex:none;align-self:center;color:#1f2a44;font-size:22px;font-weight:700;">→</div>
+
+        <div style="flex:none;width:184px;"><div style="font-family:'Caveat';font-weight:700;font-size:13px;color:#3a3a3a;height:18px;display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Selection (pkg + add-ons)</span><a href="#layout=Inventory&view=Booking" title="Open this page in Inventory" style="flex:none;font-family:'Gaegu';font-weight:700;font-size:10px;color:#2f6fd0;text-decoration:none;border:1px solid #cdd9e6;border-radius:5px;padding:0 5px;line-height:15px;">ref&nbsp;↗</a></div><div style="width:184px;height:381px;overflow:hidden;"><div style="width:290px;height:600px;transform:scale(0.6345);transform-origin:top left;"><dc-import name="PortalScreen" screen="selection" hint-size="290px,600px"></dc-import></div></div></div>
+
+        <div style="flex:none;align-self:center;display:flex;flex-direction:column;align-items:center;gap:3px;"><span style="font-family:'Caveat';font-weight:700;font-size:12px;color:#9a8f7d;width:96px;text-align:center;line-height:1.15;">same booking flow →</span><span style="color:#1f2a44;font-size:22px;font-weight:700;">→</span></div>
+
+        <div style="flex:none;width:170px;align-self:center;display:flex;flex-direction:column;align-items:center;gap:9px;">
+          <div style="width:170px;background:#1f2a44;color:#fff;border-radius:14px;padding:13px;text-align:center;"><div style="font-family:'Gaegu';font-weight:700;font-size:14px;margin-bottom:5px;line-height:1.2;">Repeats the booking flow</div><div style="font-size:10.5px;color:#c7cdd9;line-height:1.35;">Send the follow-up selection to our team — phone · email · WhatsApp. No in-app booking.</div></div>
+          <a href="#layout=Inventory&view=Booking" style="font-family:'Caveat';font-weight:700;font-size:13px;color:#2f6fd0;text-decoration:none;">see Booking ↗</a>
+        </div>
+      </div>
+
+      <!-- CLIENT · FUTURE -->
+      <div style="border-top:2px solid #1f2a44;border-left:1px dashed #d7d2c6;padding:16px 18px;display:flex;align-items:flex-start;gap:14px;">
+
+        <!-- TIME BREAK — a separate, later session, NOT a continuation of the review flow -->
+        <div style="flex:none;align-self:center;display:flex;flex-direction:column;align-items:center;gap:6px;border-left:2px dashed #cbb9a0;padding-left:16px;">
+          <span style="font-family:'Caveat';font-weight:700;font-size:16px;color:#9a8f7d;width:98px;text-align:center;line-height:1.1;">~12 months later</span>
+          <span style="font-size:10.5px;color:#b3a892;width:98px;text-align:center;line-height:1.25;">a separate, returning visit</span>
+        </div>
+
+        <!-- frames sit lower to signal a fresh session that starts at Home -->
+        <div style="display:flex;align-items:flex-start;gap:8px;margin-top:72px;">
+
+          <!-- 1 · opens the app → Home -->
+          <div style="flex:none;width:184px;"><div style="font-family:'Caveat';font-weight:700;font-size:13px;color:#3a3a3a;height:18px;display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Opens the app — Home (annual return)</span><a href="#layout=Inventory&view=Home" title="Open this page in Inventory" style="flex:none;font-family:'Gaegu';font-weight:700;font-size:10px;color:#2f6fd0;text-decoration:none;border:1px solid #cdd9e6;border-radius:5px;padding:0 5px;line-height:15px;">ref&nbsp;↗</a></div><div style="width:184px;height:381px;overflow:hidden;"><div style="width:290px;height:600px;transform:scale(0.6345);transform-origin:top left;"><dc-import name="PortalScreen" screen="home_reactivate" hint-size="290px,600px"></dc-import></div></div></div>
+
+          <div style="flex:none;align-self:center;display:flex;flex-direction:column;align-items:center;gap:3px;"><span style="font-family:'Caveat';font-weight:700;font-size:12px;color:#9a8f7d;width:80px;text-align:center;line-height:1.15;">taps “Trends”</span><span style="color:#1f2a44;font-size:22px;font-weight:700;">→</span></div>
+
+          <!-- 2 · Trends hub -->
+          <div style="flex:none;width:184px;"><div style="font-family:'Caveat';font-weight:700;font-size:13px;color:#3a3a3a;height:18px;display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Trends hub — year on year</span><a href="#layout=Inventory&view=Body%20Map" title="Open this page in Inventory" style="flex:none;font-family:'Gaegu';font-weight:700;font-size:10px;color:#2f6fd0;text-decoration:none;border:1px solid #cdd9e6;border-radius:5px;padding:0 5px;line-height:15px;">ref&nbsp;↗</a></div><div style="width:184px;height:381px;overflow:hidden;"><div style="width:290px;height:600px;transform:scale(0.6345);transform-origin:top left;"><dc-import name="PortalScreen" screen="trendshub" hint-size="290px,600px"></dc-import></div></div></div>
+
+          <div style="flex:none;align-self:center;display:flex;flex-direction:column;align-items:center;gap:3px;"><span style="font-family:'Caveat';font-weight:700;font-size:12px;color:#9a8f7d;width:80px;text-align:center;line-height:1.15;">tap a marker</span><span style="color:#1f2a44;font-size:22px;font-weight:700;">→</span></div>
+
+          <!-- 3 · Cholesterol year progression -->
+          <div style="flex:none;width:184px;"><div style="font-family:'Caveat';font-weight:700;font-size:13px;color:#3a3a3a;height:18px;display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Cholesterol — year progression</span><a href="#layout=Inventory&view=Body%20Map" title="Open this page in Inventory" style="flex:none;font-family:'Gaegu';font-weight:700;font-size:10px;color:#2f6fd0;text-decoration:none;border:1px solid #cdd9e6;border-radius:5px;padding:0 5px;line-height:15px;">ref&nbsp;↗</a></div><div style="width:184px;height:381px;overflow:hidden;"><div style="width:290px;height:600px;transform:scale(0.6345);transform-origin:top left;"><dc-import name="PortalScreen" screen="lipidstrend" hint-size="290px,600px"></dc-import></div></div></div>
+
+          <div style="flex:none;align-self:center;width:150px;background:#fdf2ea;border:1.5px dashed #e9c4ad;border-radius:10px;padding:11px;"><div style="font-family:'Gaegu';font-weight:700;font-size:13px;color:#7a4a2a;">The yearly loop</div><div style="font-size:11.5px;color:#9a6a4a;line-height:1.35;margin-top:3px;">A separate session months later: the member opens Home, taps Trends, and sees the year-on-year change — then we nudge the next re-book.</div></div>
+
+        </div>
+      </div>
+
+      <!-- ============ ROW 3 · CLINIC ASSISTANT (CA) ============ -->
+      <div style="border-top:1.5px dashed #cfcabd;padding:16px 12px;display:flex;flex-direction:column;gap:6px;justify-content:center;"><div style="font-family:'Caveat';font-weight:700;font-size:21px;color:#4a9d6e;line-height:1;">Clinic Assistant</div><div style="font-size:11px;color:#9a8f7d;line-height:1.3;">CA — guides &amp;<br>upsells, becomes HRM</div></div>
+
+      <div style="border-top:1.5px dashed #cfcabd;border-left:1px dashed #d7d2c6;padding:16px 16px;display:flex;flex-direction:column;gap:7px;align-items:flex-start;">
+        <div style="width:172px;background:#fff;border:1.5px solid #ddd8cd;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:4px;"><div style="display:flex;gap:6px;align-items:flex-start;"><span style="flex:none;width:16px;height:16px;border-radius:50%;background:#1f2a44;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;">1</span><b style="color:#222;font-size:12px;">Pre-register patient</b></div><div style="font-size:11px;color:#6a6a6a;line-height:1.3;">1 day prior — indicate current package in admin portal.</div></div>
+        <div style="color:#cfc8b8;font-size:13px;padding-left:5px;">↓</div>
+        <div style="width:172px;background:#fff;border:1.5px solid #ddd8cd;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:4px;"><div style="display:flex;gap:6px;align-items:flex-start;"><span style="flex:none;width:16px;height:16px;border-radius:50%;background:#1f2a44;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;">1</span><b style="color:#222;font-size:12px;">Send link + instructions</b></div><div style="font-size:11px;color:#6a6a6a;line-height:1.3;">Account / questionnaire link + pre-HS instructions (e.g. fasting).</div></div>
+        <div style="color:#cfc8b8;font-size:13px;padding-left:5px;">↓</div>
+        <div style="width:172px;background:#fff;border:1.5px solid #ddd8cd;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:4px;"><div style="display:flex;gap:6px;align-items:flex-start;"><span style="flex:none;width:16px;height:16px;border-radius:50%;background:#1f2a44;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;">2</span><b style="color:#222;font-size:12px;">Notified: form done</b></div><div style="font-size:11px;color:#6a6a6a;line-height:1.3;">Sees package upgrades, add-ons &amp; bookmarks. Then: booking notification.</div></div>
+      </div>
+
+      <div style="border-top:1.5px dashed #cfcabd;border-left:1px dashed #d7d2c6;padding:16px 16px;display:flex;flex-direction:column;gap:7px;align-items:flex-start;">
+        <div style="width:172px;background:#fff;border:1.5px solid #ddd8cd;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:4px;"><b style="color:#222;font-size:12px;">Welcome &amp; package review</b><div style="font-size:11px;color:#6a6a6a;line-height:1.3;">Check-in at HS station; review package, give recommendations.</div></div>
+        <div style="color:#cfc8b8;font-size:13px;padding-left:5px;">↓</div>
+        <div style="width:172px;background:#fff;border:1.5px solid #ddd8cd;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:4px;"><b style="color:#222;font-size:12px;">Brief on tablet</b><div style="font-size:11px;color:#6a6a6a;line-height:1.3;">Explain scans &amp; bookmarked tests to the client.</div></div>
+        <div style="color:#cfc8b8;font-size:13px;padding-left:5px;">↓</div>
+        <div style="width:172px;background:#fff;border:1.5px solid #ddd8cd;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:4px;"><b style="color:#222;font-size:12px;">Log add-on tests</b><div style="font-size:11px;color:#6a6a6a;line-height:1.3;">Record who added what — for billing / incentive.</div></div>
+      </div>
+
+      <div style="border-top:1.5px dashed #cfcabd;border-left:1px dashed #d7d2c6;padding:16px 16px;display:flex;flex-direction:column;gap:7px;align-items:flex-start;">
+        <div style="width:172px;background:#fff;border:1.5px solid #ddd8cd;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:4px;"><b style="color:#222;font-size:12px;">HRM outreach</b><div style="font-size:11px;color:#6a6a6a;line-height:1.3;">Establish self as long-term health relationship manager; results in 2 weeks.</div></div>
+        <div style="color:#cfc8b8;font-size:13px;padding-left:5px;">↓</div>
+        <div style="width:172px;background:#fff;border:1.5px solid #ddd8cd;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:4px;"><div style="display:flex;gap:6px;align-items:flex-start;"><span style="flex:none;width:16px;height:16px;border-radius:50%;background:#1f2a44;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;">5</span><b style="color:#222;font-size:12px;">Inform report ready</b></div><div style="font-size:11px;color:#6a6a6a;line-height:1.3;">Send instructions to access the report in-app.</div></div>
+      </div>
+
+      <div style="border-top:1.5px dashed #cfcabd;border-left:1px dashed #d7d2c6;padding:16px 16px;display:flex;flex-direction:column;gap:7px;align-items:flex-start;">
+        <div style="width:172px;background:#fff;border:1.5px solid #ddd8cd;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:4px;"><div style="display:flex;gap:6px;align-items:flex-start;"><span style="flex:none;width:16px;height:16px;border-radius:50%;background:#1f2a44;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;">6</span><b style="color:#222;font-size:12px;">Offer follow-up support</b></div><div style="font-size:11px;color:#6a6a6a;line-height:1.3;">Outreach to help schedule reviews / follow-ups.</div></div>
+        <div style="color:#cfc8b8;font-size:13px;padding-left:5px;">↓</div>
+        <div style="width:172px;background:#fff;border:1.5px solid #ddd8cd;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:4px;"><b style="color:#222;font-size:12px;">Schedule &amp; log</b><div style="font-size:11px;color:#6a6a6a;line-height:1.3;">Book follow-up bloods / scans; log any add-ons.</div></div>
+      </div>
+
+      <div style="border-top:1.5px dashed #cfcabd;border-left:1px dashed #d7d2c6;padding:16px 16px;display:flex;flex-direction:column;gap:7px;align-items:flex-start;">
+        <div style="width:172px;background:#fff;border:1.5px solid #ddd8cd;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:4px;"><b style="color:#222;font-size:12px;">Annual reminders</b><div style="font-size:11px;color:#6a6a6a;line-height:1.3;">App / email nudges to re-book annual HS; keep regular contact.</div></div>
+      </div>
+
+      <!-- ============ ROW 4 · RECEPTION / BO ============ -->
+      <div style="border-top:1.5px dashed #cfcabd;padding:16px 12px;display:flex;flex-direction:column;gap:6px;justify-content:center;"><div style="font-family:'Caveat';font-weight:700;font-size:21px;color:#c79a52;line-height:1;">Reception / BO</div><div style="font-size:11px;color:#9a8f7d;line-height:1.3;">billing &amp; clinic<br>systems</div></div>
+
+      <div style="border-top:1.5px dashed #cfcabd;border-left:1px dashed #d7d2c6;padding:16px 16px;display:flex;flex-direction:column;gap:7px;align-items:flex-start;">
+        <div style="width:172px;background:#fff;border:1.5px solid #ddd8cd;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:4px;"><div style="display:flex;gap:6px;align-items:flex-start;"><span style="flex:none;width:16px;height:16px;border-radius:50%;background:#1f2a44;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;">3</span><b style="color:#222;font-size:12px;">Appointment → systems</b></div><div style="font-size:11px;color:#6a6a6a;line-height:1.3;">Into Clinic CMS (automatic) / Hospital HIS (manual).</div></div>
+      </div>
+
+      <div style="border-top:1.5px dashed #cfcabd;border-left:1px dashed #d7d2c6;padding:16px 16px;display:flex;flex-direction:column;gap:7px;align-items:flex-start;">
+        <div style="width:172px;background:#fff;border:1.5px solid #ddd8cd;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:4px;"><b style="color:#222;font-size:12px;">Billing at screening</b><div style="font-size:11px;color:#6a6a6a;line-height:1.3;">Guide client through billing, collect payment.</div></div>
+        <div style="color:#cfc8b8;font-size:13px;padding-left:5px;">↓</div>
+        <div style="width:172px;background:#fff;border:1.5px solid #ddd8cd;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:4px;"><b style="color:#222;font-size:12px;">Finalise bill</b></div>
+      </div>
+
+      <div style="border-top:1.5px dashed #cfcabd;border-left:1px dashed #d7d2c6;padding:16px 16px;display:flex;align-items:center;justify-content:center;"><div style="font-family:'Caveat';font-size:22px;color:#cbc4b4;">—</div></div>
+
+      <div style="border-top:1.5px dashed #cfcabd;border-left:1px dashed #d7d2c6;padding:16px 16px;display:flex;flex-direction:column;gap:7px;align-items:flex-start;">
+        <div style="width:172px;background:#fff;border:1.5px solid #ddd8cd;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:4px;"><b style="color:#222;font-size:12px;">Billing at review</b><div style="font-size:11px;color:#6a6a6a;line-height:1.3;">Collect payment; finalise bill.</div></div>
+      </div>
+
+      <div style="border-top:1.5px dashed #cfcabd;border-left:1px dashed #d7d2c6;padding:16px 16px;display:flex;align-items:center;justify-content:center;"><div style="font-family:'Caveat';font-size:22px;color:#cbc4b4;">—</div></div>
+
+      <!-- ============ ROW 5 · DOCTOR ============ -->
+      <div style="border-top:1.5px dashed #cfcabd;padding:16px 12px;display:flex;flex-direction:column;gap:6px;justify-content:center;"><div style="font-family:'Caveat';font-weight:700;font-size:21px;color:#2f6fd0;line-height:1;">Doctor</div><div style="font-size:11px;color:#9a8f7d;line-height:1.3;">consult, report<br>&amp; review</div></div>
+
+      <div style="border-top:1.5px dashed #cfcabd;border-left:1px dashed #d7d2c6;padding:16px 16px;display:flex;flex-direction:column;gap:7px;align-items:flex-start;">
+        <div style="width:172px;background:#fff;border:1.5px solid #ddd8cd;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:5px;"><div style="display:flex;gap:6px;align-items:flex-start;"><span style="flex:none;width:16px;height:16px;border-radius:50%;background:#1f2a44;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;">4</span><b style="color:#222;font-size:12px;">DARA recommendations</b></div><div style="font-size:11px;color:#6a6a6a;line-height:1.3;">Upgrade options; compare against pre-booked package.</div><span style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:1px 5px;font-size:9.5px;color:#7a6a2a;align-self:flex-start;">may not apply to all packages</span></div>
+      </div>
+
+      <div style="border-top:1.5px dashed #cfcabd;border-left:1px dashed #d7d2c6;padding:16px 16px;display:flex;flex-direction:column;gap:7px;align-items:flex-start;">
+        <div style="width:172px;background:#fff;border:1.5px solid #ddd8cd;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:5px;"><b style="color:#222;font-size:12px;">Consult</b><div style="font-size:11px;color:#6a6a6a;line-height:1.3;">Reinforce CA recommendations + customised recs from consult.</div><span style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:1px 5px;font-size:9.5px;color:#7a6a2a;align-self:flex-start;">may not apply to all packages</span></div>
+      </div>
+
+      <div style="border-top:1.5px dashed #cfcabd;border-left:1px dashed #d7d2c6;padding:16px 16px;display:flex;flex-direction:column;gap:7px;align-items:flex-start;">
+        <div style="width:172px;background:#fff;border:1.5px solid #ddd8cd;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:4px;"><div style="display:flex;gap:6px;align-items:flex-start;"><span style="flex:none;width:16px;height:16px;border-radius:50%;background:#1f2a44;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;">5</span><b style="color:#222;font-size:12px;">Compile report</b></div><div style="font-size:11px;color:#6a6a6a;line-height:1.3;">DARA or manual PDF. App extracts exact findings &amp; positions them in the summary — it does not interpret.</div></div>
+        <div style="color:#cfc8b8;font-size:13px;padding-left:5px;">↓</div>
+        <div style="width:172px;background:#fff;border:1.5px solid #ddd8cd;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:4px;"><b style="color:#222;font-size:12px;">KS / OS screenings</b><div style="font-size:11px;color:#6a6a6a;line-height:1.3;">Doctor logs findings in screening report.</div></div>
+      </div>
+
+      <div style="border-top:1.5px dashed #cfcabd;border-left:1px dashed #d7d2c6;padding:16px 16px;display:flex;flex-direction:column;gap:7px;align-items:flex-start;">
+        <div style="width:172px;background:#fff;border:1.5px solid #ddd8cd;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:5px;"><b style="color:#222;font-size:12px;">HS review</b><div style="font-size:11px;color:#6a6a6a;line-height:1.3;">Review results &amp; problem areas; recommend add-ons / follow-ups.</div><span style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:1px 5px;font-size:9.5px;color:#7a6a2a;align-self:flex-start;">may not apply to all packages</span></div>
+      </div>
+
+      <div style="border-top:1.5px dashed #cfcabd;border-left:1px dashed #d7d2c6;padding:16px 16px;display:flex;align-items:center;justify-content:center;"><div style="font-family:'Caveat';font-size:22px;color:#cbc4b4;">—</div></div>
+
+    </div>
+
+    <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;">
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:380px;transform:rotate(-0.4deg);"><b>MKT — FOMO + CTA.</b> "Do you know?" pop-ups sprinkled through Browse &amp; Assessment: common conditions / health scares → which tests detect them.</div>
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:360px;transform:rotate(0.5deg);">No booking happens in the app. The app builds the selection; <b>booking is always done with our team</b> via phone, email or WhatsApp (pre-filled with the selection + assessment ref). An OTP account is created first — it unlocks the portal (reports, body map, trends) and ties every selection &amp; booking to a profile.</div>
+      <div style="background:#fdf2ea;border:1px solid #e9c4ad;border-radius:3px;padding:8px 12px;font-size:14px;color:#7a4a2a;max-width:360px;transform:rotate(-0.4deg);"><b>Trends, year on year.</b> Once a member has ≥2 screenings, Home's <b>Trends</b> action opens the Trends hub — tracked markers with sparklines, then full-year charts (cholesterol, ferritin). See Inventory ▸ Body Map + Trends.</div>
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:340px;transform:rotate(-0.3deg);"><b>Admin open Qs.</b> CA group permissions per institution; patient grouping for package delineation; how CA-logged add-ons flow to BO for billing.</div>
+      <div style="background:#fdf2ea;border:1px solid #e9c4ad;border-radius:3px;padding:8px 12px;font-size:14px;color:#7a4a2a;max-width:380px;transform:rotate(0.4deg);"><b>Body map is the hub.</b> Whichever path a client takes — assessment-first or browse-first — they converge on the body map. Covered areas light up by package; tapping any area (covered or grey) opens its tests to add à-la-carte before building the selection.</div>
+    </div>
+    </sc-if>
+
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ showInventory }}" hint-placeholder-val="{{ true }}">
+  <sc-if value="{{ showOnboarding }}" hint-placeholder-val="{{ true }}">
+  <div style="margin-bottom:48px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+      <div style="width:28px;height:28px;border-radius:50%;background:#1f2a44;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;">1</div>
+      <div style="font-family:'Caveat',cursive;font-weight:700;font-size:30px;color:#1f2a44;">Onboarding &amp; Login</div>
+      <div style="font-family:'Gaegu';font-size:14px;color:#8a8a8a;">— phone OTP or Singpass, self-serve profile</div>
+    </div>
+
+    <div style="display:flex;gap:26px;align-items:flex-start;">
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">00 · Landing</div>
+        <dc-import name="PortalScreen" screen="landing" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">01 · Log in / Sign up</div>
+        <dc-import name="PortalScreen" screen="otp" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">02 · Verify code</div>
+        <dc-import name="PortalScreen" screen="verifycode" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">03 · Create profile</div>
+        <dc-import name="PortalScreen" screen="createprofile" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">04 · Self-onboarding</div>
+        <dc-import name="PortalScreen" screen="selfonboarding" hint-size="290px,600px"></dc-import>
+      </div>
+
+    </div>
+
+    <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;">
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:360px;transform:rotate(-0.5deg);">Phone OTP or Singpass — no passwords. Logging in and signing up are the same flow; returning users skip profile setup (03–04).</div>
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:360px;transform:rotate(0.4deg);">No guest browsing — clients log in (phone OTP or Singpass) before browsing, so every selection &amp; booking is tied to a profile.</div>
+    </div>
+    </sc-if>
+
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ showHome }}" hint-placeholder-val="{{ true }}">
+  <div style="margin-bottom:48px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+      <div style="width:28px;height:28px;border-radius:50%;background:#1f2a44;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;">2</div>
+      <div style="font-family:'Caveat',cursive;font-weight:700;font-size:30px;color:#1f2a44;">Home Dashboard</div>
+      <div style="font-family:'Gaegu';font-size:14px;color:#8a8a8a;">— shell direction (A/B) + 3 member states (C–E)</div>
+    </div>
+
+    <div style="display:flex;gap:26px;align-items:flex-start;">
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">A · Action-first</div>
+        <dc-import name="PortalScreen" screen="home" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">B · Body-map-first</div>
+        <dc-import name="PortalScreen" screen="bodymapfirst" hint-size="290px,600px"></dc-import>
+      </div>
+
+    </div>
+
+    <div style="font-family:'Caveat',cursive;font-weight:700;font-size:18px;color:#7d7361;margin:22px 0 10px;">Member states — Home renders 1 of 4 by status at login</div>
+
+    <div style="display:flex;gap:26px;align-items:flex-start;flex-wrap:wrap;">
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">New — choose your path (no assessment yet)</div>
+        <dc-import name="PortalScreen" screen="home_choose" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">C · Lapsed — complete assessment</div>
+        <dc-import name="PortalScreen" screen="home_reactivate" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">D · Active — next step (recs)</div>
+        <dc-import name="PortalScreen" screen="home_nextstep" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">E · New report ready (post-screening)</div>
+        <dc-import name="PortalScreen" screen="home_newreport" hint-size="290px,600px"></dc-import>
+      </div>
+
+    </div>
+
+    <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;">
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:380px;transform:rotate(-0.5deg);">A pushes the next action, B leads with the Body Map. Bottom tab bar is shared across both.</div>
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:340px;transform:rotate(0.4deg);">Every client is signed in, so the shell always shows live insight &amp; recommendation cards — there is no locked/guest state.</div>
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:420px;transform:rotate(-0.3deg);">At login Home picks ONE state: <b>C</b> lapsed → complete assessment; <b>D</b> active → see recommendations → contact the clinic. Members <b>pre-booked by the clinic</b> (account created for them) simply land on the active Home — no appointment or pre-visit form. After a screening, <b>E</b> highlights the new report right on Home; tapping it opens the Health Report.</div>
+    </div>
+    </sc-if>
+
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ showCatalog }}" hint-placeholder-val="{{ true }}">
+  <div style="margin-bottom:48px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+      <div style="width:28px;height:28px;border-radius:50%;background:#1f2a44;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;">3</div>
+      <div style="font-family:'Caveat',cursive;font-weight:700;font-size:30px;color:#1f2a44;">Tests &amp; Packages — Browse + Select</div>
+      <div style="font-family:'Gaegu';font-size:14px;color:#8a8a8a;">— signed-in clients browse everything, recommendations included</div>
+    </div>
+
+    <div style="display:flex;gap:26px;align-items:flex-start;">
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">09 · Catalog</div>
+        <dc-import name="PortalScreen" screen="catalog" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">10 · Package detail</div>
+        <dc-import name="PortalScreen" screen="packagedetail" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">11 · Test explainer</div>
+        <dc-import name="PortalScreen" screen="testexplainer" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">12 · Your selection</div>
+        <dc-import name="PortalScreen" screen="yourselection" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:560px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">12d · Catalog — desktop / tablet</div>
+        <dc-import name="PortalScreen" screen="catalogdesktoptablet" hint-size="560px,600px"></dc-import>
+      </div>
+
+    </div>
+
+    <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;">
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:380px;transform:rotate(-0.5deg);">Account-first: clients create an OTP account, then browse everything — tests, packages, assessment AND personalised recommendations. There is no in-app booking — the selection is sent to our team to book (phone / email / WhatsApp, Section 9).</div>
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:340px;transform:rotate(0.4deg);">CRAWFURD tiers = Commence · Rise · Ascent · Wayfind · Frontier · Uncharted · Revelation · Discovery (entry → comprehensive).</div>
+    </div>
+    </sc-if>
+
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ showDARA }}" hint-placeholder-val="{{ true }}">
+  <div style="margin-bottom:48px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+      <div style="width:28px;height:28px;border-radius:50%;background:#1f2a44;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;">4</div>
+      <div style="font-family:'Caveat',cursive;font-weight:700;font-size:30px;color:#1f2a44;">Health Assessment → Recommendation</div>
+      <div style="font-family:'Gaegu';font-size:14px;color:#8a8a8a;">— assessment pathway maps you to a package</div>
+    </div>
+
+    <div style="display:flex;gap:26px;align-items:flex-start;">
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">13 · Assessment intro</div>
+        <dc-import name="PortalScreen" screen="assessmentintro" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">14 · Question (progress)</div>
+        <dc-import name="PortalScreen" screen="assessment" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">15 · Recommendation</div>
+        <dc-import name="PortalScreen" screen="recommendation" hint-size="290px,600px"></dc-import>
+      </div>
+
+    </div>
+
+    <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;">
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:380px;transform:rotate(-0.5deg);">Assessment answers seed the recommendation engine <i>and</i> become the baseline for trend visualisation.</div>
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:320px;transform:rotate(0.4deg);">Signed-in clients get full recommendations. There's no in-app booking; the selection + assessment ref are sent to our team to book. The account saves the assessment &amp; recommendation to the portal.</div>
+    </div>
+    </sc-if>
+
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ showBooking }}" hint-placeholder-val="{{ true }}">
+  <div style="margin-bottom:48px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+      <div style="width:28px;height:28px;border-radius:50%;background:#1f2a44;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;">5</div>
+      <div style="font-family:'Caveat',cursive;font-weight:700;font-size:30px;color:#1f2a44;">Contact the clinic</div>
+      <div style="font-family:'Gaegu';font-size:14px;color:#8a8a8a;">— choose a package, then reach us to arrange it · phone · email · WhatsApp</div>
+    </div>
+
+    <div style="display:flex;gap:26px;align-items:flex-start;">
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">1 · Your selection</div>
+        <dc-import name="PortalScreen" screen="selection" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">2 · Choose how to reach us</div>
+        <dc-import name="PortalScreen" screen="reach" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">3 · Request sent</div>
+        <dc-import name="PortalScreen" screen="requestsent" hint-size="290px,600px"></dc-import>
+      </div>
+
+    </div>
+
+    <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;">
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:420px;transform:rotate(-0.5deg);">The app helps you choose a package and build a selection — then hands off to our team to book. Booking, rescheduling and cancelling all happen with us via phone, email or WhatsApp. The app itself never books or manages visits.</div>
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:340px;transform:rotate(0.4deg);">An account is required and unlocks the portal (reports, body map, trends). Members pre-booked by the clinic have an account created for them — there is no in-app appointment to manage.</div>
+    </div>
+    </sc-if>
+
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ showScreening }}" hint-placeholder-val="{{ true }}">
+  <div style="margin-bottom:48px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+      <div style="width:28px;height:28px;border-radius:50%;background:#1f2a44;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;">6</div>
+      <div style="font-family:'Caveat',cursive;font-weight:700;font-size:30px;color:#1f2a44;">After Your Screening</div>
+      <div style="font-family:'Gaegu';font-size:14px;color:#8a8a8a;">— Home highlights the new report; tap straight through to it</div>
+    </div>
+
+    <div style="display:flex;gap:26px;align-items:flex-start;">
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">SD1 · Home — new report highlighted</div>
+        <dc-import name="PortalScreen" screen="home_newreport" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">SD2 · Health report</div>
+        <dc-import name="PortalScreen" screen="report" hint-size="290px,600px"></dc-import>
+      </div>
+
+    </div>
+
+    <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;">
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:420px;transform:rotate(-0.5deg);">After the in-clinic screening there’s no separate notification or “results ready” screen — the Home dashboard simply highlights the new report on its Latest report card, and tapping it opens the Health Report (Section 8) directly.</div>
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:340px;transform:rotate(0.4deg);">No pre-visit form, attendance or check-in in the app — those steps are handled by the clinic. The app only surfaces the finished report.</div>
+    </div>
+    </sc-if>
+
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ showBody }}" hint-placeholder-val="{{ true }}">
+  <div style="margin-bottom:48px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+      <div style="width:28px;height:28px;border-radius:50%;background:#1f2a44;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;">7</div>
+      <div style="font-family:'Caveat',cursive;font-weight:700;font-size:30px;color:#1f2a44;">Body Map + Trends</div>
+      <div style="font-family:'Gaegu';font-size:14px;color:#8a8a8a;">— reusable map (coverage / status), organ detail, and the Trends hub the Home “Trends” button opens</div>
+    </div>
+
+    <div style="display:flex;gap:26px;align-items:flex-start;">
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">A · Find tests — coverage</div>
+        <dc-import name="PhoneShell" gap="8px" activeTab="Tests" hint-size="290px,600px"><div style="flex:1;min-height:0;display:flex;"><dc-import name="BodyMap" mode="coverage" variant="A" pkg="wayfind" style="flex:1;width:100%;min-width:0;" hint-size="100%,100%"></dc-import></div></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">B · Your results — status</div>
+        <dc-import name="PhoneShell" gap="8px" activeTab="Reports" hint-size="290px,600px"><div style="flex:1;min-height:0;display:flex;"><dc-import name="BodyMap" mode="status" variant="A" style="flex:1;width:100%;min-width:0;" hint-size="100%,100%"></dc-import></div></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">16 · Organ detail + CTA</div>
+        <dc-import name="PortalScreen" screen="organdetailcta" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">17 · Health trend viz</div>
+        <dc-import name="PortalScreen" screen="healthtrendviz" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">T1 · Trends hub <span style="font-family:'Gaegu';font-size:12px;color:#2f6fd0;">← Home ▸ Trends</span></div>
+        <dc-import name="PortalScreen" screen="trendshub" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">T2 · Cholesterol — year progression</div>
+        <dc-import name="PortalScreen" screen="lipidstrend" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">T3 · Ferritin — year progression</div>
+        <dc-import name="PortalScreen" screen="ferritintrend" hint-size="290px,600px"></dc-import>
+      </div>
+
+    </div>
+
+    <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;">
+      <div style="background:#fdf2ea;border:1px solid #e9c4ad;border-radius:3px;padding:8px 12px;font-size:14px;color:#7a4a2a;max-width:380px;transform:rotate(0.4deg);"><b>Trends hub.</b> The Home <b>“Trends”</b> quick action now lands on T1 — a dashboard of every tracked marker with mini sparklines &amp; year-on-year deltas. Tap a marker for its full-year chart (T2 lipids, T3 ferritin). Strictly report-derived data.</div>
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:380px;transform:rotate(-0.5deg);">One map, two jobs. <b>Coverage</b> (finding tests): whole silhouette grey, pick a package and covered areas light up navy — tap any area to add tests à-la-carte. <b>Status</b> (results): only tested areas show, colored Good / Attention. Variant A (Constellation) is the locked mobile lead.</div>
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:320px;transform:rotate(0.4deg);">This is the same map that anchors the Journey — both the assessment-first and browse-first paths converge here. Full exploration of A/B/C directions lives in the <b>Body Map</b> canvas.</div>
+    </div>
+    </sc-if>
+
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ showReports }}" hint-placeholder-val="{{ true }}">
+  <div style="margin-bottom:48px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+      <div style="width:28px;height:28px;border-radius:50%;background:#1f2a44;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;">8</div>
+      <div style="font-family:'Caveat',cursive;font-weight:700;font-size:30px;color:#1f2a44;">Reports — Health &amp; Simple</div>
+      <div style="font-family:'Gaegu';font-size:14px;color:#8a8a8a;">— secure view, recommendations, comments, PDF</div>
+    </div>
+
+    <div style="display:flex;gap:26px;align-items:flex-start;">
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">18 · Reports list</div>
+        <dc-import name="PortalScreen" screen="reportslist" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">19 · Health Report · Recommendations</div>
+        <dc-import name="PortalScreen" screen="report" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">19b · Recommended tests (from report)</div>
+        <dc-import name="PortalScreen" screen="recommendedtestsfromreport" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">20 · Export / share</div>
+        <dc-import name="PortalScreen" screen="exportshare" hint-size="290px,600px"></dc-import>
+      </div>
+
+    </div>
+
+    <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;">
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:400px;transform:rotate(-0.5deg);">The Health Report leads with the Body Map (systems screened, by status), then flagged results + recommendations. Tapping <b>See recommended tests</b> opens the Body Map pick-tests screen with our recommendations preselected — same selection → booking workflow.</div>
+    </div>
+    </sc-if>
+
+  </div>
+  </sc-if>
+
+
+  <sc-if value="{{ showStory }}" hint-placeholder-val="{{ true }}">
+  <div style="margin-bottom:48px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+      <div style="width:28px;height:28px;border-radius:50%;background:#1f2a44;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;">9</div>
+      <div style="font-family:'Caveat',cursive;font-weight:700;font-size:30px;color:#1f2a44;">Year in Review &amp; Trend Story</div>
+      <div style="font-family:'Gaegu';font-size:14px;color:#8a8a8a;">— report data only, full-screen story cards</div>
+    </div>
+
+    <div style="display:flex;gap:26px;align-items:flex-start;">
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">22 · Year in Review cover</div>
+        <dc-import name="PortalScreen" screen="yearinreviewcover" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">23 · Recap stat card</div>
+        <dc-import name="PortalScreen" screen="recapstatcard" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">24 · Trend Story</div>
+        <dc-import name="PortalScreen" screen="trendstory" hint-size="290px,600px"></dc-import>
+      </div>
+
+    </div>
+
+    <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;">
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:400px;transform:rotate(-0.5deg);">Story cards are full-screen, tap/swipe like stories. Strictly report-derived — no inferred or external data — so claims stay defensible.</div>
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:300px;transform:rotate(0.4deg);">Needs ≥2 assessments to unlock; otherwise show an empty-state nudge.</div>
+    </div>
+    </sc-if>
+
+  </div>
+  </sc-if>
+  <sc-if value="{{ showProfile }}" hint-placeholder-val="{{ true }}">
+  <div style="margin-bottom:24px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+      <div style="width:28px;height:28px;border-radius:50%;background:#1f2a44;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;">10</div>
+      <div style="font-family:'Caveat',cursive;font-weight:700;font-size:30px;color:#1f2a44;">Profile, Notifications &amp; Responsive</div>
+      <div style="font-family:'Gaegu';font-size:14px;color:#8a8a8a;">— account management + email reminders + desktop</div>
+    </div>
+
+    <div style="display:flex;gap:26px;align-items:flex-start;">
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">25 · Profile management</div>
+        <dc-import name="PortalScreen" screen="profilemanagement" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:290px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">26 · Notifications</div>
+        <dc-import name="PortalScreen" screen="notifications" hint-size="290px,600px"></dc-import>
+      </div>
+
+      <div style="flex:none;width:560px;">
+        <div style="font-family:'Caveat',cursive;font-size:19px;color:#3a3a3a;margin-bottom:8px;">27d · Home — desktop (responsive)</div>
+        <dc-import name="PortalScreen" screen="homedesktopresponsive" hint-size="560px,600px"></dc-import>
+      </div>
+
+    </div>
+
+    <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;">
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:400px;transform:rotate(-0.5deg);">Email reminders + in-app notifications share one preferences screen. Reminders are driven by recommended re-test windows from Health / Simple reports.</div>
+      <div style="background:#fff7cf;border:1px solid #ecd98a;border-radius:3px;padding:8px 12px;font-size:14px;color:#6a5b1f;max-width:340px;transform:rotate(0.4deg);">Responsive: phone = bottom tab bar; desktop/tablet = top nav + two-column layout. Same components reflowed.</div>
+    </div>
+    </sc-if>
+
+  </div>
+  </sc-if>
+
+  </sc-if>
+
+    <div data-end="1"></div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;layout&quot;: {&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Journey&quot;,&quot;options&quot;:[&quot;Journey&quot;,&quot;Inventory&quot;],&quot;tsType&quot;:&quot;string&quot;},
+  &quot;view&quot;: {&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;All&quot;,&quot;options&quot;:[&quot;All&quot;,&quot;Onboarding&quot;,&quot;Home&quot;,&quot;Catalog&quot;,&quot;Assessment&quot;,&quot;Booking&quot;,&quot;Screening Day&quot;,&quot;Body Map&quot;,&quot;Reports&quot;,&quot;Story&quot;,&quot;Profile&quot;],&quot;tsType&quot;:&quot;string&quot;},
+  &quot;showNotes&quot;: {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}
+}">
+class Component extends DCLogic {
+  state = { hashView: null, hashLayout: null };
+  parseHash() {
+    const h = (location.hash || '').replace(/^#/, '');
+    if (!h) { this.setState({ hashView: null, hashLayout: null }); return; }
+    const p = new URLSearchParams(h);
+    this.setState({ hashView: p.get('view'), hashLayout: p.get('layout') });
+  }
+  componentDidMount() {
+    this.parseHash();
+    this._onHash = () => this.parseHash();
+    window.addEventListener('hashchange', this._onHash);
+  }
+  componentWillUnmount() { window.removeEventListener('hashchange', this._onHash); }
+  renderVals() {
+    const view = this.state.hashView ?? this.props.view ?? 'All';
+    const layout = this.state.hashLayout ?? this.props.layout ?? 'Journey';
+    const show = (s) => view === 'All' || view === s;
+    return {
+      showNotes: this.props.showNotes ?? true,
+      showJourney: layout === 'Journey',
+      showInventory: layout === 'Inventory',
+      showOnboarding: show('Onboarding'),
+      showHome: show('Home'),
+      showCatalog: show('Catalog'),
+      showDARA: show('Assessment'),
+      showBooking: show('Booking'),
+      showScreening: show('Screening Day'),
+      showBody: show('Body Map'),
+      showReports: show('Reports'),
+      showStory: show('Story'),
+      showProfile: show('Profile'),
+    };
+  }
+}
+</script>
+</body>
+</html>
+

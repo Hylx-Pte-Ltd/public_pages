@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&amp;family=Gaegu:wght@400;700&amp;display=swap" rel="stylesheet">
+</helmet>
+<div style="display:flex;align-items:center;gap:8px;flex:none;">
+  <sc-if value="{{ showBack }}" hint-placeholder-val="{{ true }}">
+  <span style="font-size:20px;color:#aaa;line-height:1;cursor:default;">‹</span>
+  </sc-if>
+  <span style="font-family:'Gaegu';font-weight:700;font-size:18px;color:#222;flex:1;">{{ title }}</span>
+  <sc-if value="{{ hasAction }}" hint-placeholder-val="{{ false }}">
+  <span style="font-size:13px;color:#1f2a44;font-weight:700;cursor:default;">{{ action }}</span>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 290, &quot;height&quot;: 44},
+  &quot;title&quot;: {&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Screen title&quot;,&quot;tsType&quot;:&quot;string&quot;},
+  &quot;action&quot;: {&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},
+  &quot;showBack&quot;: {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}
+}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      title: this.props.title ?? '',
+      action: this.props.action ?? '',
+      hasAction: !!(this.props.action),
+      showBack: this.props.showBack ?? true,
+    };
+  }
+}
+</script>
+</body>
+</html>

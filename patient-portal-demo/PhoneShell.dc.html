@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&amp;family=Gaegu:wght@400;700&amp;display=swap" rel="stylesheet">
+</helmet>
+<div style="position:relative;width:290px;height:600px;background:{{ bg }};border:1.5px solid #2b2b2b;border-radius:28px;padding:12px;display:flex;flex-direction:column;overflow:hidden;font-family:'Gaegu',sans-serif;">
+  <div style="display:flex;justify-content:space-between;font-size:11px;color:#aaa;padding:2px 4px;flex:none;margin-bottom:{{ statusMb }};"><span>9:41</span><span>● ● ●</span></div>
+
+  <sc-if value="{{ showHeader }}" hint-placeholder-val="{{ false }}">
+  <div style="display:flex;align-items:center;gap:8px;flex:none;margin-bottom:{{ headerMb }};">
+    <sc-if value="{{ showBack }}" hint-placeholder-val="{{ true }}">
+    <span onClick="{{ onBack }}" style="display:inline-flex;align-items:center;gap:3px;font-size:13px;font-weight:700;color:#1f2a44;cursor:pointer;flex:none;"><span style="font-size:18px;line-height:1;">‹</span><span>Back</span></span>
+    </sc-if>
+    <sc-if value="{{ hasTitle }}" hint-placeholder-val="{{ false }}">
+    <span style="flex:1;min-width:0;font-family:'Gaegu';font-weight:700;font-size:16px;color:#222;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ title }}</span>
+    </sc-if>
+    <sc-if value="{{ noTitle }}" hint-placeholder-val="{{ true }}">
+    <span style="flex:1;"></span>
+    </sc-if>
+    <sc-if value="{{ hasAction }}" hint-placeholder-val="{{ false }}">
+    <span onClick="{{ onAction }}" style="display:inline-flex;align-items:center;gap:5px;background:#1f2a44;color:#fff;border-radius:13px;padding:4px 11px;font-size:12px;font-weight:700;cursor:pointer;flex:none;">{{ action }}</span>
+    </sc-if>
+  </div>
+  </sc-if>
+
+  <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:{{ gap }};">{{ children }}</div>
+
+  <sc-if value="{{ showTabs }}" hint-placeholder-val="{{ false }}">
+  <div style="display:flex;justify-content:space-around;border-top:1.5px solid #eee;padding-top:9px;margin-top:9px;font-size:11px;color:#999;flex:none;"><span style="{{ homeStyle }}">Home</span><span style="{{ testsStyle }}">Tests</span><span style="{{ reportsStyle }}">Reports</span><span style="{{ profileStyle }}">Profile</span></div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 290, &quot;height&quot;: 600},
+  &quot;kind&quot;: {&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;menu&quot;,&quot;options&quot;:[&quot;menu&quot;,&quot;sub&quot;,&quot;auth&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Shell&quot;},
+  &quot;title&quot;: {&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Header&quot;},
+  &quot;action&quot;: {&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Header&quot;},
+  &quot;showBack&quot;: {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Header&quot;},
+  &quot;activeTab&quot;: {&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;none&quot;,&quot;options&quot;:[&quot;none&quot;,&quot;Home&quot;,&quot;Tests&quot;,&quot;Reports&quot;,&quot;Profile&quot;,&quot;Body&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Shell&quot;},
+  &quot;bg&quot;: {&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#ffffff&quot;,&quot;options&quot;:[&quot;#ffffff&quot;,&quot;#f5f5f5&quot;,&quot;#1f2a44&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Shell&quot;},
+  &quot;gap&quot;: {&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;11px&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Shell&quot;}
+}">
+class Component extends DCLogic {
+  renderVals() {
+    const kind = this.props.kind ?? 'menu';
+    const tab = this.props.activeTab ?? 'none';
+    const title = this.props.title ?? '';
+    const action = this.props.action ?? '';
+    const hasTitle = !!title;
+    const hasAction = !!action;
+    const showBack = this.props.showBack ?? (kind === 'sub');
+    const showHeader = !!(showBack || hasTitle || hasAction);
+    const showTabs = kind === 'menu';
+    const gap = this.props.gap ?? '11px';
+    const noop = () => {};
+    const inactive = 'color:#999;';
+    const active = 'color:#1f2a44;font-weight:700;';
+    const st = (n) => (tab === n ? active : inactive);
+    return {
+      children: this.props.children,
+      bg: this.props.bg ?? '#fff',
+      gap,
+      statusMb: showHeader ? '8px' : gap,
+      headerMb: gap,
+      showHeader, showBack, hasTitle, noTitle: !hasTitle, hasAction,
+      title, action,
+      onBack: this.props.onBack ?? noop,
+      onAction: this.props.onAction ?? noop,
+      showTabs,
+      homeStyle: st('Home'),
+      testsStyle: st('Tests'),
+      reportsStyle: st('Reports'),
+      profileStyle: st('Profile'),
+    };
+  }
+}
+</script>
+</body>
+</html>

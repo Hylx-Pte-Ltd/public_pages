@@ -257,6 +257,19 @@ const ORGANS = [
 ];
 const DOCTOR_PICKS = ['heart:0','heart:3','blood:1','hormones:2'];  // lipids, Lp(a), ferritin, vitamin D
 
+/* screening results per organ (Wayfind screening) — drives the report's status silhouette */
+const RESULTS = {
+  thyroid:   { status:'good', vals:[['Normal','#4a9d6e'],['Normal','#4a9d6e']] },
+  lungs:     { status:'good', vals:[['Normal','#4a9d6e']] },
+  heart:     { status:'bad',  vals:[['LDL 185 ▲','#e2664f'],['146/92 ▲','#e2664f'],['—','#999'],['>90 ▲','#e2664f']] },
+  blood:     { status:'good', vals:[['Normal','#4a9d6e'],['Normal','#4a9d6e']] },
+  liver:     { status:'good', vals:[['Normal','#4a9d6e'],['Normal','#4a9d6e']] },
+  kidneys:   { status:'good', vals:[['Normal','#4a9d6e'],['Normal','#4a9d6e']] },
+  metabolic: { status:'warn', vals:[['5.9% ▲','#c79a52'],['Borderline','#c79a52'],['—','#999']] },
+  hormones:  { status:'warn', vals:[['Normal','#4a9d6e'],['Normal','#4a9d6e'],['15.6 ↓','#c79a52']] },
+};
+const STATUS_COLOR = { good:'#4a9d6e', warn:'#c79a52', bad:'#e2664f' };
+
 const QUESTIONS = [
   { q:'How old are you?', cat:'About you', opts:['Under 30','30–39','40–49','50 and above'] },
   { q:'When was your last full health screening?', cat:'About you',
@@ -815,7 +828,35 @@ SCREENS.requestsent = { render() { return `
   </div>`; } };
 
 /* ---------- report ---------- */
-let repTab = 'recs';
+let repTab = 'results';
+function statusSilhouette() {
+  return `
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px;">
+      <div style="font-weight:700;font-size:14.5px;">What you screened</div>
+      <span class="chip">Wayfind · 8 systems</span></div>
+    <div class="sub" style="margin-bottom:8px;">Tap an area for its results</div>
+    <div class="bm-stage" style="height:300px;">
+      <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);height:100%;aspect-ratio:188/451;">
+        <svg viewBox="6 7 188 451" style="width:100%;height:100%;display:block;opacity:.9;" preserveAspectRatio="xMidYMid meet">
+          <g fill="#e4e4e4"><ellipse cx="100" cy="40" rx="26" ry="29"/><rect x="87.6" y="62" width="24.8" height="14" rx="6"/><rect x="32.2" y="74" width="135.6" height="40" rx="20"/><rect x="54.8" y="100" width="90.4" height="124" rx="26"/><rect x="9.6" y="86" width="26" height="156" rx="11"/><rect x="164.4" y="86" width="26" height="156" rx="11"/><rect x="55.9" y="208" width="88.2" height="58" rx="24"/><rect x="62.7" y="256" width="32.8" height="198" rx="14"/><rect x="104.5" y="256" width="32.8" height="198" rx="14"/></g>
+        </svg>
+        ${ORGANS.filter(o => RESULTS[o.id]).map(o => {
+          const st = RESULTS[o.id].status, col = STATUS_COLOR[st];
+          const sx = (100 + (o.x * 2 - 100) * 1.13 - 6) / 188 * 100;
+          const sy = (o.y * 4.6 - 7) / 451 * 100;
+          return `<div class="bm-node" data-act="statusOrgan" data-id="${o.id}" style="left:${sx}%;top:${sy}%;">
+            <div class="bm-dot" style="width:30px;height:30px;font-size:8px;background:${col};color:#fff;border:2px solid #fff;box-shadow:0 1px 5px rgba(20,24,38,.28);">${o.abbr}</div>
+            <span class="bm-lbl" style="color:#555;">${o.label}</span></div>`;
+        }).join('')}
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;align-items:center;font-size:10.5px;color:#888;margin:6px 0 12px;">
+      <span style="display:flex;gap:5px;align-items:center;"><span style="width:11px;height:11px;border-radius:50%;background:#4a9d6e;"></span>Good</span>
+      <span style="display:flex;gap:5px;align-items:center;"><span style="width:11px;height:11px;border-radius:50%;background:#c79a52;"></span>Watch</span>
+      <span style="display:flex;gap:5px;align-items:center;"><span style="width:11px;height:11px;border-radius:50%;background:#e2664f;"></span>Attention</span>
+      <span style="color:#bbb;">Untested areas hidden</span>
+    </div>`;
+}
 SCREENS.report = { render() {
   const seg = (id, label) => `<span class="${repTab === id ? 'on' : ''}" data-act="repTab" data-t="${id}">${label}</span>`;
   let body = '';
@@ -832,8 +873,9 @@ SCREENS.report = { render() {
       <div style="display:flex;justify-content:space-between;"><span class="chip">WATCH</span><span style="font-size:11px;color:#c79a52;font-weight:700;">5.9% ▲</span></div>
       <div style="font-weight:700;font-size:14.5px;margin-top:6px;">HbA1c <span style="font-size:11px;color:#999;font-weight:400;">target &lt;5.7</span></div>
       <div style="font-size:12.5px;color:#7a7361;line-height:1.4;">Borderline — recheck fasting glucose &amp; insulin.</div></div>`;
-  else if (repTab === 'results') body = `
-    ${[['Full blood count','Normal','#4a9d6e'],['Ferritin / iron','Normal','#4a9d6e'],['Liver panel','Normal','#4a9d6e'],['Kidneys · eGFR','Normal','#4a9d6e'],['TSH / Free T4','Normal','#4a9d6e'],['Lipid panel','LDL 185 ▲','#e2664f'],['HbA1c','5.9% ▲','#c79a52'],['Vitamin D','15.6 ng/mL ↓','#c79a52'],['Blood pressure','146/92 ▲','#e2664f']].map(r =>
+  else if (repTab === 'results') body = statusSilhouette() + `
+    <div style="font-size:12px;color:#9a9a9a;margin-bottom:6px;">All markers</div>
+    ${[['Lipid panel','LDL 185 ▲','#e2664f'],['Blood pressure','146/92 ▲','#e2664f'],['HbA1c','5.9% ▲','#c79a52'],['Vitamin D','15.6 ng/mL ↓','#c79a52'],['Full blood count','Normal','#4a9d6e'],['Ferritin / iron','Normal','#4a9d6e'],['Liver panel','Normal','#4a9d6e'],['Kidneys · eGFR','Normal','#4a9d6e'],['TSH / Free T4','Normal','#4a9d6e'],['Spirometry','Normal','#4a9d6e']].map(r =>
       `<div class="card" style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;margin-bottom:7px;">
         <span style="font-size:13.5px;font-weight:700;color:#333;">${r[0]}</span>
         <span style="font-size:12px;font-weight:700;color:${r[2]};">${r[1]}</span></div>`).join('')}`;
@@ -844,11 +886,36 @@ SCREENS.report = { render() {
         <div class="progress" style="margin-top:7px;"><i style="width:${r[2]}%;background:${r[3]};"></i></div></div>`).join('')}`;
   return hdr({ back: true, title: 'Health Report · May 2026', action: ['⤓ Export', 'exportSheet'] }) + `
   <div class="content" style="padding-top:2px;">
-    <div class="seg" style="margin-bottom:12px;">${seg('recs','Recommendations')}${seg('results','Results')}${seg('risk','Risk scores')}</div>
+    <div class="seg" style="margin-bottom:12px;">${seg('results','Results')}${seg('risk','Risk score')}${seg('recs','Recommendations')}</div>
     ${body}
     <div style="height:6px;"></div>
     <button class="btn" data-act="seeRecTests">See recommended tests →</button>
   </div>`; } };
+
+function statusOrganSheet(id) {
+  const o = ORGANS.find(x => x.id === id);
+  const r = RESULTS[id];
+  const col = STATUS_COLOR[r.status];
+  const flagged = r.vals.filter(v => v && (v[1] === '#e2664f' || v[1] === '#c79a52')).length;
+  const line = r.status === 'good' ? 'All markers in range'
+    : flagged + ' marker' + (flagged > 1 ? 's' : '') + (r.status === 'bad' ? ' need attention' : ' to watch');
+  sheet(`
+    <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px;">
+      <span style="width:34px;height:34px;border-radius:50%;background:${col};color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;">${o.abbr}</span>
+      <div style="flex:1;"><div style="font-weight:700;font-size:17px;">${o.label}</div>
+      <div style="font-size:11.5px;color:${col};font-weight:700;">${line}</div></div>
+      <span data-act="closeSheet" style="font-size:15px;color:#bbb;cursor:pointer;">✕</span></div>
+    ${o.tests.map((t, i) => {
+      const v = r.vals[i] || ['—', '#999'];
+      return `<div class="card" style="display:flex;gap:8px;align-items:center;margin-bottom:8px;padding:10px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13.5px;font-weight:700;color:#333;">${t[0]}</div>
+          <div style="font-size:10.5px;color:#999;">${t[1]}</div></div>
+        <span style="font-size:12.5px;font-weight:700;color:${v[1]};white-space:nowrap;">${v[0]}</span></div>`;
+    }).join('')}
+    ${id === 'heart' ? '<button class="btn sec" data-act="goLipidTrend" style="margin-top:2px;">View lipid trend →</button>' : ''}
+    <button class="btn" data-act="closeSheet" style="margin-top:8px;">Done</button>`);
+}
 
 function exportSheet(state) {
   const st = state || 'idle';
@@ -1009,6 +1076,8 @@ const ACTIONS = {
   fastforward() { fastForward(); },
   trendsTile() { if (!S.reportReady) { toast('Trends unlock after your first screening'); go('trends', 'push'); } else go('trends', 'push'); },
   repTab(el) { repTab = el.dataset.t; rerender(); },
+  statusOrgan(el) { statusOrganSheet(el.dataset.id); },
+  goLipidTrend() { closeSheet(); go('lipidtrend', 'push'); },
   exportSheet() { exportSheet('idle'); },
   dlPdf() { exportSheet('preparing'); setTimeout(() => exportSheet('done'), 1400); },
   emailMe() { closeSheet(); toast('Sent to your inbox ✓'); },

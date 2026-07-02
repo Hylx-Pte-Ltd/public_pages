@@ -227,8 +227,9 @@
   <div style="font-family:'Gaegu';font-weight:700;font-size:18px;color:#222;">Ready to book</div>
   <div style="font-size:12px;color:#999;">Here's what you've put together</div>
   <div style="border:1.5px solid #ddd;border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:7px;">
-    <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="display:flex;gap:7px;align-items:center;"><span style="width:22px;height:22px;border-radius:50%;background:#45a7d9;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">W</span><span style="color:#333;font-weight:700;">Wayfind package</span></span></div>
-    <div style="font-size:13px;color:#555;">+ Vitamin D add-on</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;"><span style="display:flex;gap:7px;align-items:center;"><span style="width:22px;height:22px;border-radius:50%;background:{{ selBadgeBg }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">{{ selBadge }}</span><span style="color:#333;font-weight:700;">{{ selPkgLine }}</span></span><span style="font-size:11px;color:#999;white-space:nowrap;">{{ selMeta }}</span></div>
+    <sc-for list="{{ selAddons }}" as="a" hint-placeholder-count="1"><div style="font-size:13px;color:#555;">+ {{ a.n }} <span style="font-size:11px;color:#aaa;">· {{ a.organ }}</span></div></sc-for>
+    <sc-if value="{{ selNoAddons }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:#b3b3b3;">No à-la-carte add-ons</div></sc-if>
     <div style="border-top:1px dashed #e5e5e5;margin:2px 0;"></div>
     <div style="font-size:12px;color:#888;">Assessment ref #A-2481</div>
   </div>
@@ -248,7 +249,7 @@
     <div style="border:1.5px solid #ddd;border-radius:10px;padding:11px;display:flex;gap:9px;align-items:center;"><span style="width:30px;height:30px;border-radius:8px;background:#1f2a44;color:#fff;display:flex;align-items:center;justify-content:center;">☏</span><div style="flex:1;"><div style="font-size:13px;color:#333;font-weight:700;">Call the clinic</div><div style="font-size:11px;color:#999;">+65 6730 0000 · Mon–Sat</div></div><span style="color:#bbb;">›</span></div>
   </div>
   <div style="font-size:12px;color:#888;margin-top:2px;">Message preview</div>
-  <div style="background:#f6f4ee;border-radius:10px;padding:10px;font-size:12px;color:#6f6650;line-height:1.5;flex:1;overflow:hidden;">"Hi Crawfurd, I'd like to book the <b>Wayfind package + Vitamin D</b> at Suntec City. My assessment ref is <b>#A-2481</b>. When are your next available slots?"</div>
+  <div style="background:#f6f4ee;border-radius:10px;padding:10px;font-size:12px;color:#6f6650;line-height:1.5;flex:1;overflow:hidden;">"Hi Crawfurd, I'd like to book <b>{{ reachSummary }}</b> at Suntec City. My assessment ref is <b>#A-2481</b>. When are your next available slots?"</div>
   <div style="background:#25d366;color:#fff;border-radius:10px;padding:12px;text-align:center;font-weight:700;font-size:15px;">Open WhatsApp</div>
 </dc-import>
 </sc-if>
@@ -897,7 +898,25 @@ class Component extends DCLogic {
     const s = this.props.screen || 'splash';
     const is = (k) => s === k;
     const rx = this.state.reportExport;
+
+    // Demo wiring: reflect the live body-map selection (published by BodyMap)
+    // on the Selection and Reach screens, with a sensible fallback.
+    const dsel = (typeof window !== 'undefined' && window.__demoSelection) ||
+      { pkgKey: 'wayfind', pkgName: 'Wayfind', areas: 8, tests: 19, addons: [{ n: 'Vitamin D', organ: 'Hormones' }] };
+    const PKG_COLORS = { commence: '#4a9d6e', wayfind: '#45a7d9', discovery: '#c79a52', none: '#1f2a44' };
+    const selIsAlc = dsel.pkgKey === 'none';
+    const selAddons = (dsel.addons || []).map(a => ({ n: a.n, organ: a.organ }));
+
     return {
+      selBadge: selIsAlc ? 'À' : (dsel.pkgName || 'W').slice(0, 1),
+      selBadgeBg: PKG_COLORS[dsel.pkgKey] || '#45a7d9',
+      selPkgLine: selIsAlc ? 'À la carte selection' : dsel.pkgName + ' package',
+      selMeta: dsel.areas + ' areas · ' + dsel.tests + ' tests',
+      selAddons,
+      selNoAddons: selAddons.length === 0,
+      reachSummary: selIsAlc
+        ? ('an à-la-carte selection of ' + dsel.tests + ' tests')
+        : ('the ' + dsel.pkgName + ' package' + (selAddons.length ? ' + ' + selAddons.length + ' add-on' + (selAddons.length > 1 ? 's' : '') : '')),
       openReportExport: () => this.setState({ reportExport: 'idle' }),
       closeReportExport: () => { clearTimeout(this._t); this.setState({ reportExport: 'closed' }); },
       downloadReportPDF: () => {

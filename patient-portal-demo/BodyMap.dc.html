@@ -438,6 +438,14 @@ class Component extends DCLogic {
     const areasCovered = all.filter(o => this.isActive(o)).length;
     const testsCount = all.reduce((n, o) => n + this.selectedCount(o), 0);
 
+    // Demo wiring: publish the live selection so other screens (Selection, Reach)
+    // can reflect what was actually picked here.
+    if (!isStatus) {
+      const addonList = [];
+      all.forEach(o => { if (!this.coveredByPkg(o)) o.tests.forEach((t, i) => { if (this.isAdded(o, i)) addonList.push({ n: t.n, organ: o.label }); }); });
+      try { window.__demoSelection = { pkgKey: p, pkgName: pkgName, areas: areasCovered, tests: testsCount, addons: addonList }; } catch (e) {}
+    }
+
     return {
       isA: variant === 'A', isB: variant === 'B', isC: variant === 'C',
       isStatus, isCoverage: !isStatus,

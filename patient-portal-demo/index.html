@@ -23,6 +23,51 @@ document.addEventListener('keydown', function (e) {
   if (e.key === 'ArrowRight') window.__demoNav.next();
   if (e.key === 'ArrowLeft') window.__demoNav.prev();
 });
+
+// Highlighter: pulse a glow on the elements whose tap is wired for the current step.
+(function () {
+  var st = document.createElement('style');
+  st.textContent =
+    '@keyframes demoPulse{0%,100%{box-shadow:0 0 0 2px rgba(47,111,208,.7),0 0 10px 2px rgba(47,111,208,.28)}' +
+    '50%{box-shadow:0 0 0 3px rgba(47,111,208,.32),0 0 16px 6px rgba(47,111,208,.16)}}' +
+    '.demo-hot{animation:demoPulse 1.6s ease-in-out infinite;border-radius:10px;}';
+  document.head.appendChild(st);
+
+  function rescan() {
+    var nav = window.__demoNav;
+    var ph = document.querySelector('[data-phone]');
+    if (!ph) return;
+    ph.querySelectorAll('.demo-hot').forEach(function (el) { el.classList.remove('demo-hot'); });
+    var texts = (nav && nav.hotTexts) || [];
+    if (!texts.length) return;
+    var els = ph.querySelectorAll('*');
+    texts.forEach(function (t) {
+      var best = null, bestArea = 1e9;
+      els.forEach(function (el) {
+        if (el.children.length > 6) return;
+        var txt = (el.textContent || '').trim().toLowerCase();
+        if (!txt || txt.length > 90) return;
+        var hit = t.exact ? txt === t.t : txt.indexOf(t.t) !== -1;
+        if (!hit) return;
+        var r = el.getBoundingClientRect();
+        if (r.width < 12 || r.height < 8 || r.height > 150) return;
+        var area = r.width * r.height;
+        if (area < bestArea) { best = el; bestArea = area; }
+      });
+      if (!best) return;
+      // climb to the button-like container if it's roughly the same size
+      var cand = best;
+      for (var i = 0; i < 2; i++) {
+        var par = cand.parentElement;
+        if (!par || par === ph) break;
+        var rp = par.getBoundingClientRect(), rb = best.getBoundingClientRect();
+        if (rp.height <= rb.height + 34 && rp.width <= rb.width + 90) cand = par; else break;
+      }
+      cand.classList.add('demo-hot');
+    });
+  }
+  setInterval(rescan, 700);
+})();
 </script>
 </head>
 <body>
@@ -50,7 +95,7 @@ document.addEventListener('keydown', function (e) {
   <!-- HEADER -->
   <div style="text-align:center;margin-bottom:6px;">
     <div style="font-family:'Caveat',cursive;font-weight:700;font-size:40px;color:#1f2a44;line-height:1.05;">Crawfurd Patient Portal — Interactive Demo</div>
-    <div style="font-size:15px;color:#6a6a6a;max-width:680px;margin:8px auto 0;line-height:1.45;">Pick a journey below, then <b>tap the buttons inside the phone</b> to move screen to screen — or use Back / Next. All data is hardcoded; this is a wireframe demo, not the real product.</div>
+    <div style="font-size:15px;color:#6a6a6a;max-width:680px;margin:8px auto 0;line-height:1.45;">Pick a journey below, then <b>tap the glowing buttons inside the phone</b> to move screen to screen. Back buttons and the bottom tab bar are live too. All data is hardcoded; this is a wireframe demo, not the real product.</div>
   </div>
 
   <!-- FLOW PILLS -->
@@ -86,16 +131,19 @@ document.addEventListener('keydown', function (e) {
 
     <!-- PHONE -->
     <div style="flex:none;display:flex;flex-direction:column;align-items:center;gap:12px;">
-      <sc-if value="{{ hasStates }}">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span style="font-size:13px;color:#6f6450;font-weight:700;">{{ statesLabel }}</span>
-          <select value="{{ stateVal }}" onChange="{{ onStateChange }}" style="font-family:'Gaegu',sans-serif;font-size:13px;font-weight:700;color:#1f2a44;background:#fff;border:1.5px solid #1f2a44;border-radius:9px;padding:5px 8px;max-width:230px;">
-            <sc-for list="{{ stateOptions }}" as="o">
-              <option value="{{ o.v }}">{{ o.label }}</option>
-            </sc-for>
-          </select>
-        </div>
-      </sc-if>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;">
+        <sc-if value="{{ hasStates }}">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:13px;color:#6f6450;font-weight:700;">{{ statesLabel }}</span>
+            <select value="{{ stateVal }}" onChange="{{ onStateChange }}" style="font-family:'Gaegu',sans-serif;font-size:13px;font-weight:700;color:#1f2a44;background:#fff;border:1.5px solid #1f2a44;border-radius:9px;padding:5px 8px;max-width:230px;">
+              <sc-for list="{{ stateOptions }}" as="o">
+                <option value="{{ o.v }}">{{ o.label }}</option>
+              </sc-for>
+            </select>
+          </div>
+        </sc-if>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12.5px;color:#6f6450;font-weight:700;cursor:pointer;"><input type="checkbox" checked="{{ hotOn }}" onChange="{{ toggleHot }}" style="accent-color:#2f6fd0;cursor:pointer;">highlight tappable</label>
+      </div>
 
       <div data-phone="1" style="width:290px;height:600px;flex:none;filter:drop-shadow(0 10px 22px rgba(31,42,68,.18));">
         <sc-if value="{{ isBodymap }}">
@@ -127,7 +175,7 @@ document.addEventListener('keydown', function (e) {
       </div>
       </sc-if>
       <div style="font-size:12px;color:#9a8f7d;line-height:1.5;padding:0 4px;">
-        Screens can also be fully explored — scroll, open drawers, switch packages inside the body map, export the report.
+        Header ‹ Back buttons, the bottom tab bar, home-screen tiles and report cards are all live — tapping them moves you around, just like the real app would.
         <a href="./Patient%20Portal%20Wireframes.dc.html" style="color:#2f6fd0;font-weight:700;text-decoration:none;">Open the full journey map ↗</a>
       </div>
     </div>
@@ -137,7 +185,7 @@ document.addEventListener('keydown', function (e) {
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{}">
 class Component extends DCLogic {
-  state = { flow: 0, step: 0, picks: {} };
+  state = { flow: 0, step: 0, picks: {}, hot: true };
 
   flows() {
     return [
@@ -151,31 +199,39 @@ class Component extends DCLogic {
             triggers: [{ t: 'get started', go: 'otp' }] },
           { id: 'otp', title: 'Log in / Sign up', screen: 'otp',
             note: 'Clients create an account first — fastest with Singpass, or with a phone number and OTP.',
-            tap: 'Tap “Continue with Singpass” or “Send code”.',
-            triggers: [{ t: 'send code', go: 'home_choose' }, { t: 'singpass', go: 'home_choose' }] },
+            tap: 'Tap “Send code” to get an OTP, or “Continue with Singpass” to skip it.',
+            triggers: [{ t: 'send code', go: 'verifycode' }, { t: 'singpass', go: 'home_choose' }] },
+          { id: 'verifycode', title: 'Verify code', tag: 'phone OTP path', screen: 'verifycode',
+            note: 'The 6-digit code sent by SMS. (Singpass logins skip this step.)',
+            tap: 'Tap “Verify”.',
+            triggers: [{ t: 'verify', go: 'home_choose' }] },
           { id: 'home_choose', title: 'Home — choose your path', screen: 'home_choose',
             note: 'The fork from the journey map: Option A — take the 5-minute assessment first. Option B — skip straight to the body map. Both paths land on the body map.',
             tap: 'Tap “Take assessment” (Option A) or “Skip straight to the body map” (Option B).',
             triggers: [{ t: 'take assessment', go: 'assessment' }, { t: 'skip straight', go: 'bodymap' }, { t: 'know what you want', go: 'bodymap' }] },
           { id: 'assessment', title: 'Health assessment', tag: 'Option A · optional', screen: 'assessment',
-            note: '12 quick questions. The final question hands off straight to the body map with the recommended package preselected — there is no separate recommendations screen.',
-            tap: 'Tap “Next”.',
-            triggers: [{ t: 'next', go: 'bodymap' }] },
+            note: '12 quick questions. Answering hands off straight to the body map with the recommended package preselected — there is no separate recommendations screen.',
+            tap: 'Tap an answer, or “Next”.',
+            triggers: [
+              { t: 'next', go: 'bodymap' },
+              { t: 'consistently high', go: 'bodymap' }, { t: 'some afternoon dips', go: 'bodymap' },
+              { t: 'often tired', go: 'bodymap' }, { t: 'exhausted most days', go: 'bodymap' },
+            ] },
           { id: 'bodymap', title: '★ Body map — pick tests', bodymap: true, pkg: 'wayfind',
-            note: 'The hub both paths land on. This screen is fully interactive: tap an organ to see its tests, add tests à-la-carte, or switch the package from the top dropdown.',
+            note: 'The hub both paths land on. Tap an organ to see its tests, add tests à-la-carte, or switch the package from the top dropdown. Whatever you pick here carries into the Selection screen — try changing something, then continue.',
             tap: 'Explore the map, then tap “Checkout →”.',
             triggers: [{ t: 'checkout', go: 'selection' }] },
           { id: 'selection', title: 'Selection — package + add-ons', screen: 'selection',
-            note: 'Everything the client put together: package, add-ons and their assessment reference.',
+            note: 'This reflects exactly what you picked on the body map — the package and every à-la-carte test. Tap the header ‹ Back (or the rail) to go back and change it.',
             tap: 'Tap “Book with our team”.',
             triggers: [{ t: 'book with our team', go: 'reach' }] },
           { id: 'reach', title: 'Choose how to reach us', screen: 'reach',
-            note: 'Booking is done with the clinic team — WhatsApp, email or phone, with a pre-filled message. There is no in-app booking.',
-            tap: 'Tap “Open WhatsApp”.',
-            triggers: [{ t: 'open whatsapp', go: 'requestsent' }, { t: 'email us', go: 'requestsent' }, { t: 'call the clinic', go: 'requestsent' }] },
+            note: 'Booking is arranged with the team — WhatsApp / email / phone, with a pre-filled message that includes your actual selection. There is no in-app booking.',
+            tap: 'Tap “Open WhatsApp”, “Email us” or “Call the clinic”.',
+            triggers: [{ t: 'open whatsapp', go: 'requestsent' }, { t: 'whatsapp us', go: 'requestsent' }, { t: 'email us', go: 'requestsent' }, { t: 'call the clinic', go: 'requestsent' }] },
           { id: 'requestsent', title: 'Request sent', screen: 'requestsent',
             note: 'The team replies within 2 working hours and confirms by SMS. The account created at sign-up already unlocks the portal.',
-            tap: 'End of this journey — pick another one above, or tap “Back to browsing”.',
+            tap: 'Tap “Back to browsing”, or pick another journey above.',
             triggers: [{ t: 'back to browsing', flow: 'returning', step: 'home' }] },
         ],
       },
@@ -185,7 +241,7 @@ class Component extends DCLogic {
         steps: [
           { id: 'otp', title: 'OTP login', screen: 'otp',
             note: 'Returning members sign in with Singpass or a phone OTP.',
-            tap: 'Tap “Send code”.',
+            tap: 'Tap “Send code” or “Continue with Singpass”.',
             triggers: [{ t: 'send code', go: 'home' }, { t: 'singpass', go: 'home' }] },
           { id: 'home', title: 'Home — depends on status', screen: 'home_nextstep',
             statesLabel: 'Member status',
@@ -194,29 +250,41 @@ class Component extends DCLogic {
               { v: 'home_reactivate', label: 'A · Lapsed — no recent assessment' },
               { v: 'home', label: 'C · Pre-booked by the clinic' },
             ],
-            note: 'The same Home screen has three states depending on the member’s status at login — switch the state in the dropdown above the phone. Lapsed members are nudged to re-take the assessment; active members go straight to their recommended tests; pre-booked members just browse.',
-            tap: 'Tap “See recommendations” (active) or “Start assessment” (lapsed).',
-            triggers: [{ t: 'see recommendations', go: 'bodymap' }, { t: 'start assessment', go: 'assessment' }, { t: 'complete your health assessment', go: 'assessment' }] },
+            note: 'The same Home screen has three states depending on the member’s status at login — switch the state in the dropdown above the phone. The tiles and report cards are live: “Browse tests”, “My reports”, “Trends” all go somewhere.',
+            tap: 'Tap “See recommendations” (active) or “Start assessment” (lapsed) — or any tile.',
+            triggers: [
+              { t: 'see recommendations', go: 'bodymap' },
+              { t: 'start assessment', go: 'assessment' },
+              { t: 'complete your health assessment', go: 'assessment' }, { t: 'start · 5 min', go: 'assessment' },
+              { t: 'browse tests', go: 'bodymap' },
+              { t: 'my reports', flow: 'report', step: 'reportscreen' },
+              { t: 'health report', flow: 'report', step: 'reportscreen' },
+              { t: 'trends', flow: 'annual', step: 'trendshub' },
+            ] },
           { id: 'assessment', title: 'Health assessment', tag: 'only if lapsed', screen: 'assessment',
             note: 'A lapsed member re-takes the assessment, then rejoins the same path — body map, then booking.',
-            tap: 'Tap “Next”.',
-            triggers: [{ t: 'next', go: 'bodymap' }] },
+            tap: 'Tap an answer, or “Next”.',
+            triggers: [
+              { t: 'next', go: 'bodymap' },
+              { t: 'consistently high', go: 'bodymap' }, { t: 'some afternoon dips', go: 'bodymap' },
+              { t: 'often tired', go: 'bodymap' }, { t: 'exhausted most days', go: 'bodymap' },
+            ] },
           { id: 'bodymap', title: '★ Body map — pick tests', bodymap: true, pkg: 'wayfind',
-            note: 'Review recommended tests, add à-la-carte extras, switch packages — then send the selection to the booking gate.',
+            note: 'Review recommended tests, add à-la-carte extras, switch packages — your picks carry into the Selection screen.',
             tap: 'Explore, then tap “Checkout →”.',
             triggers: [{ t: 'checkout', go: 'selection' }] },
           { id: 'selection', title: 'Selection — package + add-ons', screen: 'selection',
-            note: 'The member’s selection, ready to send.',
+            note: 'Reflects exactly what you picked on the body map. Go back and change it — this screen follows.',
             tap: 'Tap “Book with our team”.',
             triggers: [{ t: 'book with our team', go: 'reach' }] },
           { id: 'reach', title: 'Choose how to reach us', screen: 'reach',
-            note: 'Same booking gate as new clients — WhatsApp / email / call, no in-app booking.',
-            tap: 'Tap “Open WhatsApp”.',
-            triggers: [{ t: 'open whatsapp', go: 'requestsent' }, { t: 'email us', go: 'requestsent' }, { t: 'call the clinic', go: 'requestsent' }] },
+            note: 'Same booking gate as new clients — WhatsApp / email / call, no in-app booking. The message preview includes your actual selection.',
+            tap: 'Tap “Open WhatsApp”, “Email us” or “Call the clinic”.',
+            triggers: [{ t: 'open whatsapp', go: 'requestsent' }, { t: 'whatsapp us', go: 'requestsent' }, { t: 'email us', go: 'requestsent' }, { t: 'call the clinic', go: 'requestsent' }] },
           { id: 'requestsent', title: 'Request sent', screen: 'requestsent',
             note: 'Confirmation comes from the team by SMS.',
-            tap: 'End of this journey.',
-            triggers: [] },
+            tap: 'Tap “Back to browsing”, or pick another journey.',
+            triggers: [{ t: 'back to browsing', go: 'home' }] },
         ],
       },
       {
@@ -225,8 +293,14 @@ class Component extends DCLogic {
         steps: [
           { id: 'home_newreport', title: 'Home — new report', screen: 'home_newreport',
             note: 'The report has been uploaded — Home announces it the moment the client opens the app.',
-            tap: 'Tap “View health report”.',
-            triggers: [{ t: 'view health report', go: 'reportscreen' }, { t: 'new · tap to view', go: 'reportscreen' }] },
+            tap: 'Tap “View health report” or the new report card.',
+            triggers: [
+              { t: 'view health report', go: 'reportscreen' }, { t: 'new · tap to view', go: 'reportscreen' },
+              { t: 'health report · may 2026', go: 'reportscreen' }, { t: 'health report · aug 2025', go: 'reportscreen' },
+              { t: 'browse tests', flow: 'new', step: 'bodymap' },
+              { t: 'my reports', go: 'reportscreen' },
+              { t: 'trends', flow: 'annual', step: 'trendshub' },
+            ] },
           { id: 'reportscreen', title: 'Health report', screen: 'report',
             statesLabel: 'Report style',
             states: [
@@ -235,10 +309,11 @@ class Component extends DCLogic {
             ],
             note: 'Flagged results, recommendations and risk scores. The “⤓ Export” button opens a live share sheet right inside the screen — try it. Two report styles are being considered; switch them in the dropdown.',
             tap: 'Scroll the results, tap “⤓ Export”, or tap “See recommended tests →” to jump into the doctor-review journey.',
+            hot: ['⤓ export'],
             triggers: [{ t: 'see recommended tests', flow: 'review', step: 'recs' }] },
           { id: 'exportshare', title: 'Export / share', screen: 'exportshare',
             note: 'Download as PDF, email it, or copy a secure link that expires in 7 days.',
-            tap: 'End of this journey.',
+            tap: 'End of this journey — pick another above.',
             triggers: [] },
         ],
       },
@@ -247,21 +322,21 @@ class Component extends DCLogic {
         desc: 'At the review appointment the doctor recommends follow-up tests — they appear preselected on the body map, and booking repeats the same flow.',
         steps: [
           { id: 'recs', title: '★ Body map — doctor’s picks', screen: 'recommendedtestsfromreport',
-            note: 'The doctor’s recommended follow-up tests arrive preselected on the body map — the client can adjust anything before sending.',
+            note: 'The doctor’s recommended follow-up tests arrive preselected on the body map — the client can adjust anything before sending. Your adjustments carry into the Selection screen.',
             tap: 'Tap an organ to review, then tap “Checkout →”.',
             triggers: [{ t: 'checkout', go: 'selection' }] },
           { id: 'selection', title: 'Selection — follow-up tests', screen: 'selection',
-            note: 'The follow-up selection, ready for the same booking gate.',
+            note: 'The follow-up selection — exactly what is on the body map — ready for the same booking gate.',
             tap: 'Tap “Book with our team”.',
             triggers: [{ t: 'book with our team', go: 'reach' }] },
           { id: 'reach', title: 'Choose how to reach us', screen: 'reach',
             note: 'Repeats the booking flow — phone · email · WhatsApp. No in-app booking.',
-            tap: 'Tap “Open WhatsApp”.',
-            triggers: [{ t: 'open whatsapp', go: 'requestsent' }, { t: 'email us', go: 'requestsent' }, { t: 'call the clinic', go: 'requestsent' }] },
+            tap: 'Tap “Open WhatsApp”, “Email us” or “Call the clinic”.',
+            triggers: [{ t: 'open whatsapp', go: 'requestsent' }, { t: 'whatsapp us', go: 'requestsent' }, { t: 'email us', go: 'requestsent' }, { t: 'call the clinic', go: 'requestsent' }] },
           { id: 'requestsent', title: 'Request sent', screen: 'requestsent',
             note: 'Follow-up scheduled by the team.',
             tap: 'End of this journey.',
-            triggers: [] },
+            triggers: [{ t: 'back to browsing', flow: 'returning', step: 'home' }] },
         ],
       },
       {
@@ -271,11 +346,20 @@ class Component extends DCLogic {
           { id: 'home', title: 'Home — annual return', screen: 'home_reactivate',
             note: 'A fresh session months later. The member opens the app and lands on Home, nudged to refresh their health picture.',
             tap: 'Tap the “Trends” tile.',
-            triggers: [{ t: 'trends', go: 'trendshub' }] },
+            triggers: [
+              { t: 'trends', go: 'trendshub' },
+              { t: 'start assessment', flow: 'returning', step: 'assessment' },
+              { t: 'browse tests', flow: 'returning', step: 'bodymap' },
+              { t: 'my reports', flow: 'report', step: 'reportscreen' },
+              { t: 'health report', flow: 'report', step: 'reportscreen' },
+            ] },
           { id: 'trendshub', title: 'Trends hub — year on year', screen: 'trendshub',
             note: 'Every tracked marker across screenings — what improved, what needs attention.',
-            tap: 'Tap the “LDL cholesterol” marker.',
-            triggers: [{ t: 'ldl cholesterol', go: 'lipidstrend' }, { t: 'total cholesterol', go: 'lipidstrend' }, { t: 'lipid', go: 'lipidstrend' }] },
+            tap: 'Tap the “LDL cholesterol” marker, or “See Year in Review →”.',
+            triggers: [
+              { t: 'ldl cholesterol', go: 'lipidstrend' }, { t: 'total cholesterol', go: 'lipidstrend' }, { t: 'lipid', go: 'lipidstrend' },
+              { t: 'see year in review', flow: 'explore', step: 'any', pick: 'yearinreviewcover' },
+            ] },
           { id: 'lipidstrend', title: 'Cholesterol — year progression', screen: 'lipidstrend',
             note: 'The lipid panel plotted across screenings — the yearly loop closes with a nudge to re-book.',
             tap: 'End of this journey.',
@@ -341,6 +425,17 @@ class Component extends DCLogic {
     ];
   }
 
+  // Taps that work on (almost) every screen: header back button and the bottom tab bar.
+  globalTriggers() {
+    return [
+      { t: 'back', act: 'prev' },
+      { t: 'home', act: 'tab_home' },
+      { t: 'tests', act: 'tab_tests' },
+      { t: 'reports', act: 'tab_reports' },
+      { t: 'profile', act: 'tab_profile' },
+    ];
+  }
+
   cur() {
     const flows = this.flows();
     const f = flows[this.state.flow] || flows[0];
@@ -360,13 +455,19 @@ class Component extends DCLogic {
 
   goTo(fi, si) { this.setState({ flow: fi, step: si }); }
 
-  goId(flowId, stepId) {
+  goId(flowId, stepId, pick) {
     const flows = this.flows();
     const fi = flows.findIndex(x => x.id === flowId);
     if (fi < 0) return false;
     const si = flows[fi].steps.findIndex(x => x.id === stepId);
     if (si < 0) return false;
-    this.goTo(fi, si);
+    const st = { flow: fi, step: si };
+    if (pick) {
+      const picks = Object.assign({}, this.state.picks);
+      picks[fi + ':' + si] = pick;
+      st.picks = picks;
+    }
+    this.setState(st);
     return true;
   }
 
@@ -379,14 +480,39 @@ class Component extends DCLogic {
     if (this.state.step > 0) this.goTo(this.state.flow, this.state.step - 1);
   }
 
+  stepWith(f, ids) {
+    for (const id of ids) if (f.steps.some(x => x.id === id)) return id;
+    return null;
+  }
+
+  runAct(act) {
+    const { f } = this.cur();
+    if (act === 'prev') { if (this.state.step > 0) { this.prev(); return true; } return false; }
+    if (act === 'tab_home') {
+      const id = this.stepWith(f, ['home', 'home_choose', 'home_newreport']);
+      return id ? this.goId(f.id, id) : this.goId('returning', 'home');
+    }
+    if (act === 'tab_tests') {
+      const id = this.stepWith(f, ['bodymap', 'recs']);
+      return id ? this.goId(f.id, id) : this.goId('new', 'bodymap');
+    }
+    if (act === 'tab_reports') return this.goId('report', 'reportscreen');
+    if (act === 'tab_profile') return this.goId('explore', 'any', 'profilemanagement');
+    return false;
+  }
+
   tryText(txt) {
     const { f, s } = this.cur();
-    const t = (txt || '').toLowerCase();
+    const t = (txt || '').trim().toLowerCase();
     for (const trig of (s.triggers || [])) {
-      if (t.indexOf(trig.t) !== -1) {
-        if (trig.flow) return this.goId(trig.flow, trig.step);
-        return this.goId(f.id, trig.go);
-      }
+      const hit = trig.exact ? t === trig.t : t.indexOf(trig.t) !== -1;
+      if (!hit) continue;
+      if (trig.act) return this.runAct(trig.act);
+      if (trig.flow) return this.goId(trig.flow, trig.step, trig.pick);
+      return this.goId(f.id, trig.go, trig.pick);
+    }
+    for (const trig of this.globalTriggers()) {
+      if (t === trig.t) return this.runAct(trig.act);
     }
     return false;
   }
@@ -398,10 +524,19 @@ class Component extends DCLogic {
     const screen = this.curScreen(s);
     const isBodymap = !!s.bodymap || screen === '__bodymap__';
 
+    const hotTexts = this.state.hot
+      ? [
+          ...(s.triggers || []).map(x => ({ t: x.t, exact: !!x.exact })),
+          ...(s.hot || []).map(t => ({ t, exact: true })),
+          { t: 'back', exact: true },
+        ]
+      : [];
+
     window.__demoNav = {
       tryText: (txt) => this.tryText(txt),
       next: () => this.next(),
       prev: () => this.prev(),
+      hotTexts,
     };
 
     const flowPills = flows.map((fl, i) => ({
@@ -443,6 +578,8 @@ class Component extends DCLogic {
         picks[this.pickKey()] = e.target.value;
         this.setState({ picks });
       },
+      hotOn: this.state.hot,
+      toggleHot: () => this.setState({ hot: !this.state.hot }),
       isBodymap,
       isPortal: !isBodymap,
       screen: isBodymap ? 'splash' : screen,

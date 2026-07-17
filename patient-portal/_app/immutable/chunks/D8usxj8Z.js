@@ -1,0 +1,1 @@
+var e={commence:`#4a9d6e`,rise:`#57b98f`,ascent:`#4fb6ab`,wayfind:`#45a7d9`,frontier:`#2f6fd0`,uncharted:`#3358b8`,revelation:`#e2664f`,discovery:`#c79a52`};export{e as t};

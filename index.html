@@ -1,11 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="refresh" content="0; url=./patient-portal-demo/">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hylx — Public Pages</title>
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: #f6f7f9;
+    color: #1a1a1a;
+  }
+  @media (prefers-color-scheme: dark) {
+    body { background: #14161a; color: #e8e8e8; }
+    .card { background: #1e2127; border-color: #2c313a; }
+    a.item { background: #262b33; border-color: #333a44; color: #e8e8e8; }
+    a.item:hover { border-color: #4a90d9; }
+  }
+  .card {
+    background: #fff;
+    border: 1px solid #e4e6ea;
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 460px;
+    width: calc(100% - 3rem);
+    box-shadow: 0 8px 30px rgba(0,0,0,.06);
+  }
+  h1 { margin: 0 0 .25rem; font-size: 1.4rem; }
+  p.sub { margin: 0 0 1.5rem; color: #6b7280; font-size: .95rem; }
+  a.item {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: #f9fafb;
+    border: 1px solid #e4e6ea;
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+    margin-bottom: .8rem;
+    transition: border-color .15s ease;
+  }
+  a.item:hover { border-color: #4a90d9; }
+  a.item .t { font-weight: 600; display: block; }
+  a.item .d { font-size: .85rem; color: #6b7280; margin-top: .2rem; }
+</style>
 </head>
 <body>
-<p><a href="./patient-portal-demo/">Crawfurd Patient Portal — Interactive Demo</a></p>
+<main class="card">
+  <h1>Hylx — Crawfurd Patient Portal</h1>
+  <p class="sub">Interactive demos for client review.</p>
+
+  <a class="item" href="./patient-portal/">
+    <span class="t">Live App</span>
+    <span class="d">The working patient-portal build - real screens, real interactions.</span>
+  </a>
+
+  <a class="item" href="./patient-portal-demo/">
+    <span class="t">Wireframe Demo</span>
+    <span class="d">Early wireframe walkthrough and slides.</span>
+  </a>
+</main>
 </body>
 </html>

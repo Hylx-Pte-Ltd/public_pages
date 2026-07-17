@@ -1,1 +1,0 @@
-import{Z as e}from"../chunks/u1wi3tuB.js";import{c as t}from"../chunks/Dg5_Skmf.js";import{n}from"../chunks/CB0l0LLt.js";var r=e({load:()=>i}),i=()=>{n(307,`${t}/body-map`)};export{r as universal};

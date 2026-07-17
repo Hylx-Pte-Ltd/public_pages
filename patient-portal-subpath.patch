@@ -1,0 +1,339 @@
+diff --git a/apps/patient-portal/src/lib/body-map/AreaDisc.svelte b/apps/patient-portal/src/lib/body-map/AreaDisc.svelte
+index fb8771e..eb243c3 100644
+--- a/apps/patient-portal/src/lib/body-map/AreaDisc.svelte
++++ b/apps/patient-portal/src/lib/body-map/AreaDisc.svelte
+@@ -1,4 +1,5 @@
+ <script lang="ts">
++	import { base } from '$app/paths';
+ 	import type { CatalogAreaDto } from '$lib/catalog/catalog.types';
+ 	import { CoverageState } from '$lib/selection/coverage-state.enum';
+ 
+@@ -135,7 +136,7 @@
+ 
+ 	const style = $derived(DISC_STYLE[coverage]);
+ 	const label = $derived(`${area.name} - ${COVERAGE_WORDING[coverage]}`);
+-	const glyphUrl = $derived(`url('/body-map/glyph/glyph_${area.map.glyphIndex}.png')`);
++	const glyphUrl = $derived(`url('${base}/body-map/glyph/glyph_${area.map.glyphIndex}.png')`);
+ </script>
+ 
+ <button
+diff --git a/apps/patient-portal/src/lib/body-map/BodyMap.svelte b/apps/patient-portal/src/lib/body-map/BodyMap.svelte
+index cbf20ee..f842980 100644
+--- a/apps/patient-portal/src/lib/body-map/BodyMap.svelte
++++ b/apps/patient-portal/src/lib/body-map/BodyMap.svelte
+@@ -1,4 +1,5 @@
+ <script lang="ts">
++	import { base } from '$app/paths';
+ 	import type { CatalogAreaDto } from '$lib/catalog/catalog.types';
+ 	import { CoverageState } from '$lib/selection/coverage-state.enum';
+ 	import { selectionCoverageByArea } from '$lib/selection/selection.store';
+@@ -77,7 +78,12 @@
+ <div class="stage" data-testid="body-map-stage" bind:this={stageEl}>
+ 	<!-- Vector silhouette tinted via CSS mask (design section 7A.1): one asset, any ghost
+ 	     colour, and it scales with the stage instead of being baked at one size. -->
+-	<div class="silhouette" data-testid="body-map-silhouette" aria-hidden="true"></div>
++	<div
++		class="silhouette"
++		data-testid="body-map-silhouette"
++		aria-hidden="true"
++		style="--silhouette-src: url('{base}/body-map/body-silhouette.svg')"
++	></div>
+ 
+ 	{#each ordered as area (area.id)}
+ 		<AreaDisc
+@@ -133,11 +139,11 @@
+ 		position: absolute;
+ 		inset: 0;
+ 		background: var(--body-map-silhouette-ghost);
+-		mask-image: url('/body-map/body-silhouette.svg');
++		mask-image: var(--silhouette-src);
+ 		mask-repeat: no-repeat;
+ 		mask-position: center;
+ 		mask-size: contain;
+-		-webkit-mask-image: url('/body-map/body-silhouette.svg');
++		-webkit-mask-image: var(--silhouette-src);
+ 		-webkit-mask-repeat: no-repeat;
+ 		-webkit-mask-position: center;
+ 		-webkit-mask-size: contain;
+diff --git a/apps/patient-portal/src/lib/components/CheckoutBar.svelte b/apps/patient-portal/src/lib/components/CheckoutBar.svelte
+index 0282443..c98a8f0 100644
+--- a/apps/patient-portal/src/lib/components/CheckoutBar.svelte
++++ b/apps/patient-portal/src/lib/components/CheckoutBar.svelte
+@@ -1,4 +1,5 @@
+ <script lang="ts">
++	import { base } from '$app/paths';
+ 	import { selectionSummary } from '$lib/selection/selection.store';
+ 
+ 	/**
+@@ -22,11 +23,11 @@
+ 	<div class="checkout-bar" data-testid="checkout-bar">
+ 		<!-- Exactly the R4 headline. Allowance headroom ("x of N chosen") lives inside the
+ 		     imaging drawers and is deliberately absent here. -->
+-		<a class="summary" href="/selection" data-testid="checkout-summary">
++		<a class="summary" href="{base}/selection" data-testid="checkout-summary">
+ 			{summary.testCount} tests - {summary.areaCount} areas
+ 		</a>
+ 
+-		<a class="send" href="/selection/reach" data-testid="checkout-send">
++		<a class="send" href="{base}/selection/reach" data-testid="checkout-send">
+ 			Send selection to our team
+ 		</a>
+ 	</div>
+diff --git a/apps/patient-portal/src/lib/components/PackageCard.svelte b/apps/patient-portal/src/lib/components/PackageCard.svelte
+index 73467d3..e2b1c9f 100644
+--- a/apps/patient-portal/src/lib/components/PackageCard.svelte
++++ b/apps/patient-portal/src/lib/components/PackageCard.svelte
+@@ -1,4 +1,5 @@
+ <script lang="ts">
++	import { base } from '$app/paths';
+ 	import type { CatalogIndex } from '$lib/catalog/catalog-index';
+ 	import type { CatalogPackageDto } from '$lib/catalog/catalog.types';
+ 	import type { PackageTierId } from '$lib/catalog/package-tier-id.enum';
+@@ -43,7 +44,7 @@
+ >
+ 	<span class="accent" aria-hidden="true"></span>
+ 
+-	<a class="detail" href="/packages/{tier.id}" data-testid="package-card-detail">
++	<a class="detail" href="{base}/packages/{tier.id}" data-testid="package-card-detail">
+ 		<h3 class="name" data-testid="package-card-name">{tier.name}</h3>
+ 	</a>
+ 
+diff --git a/apps/patient-portal/src/lib/components/TabBar.svelte b/apps/patient-portal/src/lib/components/TabBar.svelte
+index 4c13bb5..c2f0ab0 100644
+--- a/apps/patient-portal/src/lib/components/TabBar.svelte
++++ b/apps/patient-portal/src/lib/components/TabBar.svelte
+@@ -1,4 +1,5 @@
+ <script lang="ts">
++	import { base } from '$app/paths';
+ 	import { page } from '$app/state';
+ 	import { selectionSummary } from '$lib/selection/selection.store';
+ 	import { isActiveRoute } from './is-active-route';
+@@ -12,8 +13,8 @@
+ 
+ <nav class="tab-bar" aria-label="Primary">
+ 	{#each PUBLIC_TABS as tab (tab.href)}
+-		{@const active = isActiveRoute(tab.href, page.url.pathname)}
+-		<a href={tab.href} aria-current={active ? 'page' : undefined} class:active>
++		{@const active = isActiveRoute(base + tab.href, page.url.pathname)}
++		<a href={base + tab.href} aria-current={active ? 'page' : undefined} class:active>
+ 			<span class="label">{tab.label}</span>
+ 			{#if tab.showsSelectionCount && count > 0}
+ 				<span class="count" data-testid="selection-count">{count}</span>
+diff --git a/apps/patient-portal/src/lib/components/TopNav.svelte b/apps/patient-portal/src/lib/components/TopNav.svelte
+index a048553..2372412 100644
+--- a/apps/patient-portal/src/lib/components/TopNav.svelte
++++ b/apps/patient-portal/src/lib/components/TopNav.svelte
+@@ -1,4 +1,5 @@
+ <script lang="ts">
++	import { base } from '$app/paths';
+ 	import { page } from '$app/state';
+ 	import { selectionSummary } from '$lib/selection/selection.store';
+ 	import { isActiveRoute } from './is-active-route';
+@@ -15,24 +16,24 @@
+ </script>
+ 
+ <header class="top-nav">
+-	<a class="wordmark" href="/body-map" data-testid="wordmark">
++	<a class="wordmark" href="{base}/body-map" data-testid="wordmark">
+ 		<span class="mark">Crawfurd</span>
+ 		<span class="eyebrow">Health Screening</span>
+ 	</a>
+ 
+ 	<nav class="links" aria-label="Primary" data-testid="nav-links">
+ 		{#each links as link (link.href)}
+-			{@const active = isActiveRoute(link.href, page.url.pathname)}
+-			<a href={link.href} aria-current={active ? 'page' : undefined} class:active>{link.label}</a>
++			{@const active = isActiveRoute(base + link.href, page.url.pathname)}
++			<a href={base + link.href} aria-current={active ? 'page' : undefined} class:active>{link.label}</a>
+ 		{/each}
+ 	</nav>
+ 
+ 	{#if selectionTab}
+-		{@const active = isActiveRoute(selectionTab.href, page.url.pathname)}
++		{@const active = isActiveRoute(base + selectionTab.href, page.url.pathname)}
+ 		<a
+ 			class="selection"
+ 			class:active
+-			href={selectionTab.href}
++			href={base + selectionTab.href}
+ 			aria-current={active ? 'page' : undefined}
+ 			data-testid="selection-affordance"
+ 		>
+diff --git a/apps/patient-portal/src/routes/+page.ts b/apps/patient-portal/src/routes/+page.ts
+index 896ee1d..63fa015 100644
+--- a/apps/patient-portal/src/routes/+page.ts
++++ b/apps/patient-portal/src/routes/+page.ts
+@@ -1,4 +1,5 @@
+ import { redirect } from '@sveltejs/kit';
++import { base } from '$app/paths';
+ import type { PageLoad } from './$types';
+ 
+ /**
+@@ -12,5 +13,5 @@ import type { PageLoad } from './$types';
+  * in the client router, which is exactly where the entrant's navigation happens.
+  */
+ export const load: PageLoad = () => {
+-	redirect(307, '/body-map');
++	redirect(307, `${base}/body-map`);
+ };
+diff --git a/apps/patient-portal/src/routes/packages/+page.svelte b/apps/patient-portal/src/routes/packages/+page.svelte
+index 4c54a24..bcb32ad 100644
+--- a/apps/patient-portal/src/routes/packages/+page.svelte
++++ b/apps/patient-portal/src/routes/packages/+page.svelte
+@@ -1,5 +1,6 @@
+ <script lang="ts">
+ 	import { goto } from '$app/navigation';
++	import { base } from '$app/paths';
+ 	import { buildCatalogIndex } from '$lib/catalog/catalog-index';
+ 	import type { PackageTierId } from '$lib/catalog/package-tier-id.enum';
+ 	import CheckoutBar from '$lib/components/CheckoutBar.svelte';
+@@ -37,7 +38,7 @@
+ 	 */
+ 	async function onSelect(packageId: PackageTierId): Promise<void> {
+ 		selection.selectPackage(packageId);
+-		await goto('/body-map');
++		await goto(`${base}/body-map`);
+ 	}
+ </script>
+ 
+diff --git a/apps/patient-portal/src/routes/packages/[packageId]/+page.svelte b/apps/patient-portal/src/routes/packages/[packageId]/+page.svelte
+index a9a5533..98e174d 100644
+--- a/apps/patient-portal/src/routes/packages/[packageId]/+page.svelte
++++ b/apps/patient-portal/src/routes/packages/[packageId]/+page.svelte
+@@ -1,5 +1,6 @@
+ <script lang="ts">
+ 	import { goto } from '$app/navigation';
++	import { base } from '$app/paths';
+ 	import { page } from '$app/state';
+ 	import { AreaKind } from '$lib/catalog/area-kind.enum';
+ 	import { buildCatalogIndex } from '$lib/catalog/catalog-index';
+@@ -108,7 +109,7 @@
+ 	 */
+ 	async function exploreOnMap(): Promise<void> {
+ 		select();
+-		await goto('/body-map');
++		await goto(`${base}/body-map`);
+ 	}
+ </script>
+ 
+@@ -123,7 +124,7 @@
+ 		<p class="lead">
+ 			The link may be out of date. All eight packages are on the catalog page.
+ 		</p>
+-		<a class="cta" href="/packages" data-testid="package-not-found-back">Back to packages</a>
++		<a class="cta" href="{base}/packages" data-testid="package-not-found-back">Back to packages</a>
+ 	</section>
+ {:else}
+ 	<section class="screen" style="--package-accent: {accent}">
+diff --git a/apps/patient-portal/src/routes/selection/+page.svelte b/apps/patient-portal/src/routes/selection/+page.svelte
+index f051761..66a3bf6 100644
+--- a/apps/patient-portal/src/routes/selection/+page.svelte
++++ b/apps/patient-portal/src/routes/selection/+page.svelte
+@@ -1,4 +1,5 @@
+ <script lang="ts">
++	import { base } from '$app/paths';
+ 	import { AreaKind } from '$lib/catalog/area-kind.enum';
+ 	import { buildCatalogIndex } from '$lib/catalog/catalog-index';
+ 	import type { CatalogAreaDto, CatalogTestDto } from '$lib/catalog/catalog.types';
+@@ -97,7 +98,7 @@
+ 		<!-- Nothing chosen yet: no counts, no CTA the state machine forbids - just the way in. -->
+ 		<section class="block empty" data-testid="selection-empty">
+ 			<p class="lead">You have not chosen anything yet.</p>
+-			<a class="cta" href="/body-map" data-testid="selection-empty-explore">Explore the body map</a>
++			<a class="cta" href="{base}/body-map" data-testid="selection-empty-explore">Explore the body map</a>
+ 		</section>
+ 	{/if}
+ 
+@@ -109,7 +110,7 @@
+ 			</p>
+ 
+ 			<span class="package-actions">
+-				<a class="link" href="/packages" data-testid="selection-package-change">
++				<a class="link" href="{base}/packages" data-testid="selection-package-change">
+ 					{packageName === null ? 'Choose a package' : 'Change'}
+ 				</a>
+ 				{#if packageName !== null}
+@@ -173,7 +174,7 @@
+ 	{/if}
+ 
+ 	{#if canSend}
+-		<a class="cta primary" href="/selection/reach" data-testid="selection-send">
++		<a class="cta primary" href="{base}/selection/reach" data-testid="selection-send">
+ 			Send selection to our team
+ 		</a>
+ 	{/if}
+diff --git a/apps/patient-portal/src/routes/selection/reach/+page.svelte b/apps/patient-portal/src/routes/selection/reach/+page.svelte
+index bc2b899..d1dab0b 100644
+--- a/apps/patient-portal/src/routes/selection/reach/+page.svelte
++++ b/apps/patient-portal/src/routes/selection/reach/+page.svelte
+@@ -1,5 +1,6 @@
+ <script lang="ts">
+ 	import { goto } from '$app/navigation';
++	import { base } from '$app/paths';
+ 	import { buildCatalogIndex } from '$lib/catalog/catalog-index';
+ 	import { buildReachLink } from '$lib/enquiry/build-reach-link';
+ 	import { composeEnquiryMessage } from '$lib/enquiry/compose-enquiry-message';
+@@ -46,7 +47,7 @@
+ 
+ 	$effect(() => {
+ 		if (!hasSelection) {
+-			void goto('/selection');
++			void goto(`${base}/selection`);
+ 		}
+ 	});
+ 
+@@ -73,7 +74,7 @@
+ 	 *   schemes, so this tab is not navigated either and the routing below still runs.
+ 	 */
+ 	function sent(): void {
+-		void goto('/selection/sent');
++		void goto(`${base}/selection/sent`);
+ 	}
+ </script>
+ 
+@@ -128,7 +129,7 @@
+ 		</li>
+ 	</ul>
+ 
+-	<a class="back" href="/selection" data-testid="reach-back">Back to your selection</a>
++	<a class="back" href="{base}/selection" data-testid="reach-back">Back to your selection</a>
+ </section>
+ {/if}
+ 
+diff --git a/apps/patient-portal/src/routes/selection/sent/+page.svelte b/apps/patient-portal/src/routes/selection/sent/+page.svelte
+index 312f92d..912833d 100644
+--- a/apps/patient-portal/src/routes/selection/sent/+page.svelte
++++ b/apps/patient-portal/src/routes/selection/sent/+page.svelte
+@@ -11,6 +11,7 @@
+ 	 * below honest: "Adjust selection" returns to a Draft that still holds everything the patient
+ 	 * chose, and "Send again" re-enters Reach where the message is recomposed from it.
+ 	 */
++	import { base } from '$app/paths';
+ </script>
+ 
+ <svelte:head>
+@@ -26,8 +27,8 @@
+ 	</p>
+ 
+ 	<div class="ctas">
+-		<a class="cta primary" href="/selection" data-testid="sent-adjust">Adjust selection</a>
+-		<a class="cta secondary" href="/selection/reach" data-testid="sent-send-again">Send again</a>
++		<a class="cta primary" href="{base}/selection" data-testid="sent-adjust">Adjust selection</a>
++		<a class="cta secondary" href="{base}/selection/reach" data-testid="sent-send-again">Send again</a>
+ 	</div>
+ </section>
+ 
+diff --git a/apps/patient-portal/vite.config.ts b/apps/patient-portal/vite.config.ts
+index a9c7ece..2d82aa0 100644
+--- a/apps/patient-portal/vite.config.ts
++++ b/apps/patient-portal/vite.config.ts
+@@ -21,7 +21,8 @@ export default defineConfig({
+ 				// Force runes mode for the project, except for libraries. Can be removed in svelte 6.
+ 				runes: ({ filename }) => filename.split(/[/\\]/).includes('node_modules') ? undefined : true
+ 			},
+-			adapter: adapter({ fallback: 'index.html' })
++			adapter: adapter({ fallback: 'index.html' }),
++			paths: { base: process.env.BASE_PATH ?? '' }
+ 		}),
+ 		SvelteKitPWA({
+ 			workbox: {
